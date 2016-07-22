@@ -1,0 +1,12 @@
+;
+; GLOBALS FOR VSAVE PACKAGE
+;
+; 26 JUNE 2009
+;
+defsysv, '!xspan', 1200             ; standard x range for final spectra
+defsysv, '!line_match_warning',10   ; max diff between measured line and flag
+defsysv, '!src_voffset',0.0         ; velocity offset of src relative to standard flags
+defsysv, '!src_coffset',0.0         ; channel offset of src relative to standard flags
+defsysv, '!nsave_list',intarr(16)   ; nsaves associated with this file
+!nsave_list=0
+defsysv, '!nsave_id','none'         ; identifier for nsave file used

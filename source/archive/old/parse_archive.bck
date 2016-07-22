@@ -1,0 +1,67 @@
+;+
+; NAME:
+;       PARSE_ARCHIVE
+;
+; parse_archive   Takes input structure 'rec_in' and translates it
+; -------------   into output structure 'rec_out' that has proper
+;                 tag names and variable types.
+;                 These data can then be used meaningfully.
+;
+;         Syntax: parse_archive,archive_structure_in,parsed_structure_out
+;         ===============================================================
+;
+; V5.0 July 2007
+;-
+pro parse_archive,rec_in,rec_out
+;
+on_error=2
+compile_opt idl2
+;
+; Parse an input archive record structure into meaningful data
+;     
+rec=rec_in
+name='HISTORY'
+;
+; for @write_archive_history
+;
+tag_names=['size','nfit','nunit','nrset','nregs','ngauss', $
+           'agauss','gsigma']
+;
+size=long(rec.(0))
+nfit=long(rec.(1))
+nunit=rec.(2)
+nrset=long(rec.(3))
+idx=4
+nreg=lonarr(2*nrset)
+for i=0,2*nrset-1 do begin & nreg[i]=long(rec.(i+idx)) & end
+idx=idx+2*nrset
+ngauss=long(rec.(idx))
+idx=idx+1
+a_gauss=fltarr(3*ngauss)                                       
+g_sigma=fltarr(3*ngauss)                                       
+for i=0,3*ngauss-1 do begin & a_gauss[i]=float(rec.(i+idx)) & end
+idx=idx+3*ngauss
+for i=0,3*ngauss-1 do begin & g_sigma[i]=float(rec.(i+idx)) & end
+;
+tag=tag_names[0]             ; first make the named array
+arc=create_struct(name=strname,tag,size)
+;
+; now fill the structure
+;
+arc=create_struct(arc,tag_names[1],nfit)
+arc=create_struct(arc,tag_names[2],nunit)
+arc=create_struct(arc,tag_names[3],nrset)
+arc=create_struct(arc,tag_names[4],nreg)
+arc=create_struct(arc,tag_names[5],ngauss)
+arc=create_struct(arc,tag_names[6],a_gauss)
+arc=create_struct(arc,tag_names[7],g_sigma)
+;
+print,arc
+;
+; now return this structure
+;
+rec_out=arc
+;
+return
+end
+

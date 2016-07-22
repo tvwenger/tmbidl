@@ -1,0 +1,138 @@
+======================================================================
+	TMBIDL v8.0 - Installation Instructions
+======================================================================
+
+A new installation of TMBIDL begins by obtaining the latest version of
+TMBIDL from the TMBIDL Github repository. For instructions on
+using GIT, read 00GIT.
+
+After obtaining the latest version of TMBIDL, follow these
+instructions.
+
+======================================================================
+
+1. Obtain the default IDL path for your IDL installation. To do so,
+start vanilla IDL and print the !path system variable ie:
+
+$ idl
+IDL> print,!path
+
+Copy the output of the !path system variable. Modify the following
+files:
+
+startup/TMBIDL.INIT
+startup/TMBIDL.INIT.TCSH
+startup/TMBIDL.INIT.BASH
+
+by replacing the DEFAULT_IDL_PATH environment variable value with the
+path you copied from IDL. For example, in the TMBIDL.INIT and
+TMBIDL.INIT.TCSH, the line should be
+
+setenv DEFAULT_IDL_PATH <output from IDL !path>
+
+In the TMBIDL.INIT.BASH file, the line should be
+
+export DEFAULT_IDL_PATH=<output from IDL !path>
+
+======================================================================
+
+2. Set the location of your TMBIDL installation by modifying the 
+following files
+
+startup/TMBIDL.INIT
+startup/TMBIDL.INIT.TCSH
+startup/TMBIDL.INIT.BASH
+
+and replacing the LOCAL_TMBIDL environment variable value with the
+path to your TMBIDL installation. For example, if my TMBIDL
+installation was in the directory /idl/tmbidl/, I would edit
+TMBIDL.INIT and TMBIDL.INIT.TCSH to be
+
+setenv LOCAL_TMBIDL /idl/tmbidl/
+
+and TMBIDL.BASH to be
+
+export LOCAL_TMBIDL=/idl/tmbidl/
+
+======================================================================
+
+3. Set up aliases to start TMBIDL. If you are using TCSH, add the
+following line (you may call it whatever you want) to your ~/.tcshrc
+or ~/.tcsh_profile file:
+
+alias inittmbidl 'cd /path/to/tmbidl/startup ; source TMBIDL.INIT ; idl ; cd -'
+
+where /path/to/tmbidl is the path to your TMBIDL installation. For
+example, if TMBIDL is install in /idl/tmbidl that alias should be
+
+alias inittmbidl 'cd /idl/tmbidl/startup ; source TMBIDL.INIT ; idl ; cd -'
+
+If you are using BASH, add the following line to your ~/.bashrc
+or ~/.bash_profile file:
+
+alias inittmbidl='cd /path/to/tmbidl/startup ; source TMBIDL.INIT ; idl ; cd -'
+
+======================================================================
+
+Your TMBIDL installation is now complete. It is recommended that you
+now perform initial tests to ensure that your TMBIDL installation
+is working properly. To perform these tests, start TMBIDL using the
+alias you just created (you may need to "source" your .tcshrc or
+.bashrc file first) via:
+
+$ inittmbidl
+
+You should see a long list of
+
+% Compiled module: <something>
+
+statements followed by:
+
+=======================
+TMBIDL V7.1 INITIALIZED
+=======================
+
+Select Data Type to Analyze with TMBIDL: 
+
+ (0) none     : Generic TMBIDL  package:
+                defaults to 4096 !data_points
+ (1) 140FT    : NRAO 140-FT UniPops NSAVE data
+ (2) GBT_ACS  : GBT ACS spectral line data
+ (3) GBT_DCR  ; GBT DCR continuum data
+ (4) GRS      : BU-FCRAO GRS data
+ (5) BOZO     : Arecibo Interim Correlator ICORR data
+ (6) HRDS     : H II Region Discovery Survey data
+ (7) MPI      : MPIfR 100-m AK90 data
+ (8) BUAO     : BU-AO HI survey data
+ (9) USER     : User supplied startup file
+(10) TMB      : TMB startup file
+(11) RTR      : RTR startup file
+(12) DSB      : DSB startup file
+(13) LDA      : LDA startup file
+(14) TVW      : TVW startup file
+(99) TEST     : Run TMBIDL installation tests
+
+===============================================================
+Syntax: start,telescope_no, "fully_qualified_data_file_name"   
+        OR
+        start,"telescope_name","fully_qualified_data_file_name"
+        OR 
+FOR GENERIC PACKAGE WITH #_DATA_POINTS SEE START_GENERIC,/HELP
+===============================================================
+TMBIDL-->
+
+If any error messages appear during this process, something went
+wrong. Now, start the installation tests via
+
+TMBIDL--> start,99
+
+In the end, you should see 
+
+Done!
+Please exit and restart TMBIDL.
+
+If you don't see these strings, something went wrong with the tests.
+If you get any error messages during the initial compilation or during
+these installation tests, track down the cause of the error message
+and fix the problem. 
+

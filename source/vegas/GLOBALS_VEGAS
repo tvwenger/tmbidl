@@ -1,0 +1,11 @@
+;
+; VEGAS package has no GLOBALS or system variables intrinsic
+; to it as of v8.0 July 2015
+;
+;
+print
+print,'================================================'
+print,' Loading and Initializing VEGAS Analysis Package'
+print,'                                   v8.0 Jul 2015'
+print,'================================================'
+print

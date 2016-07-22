@@ -1,0 +1,39 @@
+;==============================================================
+; Boston University --- Arecibo Observatory Galactic HI Package 
+; ==> BUAO v7.0 may 2013 tmb
+;==============================================================
+; 
+oldpath=!path
+local_TMBIDL=getenv('LOCAL_TMBIDL')
+;
+path=local_TMBIDL+'source/buao/pro/'
+!path=path
+;
+; RRL procedures
+;
+;resolve_routine,'atv',/either,/compile
+;
+; when did we ever use atv ?
+; this version tmb found in a buao directory certainly
+; does not work
+;
+resolve_routine,'buao_data',/either,/compile
+resolve_routine,'buao_hdr',/either,/compile
+resolve_routine,'buao',/either,/compile
+resolve_routine,'buao2gbt',/either,/compile
+;resolve_routine,'buao_survey',/either,/compile
+; above is now redundant
+resolve_routine,'getlb',/either,/compile
+resolve_routine,'hisa',/either,/compile
+resolve_routine,'make_buao_online',/either,/compile
+resolve_routine,'map9',/either,/compile
+resolve_routine,'survey',/either,/compile
+resolve_routine,'test',/either,/compile
+;
+; now put !path back to original
+;
+!path=oldpath
+;
+
+
+

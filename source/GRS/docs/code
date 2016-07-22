@@ -1,0 +1,101 @@
+; Transfer data into TMBIDL data format 
+    mapfile=sxpar(*info.image_hdr[info.whichImage],'OBJECT')
+    nlong=sxpar(*info.image_hdr[info.whichImage],'NAXIS1')
+    nlat =sxpar(*info.image_hdr[info.whichImage],'NAXIS2')
+    nchan=sxpar(*info.image_hdr[info.whichImage],'NAXIS3')
+
+    delta_l=sxpar(*info.image_hdr[info.whichImage],'CDELT1') ; in degrees 
+    delta_b=sxpar(*info.image_hdr[info.whichImage],'CDELT2') ; in degrees
+    delta_v=sxpar(*info.image_hdr[info.whichImage],'CDELT3')/1000.D ; in km/sec
+    !grs.delta_l=delta_l
+    !grs.delta_b=delta_b
+    !grs.delta_v=delta_v
+
+    lmap0=sxpar(*info.image_hdr[info.whichImage],'CRPIX1')
+    bmap0=sxpar(*info.image_hdr[info.whichImage],'CRPIX2')
+
+    v_center=sxpar(*info.image_hdr[info.whichImage],'CRVAL3')/1000.D ; LSR
+velocity of 'center' channel
+    v_refchan=sxpar(*info.image_hdr[info.whichImage],'CRPIX3') ; pixel/channel
+of this velocity
+    !grs.v_center=v_center
+    !grs.v_refchan=v_refchan
+
+    x=fltarr(nchan)
+    FOR i=0,nchan-1 DO x[i]=(i-v_refchan)*delta_v+v_center
+
+    lpix = convert_array[1]
+    bpix = convert_array[3]
+    l_gal=(lpix - lmap0)*delta_l   
+    b_gal=(bpix - bmap0)*delta_b 
+
+    IF (b_gal LT 0.d) THEN
+source='G'+fstring(l_gal,'(f6.3)')+fstring(b_gal,'(f6.3)') $
+    ELSE source='G'+fstring(l_gal,'(f6.3)')+'+'+fstring(b_gal,'(f5.3)')   
+
+
+; Convert to tmb_idl data format
+    !b[0]={gbt_data}            ; initialize the structure
+
+    !b[0].source=byte(strtrim(source,2))
+    !b[0].observer=byte('BU-FCRAO')
+    !b[0].obsid=byte('Galactic Ring Survey')
+    !b[0].scan_num=2000000L
+    !b[0].line_id=byte('13CO(1-0)')
+
+    !b[0].ra=0.d
+    !b[0].dec=0.d
+    !b[0].epoch=1950.
+    !b[0].l_gal=l_gal
+    !b[0].b_gal=b_gal
+    !b[0].hor_offset=lpix
+    !b[0].ver_offset=bpix
+
+    !b[0].vel=v_center*1000.d
+    !b[0].ref_ch=v_refchan
+    !b[0].rest_freq=110.201353D+9
+    !b[0].sky_freq =110.201353D+9
+    !b[0].delta_x=-(delta_v/!light_c)*!b[0].rest_freq
+
+    !b[0].bw=nchan*abs(!b[0].delta_x)
+    !b[0].tsys=1.d
+    !b[0].tintg=60.d
+    !b[0].tcal=1.d
+
+    !data_points=nchan
+    !b[0].data_points=!data_points
+
+; Set title, ranges
+;    !X.Title = 'Velocity (km/s)'
+;    !X.Range[0] = vel_array[0]
+;    !X.Range[1] = vel_array[n_vel-1]
+
+; Need to make the spectrum have length 659 since it is a fixed length
+; record. Convert to T_MB
+    spectrum = spectrum/0.48
+    IF n_vel GT 659 THEN BEGIN 
+        spectrum = spectrum[0:658]
+    ENDIF
+    IF n_vel LT 659 THEN BEGIN
+        !b[0].data[0:N_Elements(spectrum)-1]=spectrum
+    ENDIF ELSE BEGIN
+        !b[0].data = spectrum[0:658]
+    ENDELSE
+    
+; Change x-axis to km/s
+    !chan=0
+    !vgrs=1
+    !x.title='Velocity (km/s)'
+    !y.title=textoidl('T_{MB}')
+
+; Display the spectrum
+    IF info.deltavel[info.whichImage]/2000. GE 2 THEN BEGIN
+        flag,
+info.velocity[info.whichImage]/1000.+info.deltavel[info.whichImage]/2000.
+        flag,
+info.velocity[info.whichImage]/1000.-info.deltavel[info.whichImage]/2000.
+    ENDIF ELSE flag, info.velocity[info.whichImage]/1000.
+
+;    wset, 0
+    freex
+    xx

@@ -1,0 +1,39 @@
+=================================================
+          DATA FILE DEFINITIONS
+
+          V7.0 TMB/TVW MAY 2013
+=================================================
+
+Often the file names of data stream are very long
+character strings.  We've been in the habit of 
+defining filenames at startup (and, frankly, 
+in other places) with the INIT_DATA_FILES 
+file.  This file now contains definitions,
+many commented out, spanning many years, many
+GBT projects, and, in fact, multiple telescopes.
+
+Proper generic coding says that we need to clean
+up this act.  Hence the creation here in v7.0 
+of this directory that will in the future 
+contain all such definitions. 
+
+The exact structure and format of this directory
+is as yet TBD. 
+
+=================================================
+V7.1 TMB August 2013
+=================================================
+
+TMB changed his mind.  These file names are 
+ideosyncratic to a local installation of TMBIDL.
+They often will not change when a new version is
+installed so they have no place in the ../vX.x/
+directory tree.  
+
+Hence they are here at the root
+level of the .../tmbidl/data/ directory as
+
+.../tmbidl/data/INIT_DATA_FILES
+
+TMB deleted .../tmbidl/vX.x/data_def/ directory
+

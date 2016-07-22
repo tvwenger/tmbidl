@@ -1,0 +1,19 @@
+;===================================
+;Resolve routines for SPIDER package
+;===================================
+oldpath=!path
+local_TMBIDL=getenv('LOCAL_TMBIDL')
+path=local_TMBIDL+'source/spider/pro/'
+!path=path
+;
+; Spider procedures
+;
+resolve_routine,'extractspider',/either,/compile
+resolve_routine,'spideravg',/either,/compile
+resolve_routine,'spiderclean',/either,/compile
+resolve_routine,'spidercontour',/either,/compile
+;
+; put !path back to original
+;
+!path=oldpath
+;

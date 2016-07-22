@@ -1,0 +1,57 @@
+;
+; Parse an input archive record structure in LINE_HEADER format 
+; into meaningful data
+;     
+rec=rec_in
+name='LHEADER'
+;
+; for @write_archive_line_header
+;
+tag_names=['source','scan','lineid','type','pol','position', $
+           'srcvel','date','lst','ha','za','az','el','fsky', $
+           'frest','bw','tcal','tsys','tintg']
+;
+source=rec.(0)
+scan=long(rec.(1))
+lineid=rec.(2)
+type=rec.(3)
+pol=rec.(4)
+position=rec.(5)
+srcvel=float(rec.(6))
+date=rec.(7)
+lst=rec.(8)
+ha=float(rec.(9))
+za=float(rec.(10))
+az=float(rec.(11))
+el=float(rec.(12))
+fsky=float(rec.(13))
+frest=float(rec.(14))
+bw=float(rec.(15))
+tcal=float(rec.(16))
+tsys=float(rec.(17))
+tintg=float(rec.(18))
+;
+tag=tag_names[0]             ; first make the named array
+arc=create_struct(name=strname,tag,source)
+;
+; now fill the structure
+;
+arc=create_struct(arc,tag_names[1], scan)
+arc=create_struct(arc,tag_names[2], lineid)
+arc=create_struct(arc,tag_names[3], type)
+arc=create_struct(arc,tag_names[4], pol)
+arc=create_struct(arc,tag_names[5], position)
+arc=create_struct(arc,tag_names[6], srcvel)
+arc=create_struct(arc,tag_names[7], date)
+arc=create_struct(arc,tag_names[8], lst)
+arc=create_struct(arc,tag_names[9], ha)
+arc=create_struct(arc,tag_names[10],za)
+arc=create_struct(arc,tag_names[11],az )
+arc=create_struct(arc,tag_names[12],el )
+arc=create_struct(arc,tag_names[13],fsky )
+arc=create_struct(arc,tag_names[14],frest )
+arc=create_struct(arc,tag_names[15],bw )
+arc=create_struct(arc,tag_names[16],tcal )
+arc=create_struct(arc,tag_names[17],tsys )
+arc=create_struct(arc,tag_names[18],tintg )
+;

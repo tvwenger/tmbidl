@@ -1,0 +1,43 @@
+;
+;-------------------------
+; TMBIDL GRS V6.1 COMPILE 
+;-------------------------
+;
+;  GRS procedures
+;
+.compile ../GRS/pro/plt_grshdr.pro   ; modify plot header for GRS params
+.compile ../GRS/pro/freeGRS.pro      ; free x,y axis scaling for GRS case
+.compile ../GRS/pro/pcircle.pro      ; plot circle about input positon
+.compile ../GRS/pro/position.pro     ; plot source position and error for GRS lbmaps
+.compile ../GRS/pro/grs2idl.pro       ;     
+.compile ../GRS/pro/GRS_datafile.pro  ;
+.compile ../GRS/pro/GRSinfo.pro       ;
+.compile ../GRS/pro/cubeinfo.pro      ;
+.compile ../GRS/pro/findGRS.pro       ;
+.compile ../GRS/pro/getGRS.pro        ;
+.compile ../GRS/pro/getgrsBeam.pro    ;
+.compile ../GRS/pro/beamlook.pro      ;
+.compile ../GRS/pro/getlb.pro         ; get GRS spectrum at l,b
+.compile ../GRS/pro/Beamlb.pro        ; get beam-convolved spectrum for l,b
+.compile ../GRS/pro/lscan.pro         ;
+.compile ../GRS/pro/bscan.pro         ;
+.compile ../GRS/pro/ta.pro            ;
+.compile ../GRS/pro/tmb.pro           ; convert to Ta from Tmb
+.compile ../GRS/pro/vt.pro            ; convert to Tmb from Ta
+.compile ../GRS/pro/bvmap.pro         ; b-v contour map
+.compile ../GRS/pro/lvmap.pro         ; l-v contour map
+.compile ../GRS/pro/lbmap.pro         ; l-b contour map 
+.compile ../GRS/pro/remap.pro         ;
+.compile ../GRS/pro/fillmap.pro       ;
+.compile ../GRS/pro/findVT.pro        ; find terminal velocity
+.compile ../GRS/pro/l_vt.pro
+.compile ../GRS/pro/bv_vt.pro
+;
+.compile ../sandboxes/tmb/GRSdisplay.pro
+.compile ../sandboxes/tmb/pgvname.pro
+.compile ../sandboxes/tmb/cofit.pro
+.compile ../sandboxes/tmb/initgrs.pro
+.compile ../sandboxes/tmb/GRSfits.pro
+.compile ../sandboxes/tmb/plotgrs.pro
+.compile ../sandboxes/tmb/loopco.pro
+

@@ -1,0 +1,12 @@
+;
+; RRL package has no GLOBALS or system variables intrinsic
+; to it as of v7.0 May 2013
+;
+;
+print
+print,'==============================================='
+print,' Loading and Initializing RRL Analysis Package '
+print,'                                 v7.1 Aug 2013 '
+print,'==============================================='
+print
+;

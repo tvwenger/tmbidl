@@ -1,0 +1,22 @@
+;=======================================================================
+;  COMPILE ARCHIVE PROCEDURES V5.0 (THERE IS NOTHING MORE RECENT)
+;=======================================================================
+; first come the different formats
+;
+.compile ../archive/pro/write_archive_LHEAD.pro      ; write LHEAD format
+.compile ../archive/pro/write_archive_CHEAD.pro      ;       CHEAD
+.compile ../archive/pro/write_archive_FITINFO.pro    ;       FITINFO
+.compile ../archive/pro/write_archive_CUSTOM.pro     ;       CUSTOM
+.compile ../archive/pro/parse_archive_LHEAD.pro      ; parse LHEAD format
+.compile ../archive/pro/parse_archive_CHEAD.pro      ;       CHEAD
+.compile ../archive/pro/parse_archive_FITINFO.pro    ;       FITINFO
+.compile ../archive/pro/parse_archive_CUSTOM.pro     ;       CUSTOM
+;
+.compile ../archive/pro/make_ARCHIVE.pro    ; create an ARCHIVE file
+.compile ../archive/pro/setarchive.pro      ; sets the ARCHIVE file type !archivetype
+.compile ../archive/pro/open_archive.pro    ; opens an ARCHIVE file
+.compile ../archive/pro/close_archive.pro   ; waddya think it does?
+.compile ../archive/pro/write_archive.pro   ; writes a record to ARCHIVE file
+.compile ../archive/pro/read_archive.pro    ; reads a record from the ARCHIVE file 
+.compile ../archive/pro/parse_archive.pro   ; parses above output record into structure
+

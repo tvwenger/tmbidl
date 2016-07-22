@@ -1,0 +1,37 @@
+;   The basic idea behind the VSAVE files is to have the capability to
+;   store several different structures in a way similar to the current
+;   nsave files.
+;   
+;   I have created this to store line parameter structures, but I have
+;   tried to make the basic pro expandable so that one might work on
+;   several vsaves simultaneously.
+;   
+vs_info  = {vs_info,                $ ;
+            vs_type:bytarr(8),      $ ; an identifier for the vsave type, 
+;                                           e.g. 'LP' for line parameters 
+            vs_file:bytarr(32),     $ ; file name with no extension
+	    vs_active:0,            $ ; is this file active
+	    vs_lun:0L,              $ ; logical unit for vsave file
+	    vs_log_lun:0L,          $ ; logical unit for vsave log file          
+            vs_protect:1,           $ ; protect occupied vsave bin?
+            vsave:0L,               $ ; current vsave bin
+	    lastvs:0L,              $ ; last used vs bin
+            vsmax:1024L             $ ; max number of vsave bins
+}; END OF Definition
+vs_info.vs_type=byte(' ')
+vs_info.vs_file=byte(' ')
+defsysv,'!nvsf',0                          ; current number of vsave files
+defsysv,'!nvsf_max',10                     ; maximum number of concurrent vsave files
+defsysv,'!vs_blk',replicate({vs_info},1)   ; a blank vsave record
+defsysv,'!vs_rec',replicate({vs_info},1)   ; a vsave record
+defsysv,'!vsf',replicate({vs_info},!nvsf_max)     ; an array of vsave record
+defsysv,'!vsinfo_file','../tables/vsinfo.te'      ; file to store VSAVE info table
+defsysv,'!vsunit',0 ;
+defsysv,'!vsavefile','none' ;
+defsysv,'!vslogunit',0 ;
+defsysv,'!vslogfile','none' ;
+defsysv,'!vsavemax',0 ;
+defsysv,'!protectvs',1 ;
+defsysv,'!vsave',0 ;
+defsysv,'!lastvs',0 ;
+defsysv, '!vscount', 0L  &  defsysv, '!vs_stack', lonarr(2000) &    ; stack for filtering VSAVES

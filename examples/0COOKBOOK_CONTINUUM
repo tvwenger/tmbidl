@@ -1,0 +1,80 @@
+============================================================
+ TMBIDL CONTINUUM COOKBOOK EXAMPLES
+============================================================
+Read 00README for more information. 
+
+
+First make sure that you are staring fresh in continuum 
+mode in TMBIDL:
+
+inittmbidl
+TMBIDL--> start,3      <=== GBT DCR continuum mode
+TMBIDL--> @../../examples/Cfiles.pro 
+TMBIDL--> @../../examples/Cexamples.pro 
+
+This last batch file leaves you looking at an elevation 
+scan of a standard Peak for the X-band pointing 
+source 0337+5054.
+
+These example data from ../../examples/AGBT12A_114_76.cal.dcr.fits
+were translated into TMBIDL via CMAKE which generated the file
+../../data/continuum/Ldata.tmbidl.  This file was copied to: 
+../../examples/C_12A_114_76.tmbidl 
+
+This observing session only used the DCR to Peak/Focus in the
+standard way on two X-band pointing sources: 0337+5054 and
+0228+6721.
+
+===================================================================
+
+TMBIDL--> @../../examples/Cexamples.pro gives:
+
+
+TMBIDL-->@../../examples/Cexamples.pro
+OFFLINE data file: ../../examples/C_12A_114_76.tmbidl selected for searches
+OFFLINE data file contains           40 records
+Select scan range for searches is:            0 to           31
+
+ Rec#   Source             R.A.         Dec.   Vel  Rx   Type Pol  Scan#  Tsys  t_intg
+
+    0 0337+5045         03 37 43.4  +50 45 53   0.0    A2 AZ:  LL         1   32.9  0.0960
+    1 0337+5045         03 37 43.4  +50 45 53   0.0    A4 AZ:  RR         1   30.3  0.0960
+    2 0337+5045         03 37 43.4  +50 45 53   0.0    A2 BAZ  LL         2   33.2  0.0960
+    3 0337+5045         03 37 43.4  +50 45 53   0.0    A4 BAZ  RR         2   30.7  0.0960
+    4 0337+5045         03 37 43.4  +50 45 53   0.0    A2 EL:  LL         3   33.1  0.0960
+    5 0337+5045         03 37 43.4  +50 45 53   0.0    A4 EL:  RR         3   30.6  0.0960
+    6 0337+5045         03 37 43.4  +50 45 53   0.0    A2 BEL  LL         4   33.2  0.0960
+    7 0337+5045         03 37 43.4  +50 45 53   0.0    A4 BEL  RR         4   30.8  0.0960
+    8 0337+5045         03 37 43.4  +50 45 53   0.0    A2 Foc  LL         5   33.3  0.0960
+    9 0337+5045         03 37 43.4  +50 45 53   0.0    A4 Foc  RR         5   30.8  0.0960
+set nreg=   1  -341.89   -95.71
+set nreg=   2    56.96   347.06
+
+For NFIT =  1     RMS in NREGIONs = 0.0300
+
+% Program caused arithmetic error: Floating underflow  <== as usual, ignore this
+
+================
+FITING GAUSSIANS
+================
+
+This is the same as for spectral line data so read 0COOKBOOK. 
+This Cexample.pro batch script already sets the NREGIONs 
+and removes a linear baseline so you can just fit a Gaussian
+to these data in the normal way using the gg,1 command:
+
+
+TMBIDL-->gg,1
+Click: bgauss #_gauss(center,hw_right) egauss
+Cursor is at Xpos=      -93.246700 Ypos=       13.235256 in PLOT units
+Cursor is at Xpos=      -19.268094 Ypos=       126.01103 in PLOT units
+Cursor is at Xpos=       7.5593126 Ypos=       147.15648 in PLOT units
+Cursor is at Xpos=       63.652981 Ypos=       133.05951 in PLOT units
+
+G#       Height +/- sigma     Center +/- sigma       FWHM +/- sigma   ==>     kHz        km/sec
+ 1    1463.476       8.789    -15.692       0.198     67.682       0.473      0.000       0.000
+Center/FWHM in arcseconds
+
+RMS in NREGIONs =       30.0303
+
+

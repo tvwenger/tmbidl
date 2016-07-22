@@ -1,0 +1,29 @@
+generateContCat.py:
+
+Python code to take Astrid catalog files and generate a tmbidl
+continuum file to primarily import the source positions. (The GBT
+system does not provide these coordinates in any FITS file!)  The user
+is prompted for the project name.The output filename is
+"source_catalog".
+
+Usage:  
+
+> python generateContCat.py <catalog name>
+
+
+Example:
+
+fourier[316]% python generateContCat.py hii
+ 
+Reading data from proj : hii
+ 
+Processing catalog:  fluxcal.cat
+Processing catalog:  pointing.cat
+Processing catalog:  final_18-30_good.cat
+Processing catalog:  final_50-65_good.cat
+Processing catalog:  reobserve_30-50.cat
+Processing catalog:  reobserve_30-50_continuum.cat
+Processing catalog:  far_arm_nvss.cat
+Processing catalog:  far_arm_2nd_tier.cat
+Processing catalog:  cross_cal.cat
+fourier[317]% 

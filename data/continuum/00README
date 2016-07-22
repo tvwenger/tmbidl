@@ -1,0 +1,13 @@
+======================================================
+TMBIDL Continuum Data default file location 
+======================================================
+
+Cmake.pro converts GBT DCR SDFITS data to TMBIDL 
+format and stores it by default here as Cdata.tmbidl 
+
+It also produces a log file, cmake.log, giving information
+about the contents of the SDFITS data stream.
+
+condar.pro is invoked bye Cmake.pro and can be run separately
+just to parse the contents of the SDFITS file. It produces
+condar.log 

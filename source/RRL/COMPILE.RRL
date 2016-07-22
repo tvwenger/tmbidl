@@ -1,0 +1,16 @@
+;==============================================================
+; Radio Recombination Line Package -- v7.0 may 2013 tmb/tvw/dsb
+;==============================================================
+; Include in TMBIDL via:  @../RRL/COMPILE.RRL
+;
+;
+  .compile ../RRL/pro/h00.pro
+  .compile ../RRL/pro/sinc.pro
+  .compile ../RRL/pro/interpsinc.pro
+  .compile ../RRL/pro/interpRRL_rvsys.pro
+  .compile ../RRL/pro/processRRL_rvsys.pro
+  .compile ../RRL/pro/combineRRL.pro
+  .compile ../RRL/pro/processRRL_combine.pro
+  .compile ../RRL/pro/calibrateRRL.pro
+  .compile ../RRL/pro/fitRRL.pro
+

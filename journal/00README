@@ -1,0 +1,17 @@
+======================================================================
+TMBIDL v8 
+journal/ directory
+======================================================================
+
+On starting a new TMBIDL session via
+
+TMBIDL> start,number
+
+a journal file will be created in the saves/ directory for this
+session.  This journal file is overwritten everytime a new session of
+that same number is started. To permanently save the journal file, do
+
+TMBIDL> bye
+
+to exit TMBIDL and move the journal file from the saves/ directory
+to this directory.

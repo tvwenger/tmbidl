@@ -1,0 +1,28 @@
+;
+;  Define TMBIDL colors 
+;
+;  V5.0  July 2007
+;
+; define the color table i/o structure 
+;
+ct={tmbidl_color_table, $
+    red:bytarr(256),    $
+    green:bytarr(256),  $
+    blue:bytarr(256),   $
+    oldr:bytarr(256),   $
+    oldg:bytarr(256),   $
+    oldb:bytarr(256)    $
+    }
+;
+defsysv,'!ct',replicate({tmbidl_color_table}, 1)
+;
+setcolors, /system_variables   ; makes the color names !colorname system variables
+;
+; fetch this color table
+;
+tvlct,red,green,blue,/get
+;
+;  store thie color table into the structure
+;
+!ct.red=red & !ct.green=green & !ct.blue=blue & 
+;

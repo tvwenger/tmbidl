@@ -1,0 +1,18 @@
+;
+;-------------------------------------------------
+; TMBIDL cmapvgps V7.0 COMPILE AS RESOLVE_ROUTINEs
+;-------------------------------------------------
+;
+oldpath=!path
+local_IDL=getenv('LOCAL_IDL')
+local_TMBIDL=getenv('LOCAL_TMBIDL')
+path=local_TMBIDL+'source/vgps/pro/'
+!path=path
+;
+;  cmapvgps procedures
+;
+resolve_routine,'cmapvgps',/either,/compile
+;
+; now put !path back to original
+;
+!path=oldpath

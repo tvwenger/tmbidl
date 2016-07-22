@@ -1,0 +1,91 @@
+
+Tsys saga in Bozo processing.
+
+scan=518700312L
+
+openr,!dataunit,!datafile
+
+istat=corposonoff(!dataunit,b,t,cals,bonrecs,boffrecs,/sclcal,scan=scan)
+
+---------------------------------------------------------------------------------
+CALS structure
+---------------------------------------------------------------------------------
+IDL-->print,cals.calval     <== cal values accoring to Phil
+      38.6135      40.9413
+      38.6072      40.0097
+      36.4421      36.1321
+      35.0062      34.1791
+
+IDL-->print,cals.calscl     <== scale factor to switch from correlator units to Kelvins
+      38.6445      43.0231
+      37.4755      37.6446
+      37.1172      41.7690
+      45.3727      44.7112
+calon=cals[0].h.cor.calON
+caloff=cals[0].h.cor.calOff
+IDL-->onoff=calon-caloff
+IDL-->print,onoff
+     0.999198     0.951612
+IDL-->print,cals[0].h.cor.calON
+      1.92965      1.93151
+IDL-->print,cals[0].h.cor.calOff
+     0.930452     0.979897
+------------------------------------------------------------------------------------------------
+ T Structure
+------------------------------------------------------------------------------------------------
+
+IDL-->print,t.src              IDL-->print,t.src           the source temp?    
+     0.533889     0.585517     0.534081     0.585972       almost but not quite 
+     0.473831     0.510506     0.474312     0.510555       t.on - t.off 
+     0.436466     0.486487     0.436905     0.486790
+     0.406334     0.451135     0.406906     0.451904
+      0.00000      0.00000
+      0.00000      0.00000
+      0.00000      0.00000
+      0.00000      0.00000
+
+IDL-->print,t.on               <=== Tsys ON ?
+      36.6680      42.9790
+      35.2717      39.1997
+      38.8869      41.0826
+      39.4123      42.0659
+      0.00000      0.00000
+      0.00000      0.00000
+      0.00000      0.00000
+      0.00000      0.00000
+IDL-->print,t.off              <=== Tsys OFF ?
+      36.1339      42.3930
+      34.7974      38.6891
+      38.4500      40.5958
+      39.0053      41.6140
+      0.00000      0.00000
+      0.00000      0.00000
+      0.00000      0.00000
+      0.00000      0.00000
+IDL-->print,t.calval          print,cals.calval     <== cal values accoring to Phil
+      38.6135      40.9413    38.6135      40.9413 
+      38.6072      40.0097    38.6072      40.0097 
+      36.4421      36.1321    36.4421      36.1321 
+      35.0062      34.1791    35.0062      34.1791 
+      0.00000      0.00000
+      0.00000      0.00000    These are identical 
+      0.00000      0.00000
+      0.00000      0.00000
+IDL-->print,t.calscl          print,cals.calscl     <== scale factor from Corr units to Kelvins
+      38.6445      43.0231    38.6445      43.0231     
+      37.4755      37.6446    37.4755      37.6446
+      37.1172      41.7690    37.1172      41.7690 
+      45.3727      44.7112    45.3727      44.7112 
+      0.00000      0.00000
+      0.00000      0.00000    These are identical
+      0.00000      0.00000
+      0.00000      0.00000
+
+
+Conclusion:
+
+cal.calval are the Cal values
+
+t.on       are Tsys ON
+t.off      are Tsys OFF
+

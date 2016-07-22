@@ -1,0 +1,176 @@
+=====================================================================
+Package for Arecibo HI Surveys: BUAO and BL :
+Boston University--Arecibo Observatory & Bania--Lockman 
+=====================================================================
+==> Only BUAO implemented at present 
+
+v7.0 July 2013 tmb
+v7.1 Aug  2013 tmb 
+=====================================================================
+=====================================================================
+
+Must run IDL in 32 bit mode because of BUAO's
+data structure's odd number of data points
+in the spectrum (681 blame tmb. but to be fair
+to him and robert simon we were running on 32 bit machines)
+
+You will find it useful to define the following alias
+(using file names appropriate to your local machine):
+
+inittmbidl32   cd /idl/tmbidl/v7.1/startup/ ; source TMBIDL.INIT; idl -32; cd -
+
+You will know that you're running in 64 bit mode
+if start,8 gives you this error message:
+
+ONLINE data file: ../../data/buao/buao_survey.tmbidl selected for searches
+ONLINE data file contains        26100 records
+% End of file encountered. Unit: 102, File: ../../data/buao/buao_survey.tmbidl
+% Execution halted at: $MAIN$  
+
+==> 64 bit mode hits EOF because of odd number of data points ...
+
+==============================================
+==============================================
+
+==> IMPORTANT <==
+
+This mode needs the BUAO survey data! 
+
+==> They can be found at BU on NINKASI:
+
+bania@ninkasi /data/buao/          
+> du -h 
+94M     buao_survey.tmbidl
+==> As you can see, this is not very big, but then one cannot
+    include everything in the standard TMBIL release                          
+
+==> The TMBIDL BUAO package expects these data to be located at 
+    ../tmbidl/data/buao/ 
+    so either put them there or use a symbolic link.
+    (See ../v7.0/0DATA_FILES)
+
+    The BUAO data are located on NINKASI at BU in 
+    /data/buao/buao_survey.tmbidl
+
+    In my NINKASI installation of TMBIDL I use a link to these data:
+
+    ln -s /data/buao/ /tmbidl/data/buao
+    ------------------------------------
+
+==> getlb.pro repeats GRS .pro name. One surely wants to superimpose
+    GRS 13-CO and BUAO HI spectra, so we need to find a way to do this.
+    tmb thinks additional .pro's 
+    e.g. getBUAO,lgal,bgal  getGRS,lgal,bgal 
+
+=====================================================================
+HERE BELOW IS THE OUTPUT OF A SUCCESSFUL start,8 BUAO TMBIDL STARTUP
+=====================================================================
+
+TMBIDL-->start,8
+=======================
+TMBIDL V7.1 INITIALIZED
+=======================
+===========================================
+Initializing TMBIDL for BUAO HI Survey data
+===========================================
+TMBIDL V7.1 loaded from /ninkasi0/idl/tmbidl/v7.1/startup
+
+
+======================================================
+BUAO HI Survey database parameters:
+======================================================
+     Start position:  30.5000,  0.4667
+     Stop  position:  60.4667, -0.4667
+     Coordinate increments: ( 0.0333, 0.0333)
+     Giving a map dimension of 900 x 29
+======================================================
+% Compiled module: BUAO_DATA.
+% Compiled module: BUAO_HDR.
+% Compiled module: BUAO.
+% Compiled module: BUAO2GBT.
+% Compiled module: GETLB.
+% Compiled module: HISA.
+% Compiled module: MAP9.
+% Compiled module: SURVEY.
+% Compiled module: TEST.
+
+NSAVE write protection turned ON
+
+STACK is now empty
+
+ONLINE data file is ../../data/buao/buao_survey.tmbidl
+
+ONLINE data file: ../../data/buao/buao_survey.tmbidl selected for searches
+ONLINE data file contains        26100 records
+Select scan range for searches is:            0 to        26099
+Files currently being used are:
+
+Spectral Line SDFITS  Data  file= 
+              LUN=   0
+Continuum     SDFITS  Data  file= 
+              
+ONLINE  Data  file= ../../data/buao/buao_survey.tmbidl LUN= 102
+OFFLINE Data  file= ../../data/continuum/Cdata.tmbidl LUN= 103
+
+Nsave file= ../../data/nsaves/nstest.LNS LUN= 100
+NSlog file= ../../data/nsaves/nstest.LNS.key LUN= 101
+
+PLOT    file= ../../figures/tmbidl.ps
+MESSAGE file= ../saves/messages
+ARCHIVE file= ../archive/archive
+
+Journal   = ../saves/jrnl_BUAO.log
+SAVE_state= ../saves/state.dat
+SAVE_procs= ../saves/procs.dat
+% Compiled module: TEXTOIDL.
+% Compiled module: TEXTABLE.
+% Compiled module: STRTRANS.
+% Compiled module: TRANSLATE_SUB_SUPER.
+% Compiled module: NEXTTOK.
+% Compiled module: STR_TOKEN.
+% Compiled module: MATCHDELIM.
+
+==> AT THIS POINT YOU CAN RUN A SANITY CHECK (READ THE FILE!)
+
+@../buao/0SANITY
+
+=====================================================================
+=====================================================================
+IGNORE THE STUFF BELOW UNLESS YOU WANT TO CODE !
+=====================================================================
+=====================================================================
+==> Lots to do: see /idl/buao/ 
+
+buao/      contains Arecibo Bania-Lockman and BUAO HI surveys
+=====      lots of FORTRAN code to deal with it...
+           > du -h buao/
+           17M     buao/fits
+           72M     buao/buao/survey
+           572K    buao/buao/for
+           3.6M    buao/buao/bl_survey
+           76M     buao/buao
+   93M     buao/
+
+
+
+
+==> HOLY CRAP !!!!  TMB just found: /idl/idl/buao/ : 
+
+Apparently tmb did a shitload of work in 2004 for v3.2 anent
+interfacing BUAO with TMBIDL...  so there is a jump start here.
+
+==> Here is the 00README from that effort:
+
+    July 2007
+
+    Contains procedures for analyzing data from the Boston University - 
+    Arecibo (BUAO) HI survey.
+
+    Contains the BUAO survey data themselves.
+
+    NOT YET INTEGRATED INTO THE V5.0 RELEASE.  PERHAPS SHOULD BE IN V5.1. 
+
+==> Well, now is the time, eh?
+
+=====================================================================
+

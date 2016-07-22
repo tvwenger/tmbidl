@@ -1,0 +1,29 @@
+;==============================================================
+; Radio Recombination Line Package -- v7.0 may 2013 tmb/tvw/dsb
+;==============================================================
+; 
+oldpath=!path
+local_TMBIDL=getenv('LOCAL_TMBIDL')
+;
+path=local_TMBIDL+'source/RRL/pro/'
+!path=path
+;
+; RRL procedures
+;
+resolve_routine,'h00',/either,/compile
+resolve_routine,'sinc',/either,/compile
+resolve_routine,'interpsinc',/either,/compile
+resolve_routine,'interprrl_rvsys',/either,/compile
+resolve_routine,'processrrl_rvsys',/either,/compile
+resolve_routine,'combinerrl',/either,/compile
+resolve_routine,'processrrl_combine',/either,/compile
+resolve_routine,'calibraterrl',/either,/compile
+resolve_routine,'fitrrl',/either,/compile
+;
+; now put !path back to original
+;
+!path=oldpath
+;
+
+
+

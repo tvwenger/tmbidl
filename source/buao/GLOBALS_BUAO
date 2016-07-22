@@ -1,0 +1,36 @@
+;
+;
+;   global variables for BUAO survey:  generic for maps?
+;
+defsysv,'!hor_0',   30.50000000d           ;  map origin in degrees
+defsysv,'!ver_0',    0.46666667d            
+defsysv,'!hor_tlc', 30.50000000d           ;  map start, TLC in case of BUAO  
+defsysv,'!ver_tlc',  0.46666667d
+defsysv,'!hor_brc', 60.46666667d           ;  map stop,  BRC in case of BUAO  
+defsysv,'!ver_brc', -0.46666667d
+defsysv,'!del_hor',  3.33333333d-02        ;  map spacing in degrees
+defsysv,'!del_ver',  3.33333333d-02
+defsysv,'!n_hor',    900L                  ;  map cell dimensions
+defsysv,'!n_ver',     29L 
+;
+!kount=!n_hor*!n_ver
+;
+print,'======================================================'
+print,'BUAO HI Survey database parameters:'
+print,'======================================================'
+gl1=!hor_tlc 
+gb1=!ver_tlc 
+gl2=!hor_brc 
+gb2=!ver_brc &
+deltal=!del_hor 
+deltab=!del_ver 
+nl=!n_hor 
+nb=!n_ver 
+;
+print,gl1,gb1,format='("     Start position: ",f8.4,",",f8.4)'
+print,gl2,gb2,format='("     Stop  position: ",f8.4,",",f8.4)'
+print,deltal,deltab,$
+      format='("     Coordinate increments: (",f7.4,",",f7.4,")")'
+print,nl,nb, $
+      format='("     Giving a map dimension of ", I3," x",i3)'
+print,'======================================================'

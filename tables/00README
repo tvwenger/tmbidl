@@ -1,0 +1,14 @@
+=============================================================
+ TABLES directory 
+=============================================================
+This is the directory traditionally used by TMBIDL  
+to store data analyis tables and other info.
+           
+Insofar as TMB is aware it is not a DEFAULT directory for 
+any .pro's writes ...
+
+=============================================================
+TMB copied everything from ../tmbidl_old/tables/ 
+=============================================================
+===> Much, perhaps all, of this should not stay in the v7.0
+     master release. 

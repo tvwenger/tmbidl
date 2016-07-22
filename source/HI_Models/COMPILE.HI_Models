@@ -1,0 +1,18 @@
+;
+; HI Models Package
+;
+; Include in TMBIDL via:  @../RRL/COMPILE.HI_Models
+;
+;
+.compile ../HI_Models/circle_tvw.pro
+.compile ../HI_Models/closest2d.pro
+.compile ../HI_Models/histogram_clip.pro
+.compile ../HI_Models/intersect2d.pro
+.compile ../HI_Models/los.pro
+.compile ../HI_Models/makegclouds.pro
+.compile ../HI_Models/progressbar_tvw.pro
+.compile ../HI_Models/pspiral.pro
+.compile ../HI_Models/radtrans.pro
+.compile ../HI_Models/synthlvimage.pro
+.compile ../HI_Models/synthlv.pro
+.compile ../HI_Models/vlos.pro

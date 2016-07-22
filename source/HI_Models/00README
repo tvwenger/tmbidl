@@ -1,0 +1,26 @@
+=========================================================
+ HI Model Spectra for the Milky Way
+
+ code by Trey V. Wenger May 2013
+=========================================================
+
+The .procedures for this package are in ../vX.X/HI_Models
+
+You compile these procedures from the IDL command line via: 
+
+@fully-qualified-file-name/vX.X/HI_Models/COMPILE_HI_Models
+
+=========================================================
+Information on how to use this code is found in:
+COOKBOOK and 
+=========================================================
+
+
+=========================================================
+This code was interfaced with TMBIDL by tmb using the
+code in the file ../vX.X/trey2tom.pro
+which is a batch file invoked by radtrans.pro
+
+This file shows how to interface any vector array data
+into TMBIDL.
+=========================================================

@@ -1,0 +1,30 @@
+;
+;   WRITE to ARCHIVE file Spectral Line HEADER information
+;   This is a modified form of much of the information in the standard
+;   plot header
+;
+;   Outputs 'archive' which is a single string containing the following
+;   information delimited by a ' ' blank
+;
+;
+;   archive_type,source,scan,
+;
+archive_type='CHEAD'
+b=' '                ; force blanks between variables for later strsplit
+;
+; first fetch the variables from !b[0]
+; turn them all to strings via =fstring(,'()') 
+;
+source=strtrim(string(!b[0].source),2) 
+scan=fstring(!b[0].scan_num,'(I9)')                    ; beware BOZO !
+;
+print,'Source Name = '+ source
+print,'Scan Number = '+ scan
+;
+archive=archive_type+b+source+b+scan+b+
+;
+; all ARCHIVE scripts must return a single string called 'archive'
+; first entry is ID of archive_type  
+;
+print,archive
+;

@@ -1,0 +1,148 @@
+===============================================
+ IS YOUR GRS INSTALLATION SANE?
+===============================================
+===============================================================
+You can do a quick sanity check by running the batch script:
+
+@../GRS/0SANITY_TEST
+
+===============================================================
+
+Well, who knows?  But here is what you should be seeing:
+
+==============================================================
+STARTING TMBIDL IN GRS MODE:
+==============================================================
+
+At Linux prompt:  inittmbidl32  <== See 00README for details
+
+You then get a stream of the usual static .compile 's 
+ending with: 
+
+=======================
+TMBIDL V7.1 INITIALIZED
+=======================
+
+Select Data Type to Analyze with TMBIDL: 
+
+ (0) none     : Generic package: prompts for !data_points
+ (1) 140FT    : NRAO 140-FT UniPops NSAVE data
+ (2) GBT_ACS  : GBT ACS spectral line data
+ (3) GBT_DCR  ; GBT DCR continuum data
+ (4) GRS      : BU-FCRAO GRS data
+ (5) BOZO     : Arecibo Interim Correlator 3-Helium data
+ (6) CUSTOM   : Special Configuration du Jour
+ (7) MPI      : MPIfR 100-m
+ (8) BUAO     : BU-AO HI survey data
+ (9) USER     : User supplied startup file
+(10) TMB      : TMB startup file
+(11) RTR      : RTR startup file
+(12) DSB      : DSB startup file
+(13) LDA      : LDA startup file
+(14) TVW      : TVW startup file
+
+===============================================================
+Syntax: start,telescope_no, "fully_qualified_data_file_name" 
+        OR
+        start,"telescope_name","fully_qualified_data_file_name" 
+===============================================================
+TMBIDL-->
+
+start,4 then gives:
+
+=======================
+TMBIDL V7.1 INITIALIZED
+=======================
+TMBIDL V7.1 loaded from /ninkasi0/idl/tmbidl/v7.0/startup
+
+
+Initializing TMBIDL for BU-FCRAO Galactic Ring Survey: GRS
+
+==> which is followed by the GRS package procedure .compile 's
+    ending with:
+
+
+=============================================
+Loaded GRS package system variables and files
+=============================================
+
+STACK is now empty
+
+ONLINE data file is ../../data/grs/data/LVmap.dat
+
+ONLINE data file: ../../data/grs/data/LVmap.dat selected for searches
+ONLINE data file contains         6830 records
+Select scan range for searches is:            0 to            2
+
+NSAVE date file is ../../data/nsaves/GRS/hrdsGRS.dat
+NSAVE log file name is ../../data/nsaves/GRS/hrdsGRS.key
+
+NSAVE file has         4096 slots of which          383 are used
+
+NSAVE write protection turned ON
+
+Files currently being used are:
+
+Spectral Line SDFITS  Data  file= 
+              LUN=   0
+Continuum     SDFITS  Data  file= 
+              
+ONLINE  Data  file= ../../data/grs/data/LVmap.dat LUN= 102
+OFFLINE Data  file= ../../data/continuum/Cdata.tmbidl LUN= 103
+
+Nsave file= ../../data/nsaves/GRS/hrdsGRS.dat LUN= 100
+NSlog file= ../../data/nsaves/GRS/hrdsGRS.key LUN= 101
+
+PLOT    file= ../../figures/tmbidl.ps
+MESSAGE file= ../saves/messages
+ARCHIVE file= ../archive/archive
+
+Journal   = ../saves/jrnl_GRS.log
+SAVE_state= ../saves/state.dat
+SAVE_procs= ../saves/procs.dat
+
+==> This last part shows the currently attached data files. 
+
+==============================================================
+==============================================================
+
+Quick tests of whether or not you can get to the GRS data:
+
+Can you see the nsaves?
+=======================
+printon
+getns,10
+xx
+zline
+printoff
+
+Should make a PostScript figure named: 
+
+../tmbidl/figures/tmbidl.ps
+
+that is identical to 
+
+../tmbidl/v7.0/GRS/test_figure.ps
+
+Can you find this same position in the GRS data base?
+=====================================================
+
+lgal=32.838
+bgal=+0.019
+getlb,lgal,bgal
+
+gives==>
+
+../../data/grs/grs_data/grs-32.dat Dist=       3023.91          17
+../../data/grs/grs_data/grs-33.dat Dist=       588.967          18
+
+xx
+
+Should show a spectrum very much like test_figure.ps
+*except* this is the baselined GRS spectrum nearest
+in position to this lgal,bgal.  test_figure.ps 
+is the average of the 9 GRS spectra nearest this
+nominal position weighted by the FCRAO Gaussian 
+beam.  This is what the label 'CONVOLVED' means.
+And, yes, tmb knows this to be a misnomer...
+

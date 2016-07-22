@@ -1,0 +1,84 @@
+====================================================
+THERE IS VERY LITTLE CODE WRITTING FOR BUAO ANALYSIS
+====================================================
+
+There is, however, a lot of  FORTRAN code to be found 
+on NINKASI at BU in /idl/buao/buao/for/
+
+just how much of this might be worth the effort of
+rewriting into IDL is currently unknown.
+
+====================================================
+Here are the .pro's in ../buao/pro/  
+As yet, none of them has been brought up to v7.0
+programming standard. (Save for a few edits needed 
+to make them run.)
+
+getlb.pro -   Syntax: getlb,gl,gb,nrec
+=========     ========================
+              Takes input gl,gb and gets the nearest
+              BUAO spectrum to this position. Returns
+              nrec which is the sequential file record
+              number of this spectrum in the survey
+              data file.
+        ==>   Note the identical .pro name to GRS equivalent...
+
+map9.pro -    Fetch and overplot the 8 nearest neighbor spectra
+========      to input spectrum specified by its NREC position. 
+              Note that NREC=!b[0].scan_num           
+
+buao_survey.pro - THIS WILL NOT RUN AS GLOBALS ARE SET ELSEWHERE  
+===============   Originally defined and set survey parameter 
+                  globals for the next .pro
+
+survey.pro -  Makes a plot of the survey lgal,bgal 
+==========    coverage.  Is based on the values of
+              the BUAO GLOBALS set elsewhere. It
+              runs.  IF correct, it suggests that
+              we don't have anywhere near the 
+              entire survey.  Bummer. 
+
+hisa.pro -    Beginning of HI Self-Absorption analysis.
+========      Based on v3.2 code. Plots spectra nearest
+              input position.  square girds. 3x3 default
+              and 5x5 is current maximum
+
+
+
+
+==> BUAO Survey data had to be converted from their native
+    DEC VAX VMS FORTRAN Direct Access file format to TMBIDL.
+    These .pro's did that although tmb had not confirmed that
+    these are a complete set.  Hopefully, we shall never have
+    need to use them ever again...
+
+test.pro -      Beginning of task of figuring out VAX file...
+========        No longer needed.
+
+buao_data.pro - Reads input BuAO VAX data file.  Alas, takes
+=============   this filename as input so cannot know it. 
+
+buao_hdr.pro  - Same as above but read only the header. 
+============    BUT it says file='/home/bania/buao/survey/survey.dat'
+                which suggests that this was the VAX file...
+
+buao.pro -      The above were used to figure things out.
+========        This is the code that did the translation
+                of the file named above.  It invokes:
+
+buao2gbt.pro -  This does the AO to TMBIDL conversion on a 
+============    record by record basis. 
+
+make_buao_online.pro - Converts VAX file into TMBIDL ONLINE file.
+====================   Go figure?  Not needed now. 
+
+start_buao.pro - Unnecessary.  Replaced by 
+==============   ../tmbidl/v7.0/start/start_BUAO.pro
+
+=====================================================================
+==> Finally:
+
+atv.pro - ancient 1.5 2004 version of famous interactive   
+=======   display tool for astronomical images
+          see www.physics.uci.edu/~barth/atv
+          It is not clear why this was in the buao directory...

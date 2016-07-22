@@ -1,0 +1,28 @@
+;
+;------------------------------------------------------------------------------
+; TMBIDL v7.0 TEMPLATE COMPILE BY RESOLVE_ROUTINE FOR AN ANALYSIS PACKAGE "XXX"
+;------------------------------------------------------------------------------
+;
+oldpath=!path
+local_IDL=getenv('LOCAL_IDL')
+local_TMBIDL=getenv('LOCAL_TMBIDL')
+;
+path=local_TMBIDL+'XXX/pro/'
+!path=path
+;
+;  XXX procedures
+;
+resolve_routine,'first_pro',/either,/compile    ; function of first_pro
+resolve_routine,'next_pro',/either,/compile     ; function of next_pro
+;
+; these in tmb sandbox 
+path=local_IDL+'sandboxes/tmb/'
+!path=path
+;
+resolve_routine,'GRSdisplay',/either,/compile
+resolve_routine,'pgvname',/either,/compile
+;
+; now put !path back to original
+;
+!path=oldpath
+;

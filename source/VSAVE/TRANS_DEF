@@ -1,0 +1,29 @@
+trset   = {trans_set,    $              ;
+           trans:bytarr(16),   $        ;  transition; name for the transition(s)
+           band:bytarr(32),    $        ;  band for this transistion
+           hgt:fltarr(!ngauss_max),  $  ;  line intensity
+           cen:fltarr(!ngauss_max),  $  ;  Center (channels)
+           fwhm:fltarr(!ngauss_max), $  ;  FWHM (channels)
+           fixc:intarr(!ngauss_max), $  ;  Is fit center fixed?
+           fixhw:intarr(!ngauss_max),$  ;  Is fit FWHM fixed?
+           ngauss:0,          $         ;  !ngauss 
+           bgauss:0,          $         ;  !bgauss
+           egauss:0,          $         ;  !egauss
+           xrange:fltarr(2),  $         ;  !x.range
+           nfit:0,            $         ;  !nfit
+           nrset:0,           $         ;  !nrset
+           sregion:lonarr(16), $       ;  first 16 values of !nregion
+           comment:bytarr(16)  $       ;  a comment          
+}; END OF DEFINITION
+defsysv,'!tr_file','../tables/tr_tab.te' ; file for transitions
+defsysv,'!tr_file_stat',0   ; status of !tr_file
+defsysv,'!tr_lun',0         ; lun of !tr_file
+defsysv,'!trans_max',100    ; maximum number or transitions
+defsysv,'!trans_i',0        ; transition pointer
+defsysv,'!trans_found',0    ; number of transitions of a given kind found in table
+defsysv,'!trans_n',0        ; current number of transitions in the table
+defsysv,'!tr',replicate({trans_set}, !trans_max)   ;  define transition structure array 
+defsysv,'!tr_rec',replicate({trans_set}, 1)     ;  a single transition record 
+defsysv,'!tr_blk',replicate({trans_set}, 1)  ;   a blank transition record
+defsysv,'!trans','not set ' ; current transition
+defsysv,'!band','not set ' ; current transition

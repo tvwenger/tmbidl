@@ -1,0 +1,27 @@
+================================
+ TMBIDL QUICK LOOK SANITY CHECKS
+================================
+
+To check the sanity of a TMBIDL v7.0 installation
+do the following at the TMBIDL--> command line: 
+
+TMBIDL--> debugon  <== in case something barfs
+                       this gives full error traceback
+
+Then execute the following IDL batch files:
+
+@../examples/Lfiles.pro
+@../examples/examples.pro
+
+You should see a baseline subtracted H91 alpha 
+spectrum for a 190.7 minute integration on W3.
+
+To check the continuum part of the installation:
+
+@../examples/Cfiles.pro
+@../examples/Cexamples.pro
+
+You should see an elevation scan of a standard
+Peak for the X-band pointing source 0337+5054.
+
+=============================================

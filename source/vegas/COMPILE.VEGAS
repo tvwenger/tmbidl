@@ -1,0 +1,10 @@
+;==============================================================
+; VEGAS Analysis Package -- v8.0 july 2015 tmb/tvw
+;==============================================================
+; Include in TMBIDL via:  @../vegas/COMPILE.VEGAS
+;
+;
+.compile ../vegas/pro/vegas
+.compile ../vegas/pro/gvegas
+.compile ../vegas/pro/vegaslook
+.compile ../vegas/pro/showvegas

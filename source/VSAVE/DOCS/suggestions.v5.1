@@ -1,0 +1,37 @@
+TMB,
+
+As I contemplate merging new material in I have some suggestions.
+
+When copying over a new version a minumum of files should have to be
+modified in the copied version.
+
+STARTUP.IDL.V5.1 should be made more vanilla.
+
+     statements specific to a specific task like lfile=stuff should be
+     collected in separate files like STARTUP.MR08 for things we might
+     all be using. Individual STARTUP packages should be put in each
+     individual's directory, eg, ../rtr/startup.te since we may have
+     more than one.
+
+COMPILE.TMBIDL.V5.1
+
+     This should contain only the basics. One is presumedly running in
+     the v5.1 subdirectory so eg
+
+              .compile ../v5.1/findpol should become .compile findpol
+
+     We should begin to move toward packages. So eg GRS and Arecibo
+     specific pro should be moved to COMPILE.GRS COMPILE.BOZO etc
+
+     Parhaps introduce startup files like STARTUP.GRS which would
+     invoke COMPILE.GRS and define system variables specific to
+     GRS. I'm trying to write my new stuff so that it can work in that
+     way. 
+
+Try to avoid fully qualified file names where ever possible. Using
+names like ../nsave/saves.mr08 works well and is installation
+independent. 
+
+I suggest adding a new standard subdirectory in the idl subdirectory
+called tables. This would contain tables of things like calibration
+factors. 

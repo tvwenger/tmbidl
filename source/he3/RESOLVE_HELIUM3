@@ -1,0 +1,19 @@
+;==============================================================
+; GBT ACS 3_Helium Data Analysis Package -- v7.0 july 2013 tmb
+;==============================================================
+;--------------------------------------------------------------
+;
+oldpath=!path
+local_TMBIDL=getenv('LOCAL_TMBIDL')
+;
+path=local_TMBIDL+'source/he3/pro/'
+!path=path
+;
+resolve_routine,'lookhe',/either,/compile    ; Looks at 3He spectra
+resolve_routine,'dohe',/either,/compile      ; Analyzes 3He
+resolve_routine,'hephotom',/either,/compile  ; Analyzes H91 alpha
+;
+; now put !path back to original
+;
+!path=oldpath
+;

@@ -1,0 +1,18 @@
+============================================================
+    TMBIDL V8 Construction    tmb & tvw  July 2015
+============================================================
+
+==>  ../source/pro/  protocol to eliminate old 'v7.1' directory style
+
+==>  concept of sanity check mode. 
+
+Following .pro's brought over from GB installation after June 2015 team retreat:
+
+../tmbidl_v8/sandboxes/tmb/x.pro gvegas.pro vegas.pro vegasLook.pro
+
+../tmbidl_v8/pro/read_table.pro 
+
+2016
+
+rxidrecVEGAS.pro
+rrls.catalog

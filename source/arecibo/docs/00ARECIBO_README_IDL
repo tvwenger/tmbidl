@@ -1,0 +1,286 @@
+
+***********************************************************************
+***********************************************************************
+****                                                               ****
+****  NOT TO BE CONFUSED WITH THE NRAO GBTIDL V1.1 PACKAGE         ****
+****                                                               ****
+****     THIS IS SIMILAR, BUT ENTIRELY DISTINCT SOFTWARE           ****
+****                                                               ****
+***********************************************************************
+***********************************************************************
+***********************************************************************
+------------------------------------------------------------------------
+  Arecibo Version of the 3HeIDL Data Analysis Package 
+
+  T.M. Bania, July 2005
+
+------------------------------------------------------------------------
+
+The AO version is a modified form of the v3.3 3HeIDL Package and works
+only for the 'Interim' Correlator (hereafter, the 'Correlator').
+It uses a variety of IDL .pro's written by Phil Perillat in order to 
+interface AO data with the package.  As of 6 July 2005 this package works 
+only for spectral line data.  Specifically, it has been tested for total
+power position switched data taken in the standard:  OnOff ON, OnOff OFF,
+CalOn, CalOff pattern.  For anything else, caveat emptor and be prepared
+to modify/enhance this package.
+
+------------------------------------------------------------------------
+
+THIS TEXT AND LINKS TO V3.3 DOCUMENTATION CAN BE FOUND AT ARECIBO AT:
+
+file:///home/tbania/he3/idl/v3.3/DOCS/gbt_idl_v3.3.html
+
+N.B.:  This documentation has lots of information that applies only
+to GBT data. I have not had the chance to tweak it for the Arecibo
+application.  READ THIS FILE FOR ARECIBO DETAILS.  Once the AO
+data are converted into the {gbt_idl} data format, then the vast
+majority of the .PRO's describe here should just work.....
+
+------------------------------------------------------------------------
+
+
+
+***  Relevant Data files:
+
+-->  The real time raw telescope data files are:
+
+/share/olcor/corfile   <-- spectral line data
+/share/olcor/calfile   <-- calibration (continuum) data 
+
+These real-time files give you access to the data as you are observing.
+This package allows you to do this with a variety of commands.
+
+Once you finish a session, the AO system automatically copies these  
+online files into files called something like:
+
+/share/olcor/corfile.05jul05.a1804.1
+/share/olcor/calfile.05jul05.a1804.1
+/share/olcor/corfile.06jul05.a1804.1
+etc.
+
+where the string 'a1804' is your AO project ID number
+
+-->  Somewhen the next day these files are copied to a more permanent place:
+
+/proj/a1804/corfile.05jul05.a1804.1
+/proj/a1804/calfile.05jul05.a1804.1
+etc.
+
+---------------------------------------------------------------------------
+  RUNNING THE 3HeIDL at Arecibo
+---------------------------------------------------------------------------
+You will find these alias useful.  Put them in your shell .*rc file. Below
+is what I use for .tcshrc
+
+#     initialize IDL
+alias initidlde      'cd /home/tbania/he3/idl/v3.3/ ; source IDL.INIT.V3.3 ; idl61 -w'
+alias initidl        'cd /home/tbania/he3/idl/v3.3/ ; source IDL.INIT.V3.3 ; idl61'
+alias he3            'cd /home/tbania/he3/idl/v3.3; ; ls'
+alias felipe         'cd /pkg/rsi/local/libao/phil/Cor2 ; ls'
+alias a1704          'cd /proj/a1704 ; ls'
+alias a1804          'cd /proj/a1804 ; ls'
+#
+
+'initidl' and 'initidlde' each initializes the package, sets the IDL path, and
+then invokes, respectively, IDL v6.1 and IDLDE v6.1, respectively.
+Note that you are running in my 'tbania' directory.  Please do not modify
+any procedures! There is a directory already in the IDL path called: 
+/home/tbania/he3/idl/test
+Put your ideosyncratic .pro's here.  Or add to the path and put them
+somewhere else.  
+
+'felipe' gets you to Phil's IDL Interim Correlator routines.
+
+'a1804' gets you to your project data file; the permanent one that eventually
+appears...
+
+--------------------------------------------------------------------------------
+  RUNNING 3HeIDL with ARECIBO CORRELATOR DATA IN REAL TIME 
+--------------------------------------------------------------------------------
+
+When developing/debugging code I use IDLDE; for standard useage I prefer IDL. 
+
+-->  Real time data analysis of online data:
+
+1. Start by issuing:  'initidl' or 'initidlde'
+
+Package will .compile lots of routines and issue v3.3/ procedure:
+STARTUP.IDL.V3.3 which in turn executes: 
+start_arecibo,'/share/olcor/corfile' ; <--- real time online raw data file
+
+2. The first time you run IDL during an observing session, you MUST create
+a dummy file called '/share/tbania/online.bozo'.  The system does this for
+you automatically (see dialog below).  'online.bozo' contains the 3HeIDL
+format data after it is processed from the AO raw telescope format.  As
+you observe, you use the 'update' command to process newly acquired data
+which is then appended to 'online.bozo'
+
+==> it is VITAL, therefore, that before initializing a new observing 
+session, that any data in a pre-existing /share/tbania/online.bozo 
+file be copied and stored elsewhere.  Otherwise, it shall be expunged. 
+
+THE STARTUP DIALOG
+
+Answers below are relevant to a correlator configuration
+which has 4 tunings of two polarizations, 25 MHz bandwith, 9-level, 
+and 1024 channels per spectrum.  Each AO scan number produces, therefore,
+8 independent spectra.  Only the number of spectra per scan and the number
+of channels per scan are relevant here. 
+
+   .... lots of compile information
+
+   HE3IDL loaded from directory= /home/tbania/he3/idl/v3.3
+
+
+   Current ONLINE file definition is:
+   ONLINE file will be= /share/tbania/online.bozo LUN= 104
+
+   Do you want KEEP this or to make another new ONLINE file? (k/y/n) 
+
+***===> answer 'y' (no quotes!) for initialization of file
+
+   Input # records per scan, i.e. # subcorrelators in configuration
+   Input # records per scan: 8
+==> Each Scan makes   8 spectra
+
+   Constructing ONLINE data file /share/tbania/online.bozo
+
+
+   Made ONLINE data file /share/tbania/online.bozo with 0 records
+
+***===> If you don't yet have an nsave file, make one. Else keep
+        the old one....
+
+   Current NSAVE file is:
+
+   Nsave file= /share/tbania/nsave.dat LUN= 100
+   NSlog file= /share/tbania/nsave.log LUN= 101
+
+   Do you want to make a new NSAVE file? (y/n: n means use the above files)
+   Make NSAVE? (y or n):n
+
+   Nsave file= /share/tbania/nsave.dat LUN= 100
+   NSlog file= /share/tbania/nsave.log LUN= 101
+
+
+   Files currently being used are:
+
+
+   BOZO Telescope Data  file= /share/olcor/corfile LUN= 104
+   ONLINE  Data  file= /share/tbania/online.bozo LUN= 106
+   OFFLINE Data  file= /share/tbania/offline.bozo LUN= 103
+
+   Nsave file= /share/tbania/nsave.dat LUN= 100
+   NSlog file= /share/tbania/nsave.log LUN= 101
+   PLOT  file= ../figs/idl.ps
+
+   Journal   = ../saves/journal.dat
+   SAVE_state= ../saves/state.dat
+   SAVE_procs= ../saves/procs.dat
+   STACK is now empty
+   ONLINE data file: /share/tbania/online.bozo selected for searches
+   ONLINE data file contains 0 records
+   EOF on ONLINE data file
+   EOF on ONLINE data file
+   Select scan range for searches is: 0 to 0
+
+   NSAVE write protection turned ON
+
+3. To use the package, you need to convert the raw telescope data file
+   into the internal package data structure:  {gbt_idl} 
+   This can be found in /home/tbania/he3/idl/v3.3/gbt_data
+
+   Do this by issuing the 'update' command *after* the first valid
+   OnOff ON/OnOff OFF/CalOn/CalOff PS cycle is finished. Be patient!
+   IDL is doing a lot of work and is also fighting the system for
+   access to the raw telescope data file disk....
+
+'update' uses Phil's 'corposonof' procedure to calibrate and process
+the data into a Position Switched, PS, spectrum for each subcorrelator:
+(on/off-1)Tsys_off, as well as calculating the calibrated ON and OFF
+TP spectra.  Thus, 'update' produces 24 spectra for each AO ON scan
+number (8 PS + 8 ON + 8 OFF spectra). 
+
+--------------------------------------------------------------------------------
+  ANALYZING ARECIBO CORRELATOR DATA OFFLINE with He3IDL 
+--------------------------------------------------------------------------------
+
+Once you have created an 'online.bozo', you should do the remaining analysis
+with these data.  The raw telescope data file is unnecessary at this point.
+Ignore it. 
+
+All processing should use the ONLINE, OFFLINE, and NSAVE data files, each
+of which contains data in the {gbt_data} format.
+
+1. Start IDL with 'initidl'
+   Attach to the ONLINE file any valid file containing {gbt_data} format data. 
+
+
+   -->  Do you want KEEP this or to make another new ONLINE file? (k/y/n) 
+   i.e. answer 'yes' and input the fully qualified data file name.
+
+   The first time through, create your own personal NSAVE.dat files.  Pick
+   file names that are NOT NSAVE but rather something like:
+
+   /home/yourname/idl/data/my_nsave_data.dat   etc.
+
+   Once inside IDL, you can use the ATTACH procedure to change at will the
+   file assignments for the ONLINE, OFFLINE, and NSAVE data files.
+
+2. You should normally work with the position-switched, calibrated spectra.
+   You choose these with the SELECT procedure, for example, to 'PS' rather
+   than 'ON' or 'OFF'. (You could also use settype,'PS'
+
+   You should access the 'PS' data with the GET,rec_number procedure.
+   Use the LIST procedure to see what is in the ONLINE or OFFLINE data file.
+
+   Toggle your searching and listing between ONLINE/OFFLINE data files via
+   the 'ONLINE' and 'OFFLINE' commands.
+
+   See the documentation for He3_IDL v3.3 for all the commands and their
+   functionality.
+
+--------------------------------------------------------------------------------
+  ARECIBO PROCEDURES:
+--------------------------------------------------------------------------------
+
+==> The following IDL procedures were written to interface AO Correlator data to 
+    3HeIDL v3.3:
+
+start_arecibo,infile       ; STARTS THIS PACKAGE
+update                     ; updates online.bozo data file by appending new data
+                           ; automatically searches for valid new telescope data
+update_bozo,on_scan_number ; the primitive that does the work
+make_bozo_data             ; converts AO raw telescope into {gbt_data} format
+                           ; for an entire data file. 
+
+ao2gbt,nboard,npol,in,out  ; Convert the Arecibo {corget} data structure into 
+                           ; the GBT data structure {gbt_data}
+                           ;       'in'  is {corget}   data structure input
+                           ;      'out'  is {gbt_data} data structure output
+                           ;    'nboard' is the number of the subcorrelator boards (tunings)
+                           ;      'npol' is the number of polarizations sampled
+
+getbozo,scan_number        ;  for scan_number, use 'corrposonoff' to
+                           ;  calibrate and process a PS TP pair, convert into  
+                           ;  {gbt_data} structure HE3IDL package and put the
+                           ;  4 tunings x 2 polarizations = 8 PS spectra into
+                           ;  !b[7] to !b[15]
+
+
+cshift,vel,ichan           ; calculate channel shift needed to align spectra
+                           ; taken at incorrect source velocity 
+
+
+
+==> The following 3HeIDL v3.3 procedures were modified to interface the AO 
+    Correlator data:  
+
+STARTUP.IDL.V3.3 
+
+acquire.pro
+
+--------------------------------------------------------------------------------
+
+

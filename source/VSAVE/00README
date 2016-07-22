@@ -1,0 +1,14 @@
+===================================================================
+ VSAVE Data Reduction Package  26 June 2009
+===================================================================
+
+rtr's 3He averaging code with line transition and line parameter 
+structures
+
+===================================================================
+
+Include package GLOBALS in TMBIDL via:      @../VSAVE/GLOBALS.VSAVE
+
+Include package compilation in TMBIDL via:  @../VSAVE/COMPILE.VSAVE
+
+Doing the above loads a vanilla version of this package

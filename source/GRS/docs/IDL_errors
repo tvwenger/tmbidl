@@ -1,0 +1,64 @@
+
+Comments on GRS software and web page.
+
+**** Going through the Astronomy Dept. www site and clicking on research, IAR,
+research, GRS leads to the GRS grad school www site.  i sent email to jeff sanborn
+about this about a week ago.  now he is on jury duty.
+
+
+
+1.  All 3 IDL procedures have wrap-around errors when downloading.  That is, 
+    syntatically valid IDL commands become compile time errors when they wrap.
+    Long lines should be shortened by making the commands multi-line via "$"
+
+2.  GRS_spectrum.pro -- 
+     ================    
+
+***2 wraparound errors
+
+ GRS-IDL-->.compile GRS_spectrum
+
+data cubes'
+      ^
+% Syntax error.
+  At: /idl/idl/GRS/GRS_spectrum.pro, Line 12
+
+pixel is finite
+       ^
+% Syntax error.
+  At: /idl/idl/GRS/GRS_spectrum.pro, Line 74
+% 2 Compilation error(s) in module GRS_SPECTRUM.
+
+***Execution error with:
+
+GRS-IDL-->print,fname
+/drang/grs_data/grs-15-cube.fits
+
+GRS-IDL-->GRS_spectrum,fname,16.0,0.
+% READFITS: Now reading 326 by 342 by 659 array
+% Compiled module: MEAN.
+% Compiled module: MOMENT.
+% Compiled module: WRITEFITS.
+% Keyword CHECKSUM not allowed in call to: WRITEFITS
+% Execution halted at: GRS_SPECTRUM       86 /idl/idl/GRS/GRS_spectrum.pro
+%                      $MAIN$          
+
+CHECKSUM is apparently illegal.  I edited it out, recompiled and code ran.
+
+3.  GRS_plotspectrum.pro
+    ====================
+
+*** wrap around error 
+
+GRS-IDL-->.compile /idl/idl/GRS/GRS_plotspectrum.pro
+
+(km/s)", ytitle="T!DA!N!U*!N (K)"
+       ^
+% Syntax error.
+  At: /idl/idl/GRS/GRS_plotspectrum.pro, Line 35
+% 1 Compilation error(s) in module GRS_PLOTSPECTRUM.
+
+4.  GRS_intint.pro
+    ==============
+
+    hypertext click leads to "cannot find page" error message

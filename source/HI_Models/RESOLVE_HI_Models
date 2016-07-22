@@ -1,0 +1,29 @@
+;
+;--------------------------------------------
+; TMBIDL GRS V7.0 COMPILE AS RESOLVE_ROUTINEs
+;--------------------------------------------
+;
+oldpath=!path
+local_IDL=getenv('LOCAL_IDL')
+local_TMBIDL=getenv('LOCAL_TMBIDL')
+path=local_TMBIDL+'source/HI_Models/pro/'
+!path=path
+;
+; HI Models procedures
+;
+resolve_routine,'circle_tvw',/either,/compile     ; draws circles since pcircle.pro didn't work
+resolve_routine,'closest2d',/either,/compile      ; finds the closest point between two curves
+resolve_routine,'histogram_clip',/either,/compile ; from LDA
+resolve_routine,'intersect2d',/either,/compile    ; finds the intersection between two curves
+resolve_routine,'los',/either,/compile            ; creates line-of-sight clouds
+resolve_routine,'makegclouds',/either,/compile    ; creates galactic clouds
+resolve_routine,'cgprogressbar_tvw__define',/either,/compile  ; modified COYOTE progress bar
+resolve_routine,'pspiral',/either,/compile        ; draws a spiral galaxy
+resolve_routine,'radtrans',/either,/compile       ; performs radiative transfer calculations
+resolve_routine,'synthlvimage',/either,/compile   ; takes info from synthlv just to make a map
+resolve_routine,'synthlv',/either,/compile        ; creates an l-v map using radtrans
+resolve_routine,'vlos',/either,/compile           ; determines velocities along a galactic line-of-sight
+;
+; now put !path back to original
+;
+!path=oldpath

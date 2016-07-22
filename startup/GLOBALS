@@ -1,0 +1,219 @@
+;================================
+;  THIS IS THE V8.0 GLOBALS FILE
+;================================
+;  V6.1 aug 2009 tmb additions to make KANG work well
+;                    !window_state
+;                    !tmbidl_x_range  need to save plot info
+;                    !tmbidl_y_range  so it can be restored
+;       mar 2010 tmb !p_old   PostScript code for plots
+;                    !x_old !y_old !z_old
+;
+;  V7.0 may 2013 tmb/tvw
+;       jun 2013 tmb added !nrtype
+;  V7.1 aug 2013 tmb 
+;  V8.0 jul 2015 tmb  just changed the labels
+;       9jun2016 tmb  added !velx for imported velocity axis
+;
+;==================================================
+;  define variables which must be global in scope 
+;  only system variables have this attribute in IDL
+;  (COMMON variables need to be invoked in each 
+;  procedure via a named COMMON statement)
+;
+;  Here we define variables and initialize default values
+;
+defsysv,'!b',replicate({tmbidl_data}, 16)   ;  define 16 system buffers 
+                                         ;  each is the gbt_data structure format 
+                                         ;  each holds a header and a spectrum
+;
+defsysv,'!rec',replicate({tmbidl_data}, 1)     ;  a global for a single version 
+defsysv,'!blkrec',replicate({tmbidl_data}, 1)  ;  a global for a single BLANK version
+defsysv,'!p_old', replicate(!p, 1)             ;  PLOT parameters
+defsysv,'!x_old', replicate(!x, 1)             ;  PLOT parameters
+defsysv,'!y_old', replicate(!y, 1)             ;  PLOT parameters
+defsysv,'!z_old', replicate(!z, 1)             ;  PLOT parameters
+;
+!rec=tmb                                    ;  fill !rec with initialized data
+!blkrec=!rec
+;
+;    !b[0]  --  working buffer:  everything invokes what is in here
+;    !b[1]  --  BMODEL and GMODEL buffer 
+;    !b[2]  --  copy of !b[0] during BASE and GAUSS
+;    !b[3]  --  ACCUM buffer
+;    !b[4]  --  AVE buffer:  copy of last AVE 
+;    !b[5]  --  ON  buffer:  copy of ON scan
+;    !b[6]  --  OFF buffer:  copy of OFF scan
+;    !b[7]  --  PSW buffer:  copy of (ON-OFF)/OFF 
+;    !b[8]  --  SMOOTH buffer:  copy of data before any smoothing operation
+;               GAUSS: difference between DATA - GMODEL
+;    !b[9]  --  SHOW buffer: copy of latest SHOW 
+;    !b[10] -- 
+;     ...       Unused at present for procedures.  Scratch buffers.
+;    !b[15] 
+;
+;  defsysv, '!gbt', replicate({gbt_data},kount) -- eventually will probably want
+;                                                  to define the database here
+;                   but recall that neither size nor type of sysvar can be changed...
+;                   so may have to make this REALLY big and fill as data arrive...
+;
+;  initialize boolean switches  --  CAPITAL letters are procedure names that
+;                                   toggle the state of these switches
+;
+defsysv, '!LINE', 1        ; spectral LINE mode on  LINE=1 CONT=0
+defsysv, '!GRSMODE',  0    ; GRS data mode off      GRS=1 mode on
+                           ; need to define always e.g. show.pro
+defsysv, '!select',   0    ; STACK filled with records (0) or NSAVEs (1)
+defsysv, '!window_state', -1 ; current IDL window unit 
+defsysv, '!line_win', -1   ; spectral line window unit
+defsysv, '!cont_win', -1   ; continuum window unit
+defsysv, '!map_win',  1    ; map window unit
+defsysv, '!config', -1     ; ACS configuration flag 
+defsysv, '!tp'  , 1        ; total power mode on    TP=1   FS=0
+;defsysv, '!print', 0       ; print mode: !print=0 off; =1 on
+defsysv, '!clr' , 1        ; plot is color=1 or BW=0
+;
+defsysv, '!chan', 1        ; default x-axis CHAN   <== these 8 choices are
+defsysv, '!freq', 0        ; x-axis FREQ           <== mutually exclusive
+defsysv, '!velo', 0        ; x-axis VELOcity       <== choose via: 
+defsysv, '!azxx', 0        ; x-axis AZimuth        <==        VELO, CHAN, FREQ,
+defsysv, '!elxx', 0        ; x-axis ELevation      <==        AZXX, ELXX, 
+defsysv, '!raxx', 0        ; x-axis RA             <==        RAXX, DECX
+defsysv, '!decx', 0        ; x-axis DEC            <==        
+defsysv, '!vgrs', 0        ; x-axis GRS spectra    <==        VGRS
+defsysv, '!velx', 0        ; x-axis imported data  <==        VELX
+defsysv, '!cosdec',0       ; cos(DEC) correction? 0=NO (default) 1=YES
+;
+defsysv, '!cursor', 1      ; default cursor on CURON/CUROFF
+defsysv, '!zline', 0       ; default zero line off  ZLON/ZLOFF
+defsysv, '!dcsub', 0       ; default DC level subtract off DCON/DCOFF   
+defsysv, '!srcvl', 0       ; default source velocity flag off SRCVLON/SRCVLOFF
+defsysv, '!plthdr', 1      ; default plot header  
+defsysv, '!bmark', 1       ; default plot nregions NRON/NROFF
+defsysv, '!flag',   0      ; default  off; used in ccc.pro + else FLAGON/FLAGOFF
+defsysv, '!verbose', 0     ; default off; toggles procedure debug prints 
+defsysv, '!batch',0        ; default off; toggles BATCH print mode BATCHON/BATCHOFF
+defsysv, '!protectns', 1   ; default flag on; protects NSAVE overwrites NSON/NSOFF
+defsysv, '!deja_vu',   1   ; default flag on; toggles writes in various procedures
+defsysv, '!ONLINE',    1   ; default ONLINE flag; toggles ON/OFFLINE data search
+;                                    vis ONLINE=1 or OFFLINE=0 commands
+;
+;  initialize source search variables 
+;
+defsysv, '!src',  '*' & defsysv, '!id',  '*' & defsysv, '!typ', '*' & 
+defsysv, '!scan', '*' & defsysv, '!pol', '*' &
+defsysv, '!recmin', 0L  & defsysv, '!recmax',  0L &  ; rec search range
+defsysv, '!scanmin', 0L & defsysv, '!scanmax', 0L &  ; scan search range
+defsysv, '!last_scan', 0L                            ; last scan number in datafile
+defsysv, '!recs_per_scan', 16L ; number of subcorrelators per scan#
+                               ; initialized for 3He correlator configuration
+;
+;  averaging and calibration variables
+;
+defsysv, '!this_epoch', bytarr(4) ; observing epoch format mmyy
+defsysv, '!epoch', bytarr(4)      ; epoch of data
+defsysv, '!data_type', bytarr(4)  ; data type Dnn, EPAV, GAV, etc
+defsysv, '!begin_day_scan', 0     ; first scan of the day
+defsysv, '!end_day_scan', 99999999   ; last scan of the day
+defsysv, '!lastns',  0            ; last nsave used
+defsysv, '!obs_config',bytarr(32) ; observing config
+;=====================================================================
+!this_epoch=byte('NULL') & !epoch=byte('    ') & !data_type=byte('    ') &
+!obs_config[0:6]=byte('0123456')
+;
+;  initialize variables
+;
+defsysv, '!tsys', 0.0d  &  defsysv, '!time', 0.0d  &  
+defsysv, '!aaccum', 0L  &  
+;defsysv, '!accum', dblarr(10240) &    ; vars for averaging
+;defsysv, '!accum', dblarr(102400) &    ; vars for averaging
+defsysv, '!accum', dblarr(409600) &    ; vars for averaging
+defsysv, '!wtd', 0.0d   &  defsysv, '!sumwtd', 0.00d  &          ; weight for data
+defsysv, '!wts', 0.0d   &  defsysv, '!sumwts', 0.00d  &          ; weight for Tsys
+defsysv, '!nrset', 0L   &   ; number of NREGIONs defined 
+defsysv, '!nrtype', 0L  &   ; x-axis units when NREGIONs defined 
+defsysv, '!nregion_max', 50 ; total number of nregions allowed 
+defsysv, '!nregion', fltarr(2*!nregion_max) &; nregions for masking 
+defsysv, '!acount', 0L  &  defsysv, '!astack', lonarr(2000) &    ; stack for filtering
+defsysv, '!nfit', 1     ;  order of polynomial to fit to baseline 
+defsysv, '!ngauss_max', 16  ; total number of gaussians allowed for one fit
+defsysv, '!a_gauss', fltarr(!ngauss_max*3) ;  parameters of these gaussians 
+defsysv, '!g_sigma', fltarr(!ngauss_max*3) ;  errors of these fits
+defsysv, '!ngauss', 1   ;  number of Gaussians to fit to spectrum;
+parinfo={parname:'height', value:0D, fixed:0, comment:''}  ; define PARINFO for mpcurvefit
+defsysv, '!parinfo', replicate(parinfo, 3*!ngauss_max)     ; H,C,W for each Gaussian 
+; now set the PARINFO structure  labels correctly
+h='height_' & c='center_' & w='width_' &
+siz=3*!ngauss_max-1
+for i=0,siz,3 do begin & !parinfo[i].parname=h+strtrim(fstring(i/3,'(i2)'),2) & endfor
+for i=1,siz,3 do begin & !parinfo[i].parname=c+strtrim(fstring(i/3,'(i2)'),2) & endfor
+for i=2,siz,3 do begin & !parinfo[i].parname=w+strtrim(fstring(i/3,'(i2)'),2) & endfor
+defsysv, '!bgauss', 0L  
+defsysv, '!egauss', !data_points-1          ; begin/end X-axis for Gauss fit
+;
+defsysv, '!fit', $
+         { nfit:0L, nrset:0L, nregion:fltarr(2*!nregion_max), ngauss:0L, $
+           bgauss:0., egauss:0., height:fltarr(!ngauss_max), $
+           errheight:fltarr(!ngauss_max),center:fltarr(!ngauss_max), $
+           errcenter:fltarr(!ngauss_max), width:fltarr(!ngauss_max), $
+           errwidth:fltarr(!ngauss_max) }
+;
+defsysv, '!fact', 1.000                     ; scaling factor for spectral intensities
+defsysv, '!y_offset', 0.000                  ; y_offset for spectra  
+defsysv, '!max_no_smooth_chans', 500L       ; maximum number of smoothing channels
+defsysv, '!smgwt', fltarr(!max_no_smooth_chans) ; weights of smoothing channels
+;
+defsysv, '!dcfreq', 0L                      ; toggle for DC subtract mean freq
+defsysv, '!dcfreq_value', 0.d               ; mean value of X-axis in FREQ units
+defsysv, '!gauss_x', dblarr(5000)           ; gaussian fit array
+defsysv, '!gauss_y', dblarr(5000) 
+defsysv, '!xval_per_chan', 0.d              ; x-axis value range per channel 
+defsysv, '!last_x',  dblarr(2)              ; last x-axis range set
+defsysv, '!last_y',  dblarr(2)              ; last y-axis range set
+defsysv, '!last_look', 0L                   ; last scan examined by rlook
+defsysv, '!nslow', 0L                       ; first NSAVE for Searches, lists
+defsysv, '!nshigh', 4095L                   ; last  NSAVE for Searches, lists
+;
+; continuum variables
+;
+;defsysv, '!azim',  1              ;  x-axis is AZIMUTH in degrees
+;defsysv, '!elev',  0              ;  x-axis is ELEVATION in degrees
+defsysv, '!c_pts',  819            ;  number of data points in continuum scan
+defsysv, '!c_chan', 819            ;  maximum # of continuum scan data  points
+defsysv, '!x_az',  fltarr(!c_chan) ;  azimuth values array
+defsysv, '!x_el',  fltarr(!c_chan) ;  elevation values array
+defsysv, '!x_ra',  fltarr(!c_chan) ;  R.A. values array
+defsysv, '!x_dec', fltarr(!c_chan) ;  Dec. values array
+defsysv, '!relative', 1            ;  display x-axis in relative co-ords
+                                   ;  = 0 display in absolute co-ords
+; 
+;  Hardwire PLOT stuff
+;                                            using normalized units
+;set_viewport,.1,.9,.15,.75               ;  define plot region within the window
+;                                         ;  set_viewpoint is obsolete
+                                          ;  !p.position=[xmin,ymin,xmax,ymax]
+!p.position=[0.13,0.15,0.93,0.80] 
+!x.title='CHANNELS' & !y.title='Antenna Temperature (K)' &
+; delete this hardwiring and put it in SHOW.pro
+;!x.charsize=2.0     & !y.charsize=2.0 &
+;!x.thick=2.0        & !y.thick=2.0 &
+defsysv, '!xchan', indgen(!data_points) ; global x channel axis 
+defsysv, '!xx', fltarr(!data_points)    ; global x data array in current x-axis units
+defsysv, '!xtitle_old', 'CHANNELS'                 ; old x-axis title
+defsysv, '!ytitle_old', 'Antenna Temperature (K)'  ; old y-axis title 
+defsysv, '!ytitle_ta', "T!DA!N!U*!N (K)"           ; T_A^* y-axis title
+defsysv, '!ytitle_tmb', "T!DMB!N (K)"              ; T_MB^* y-axis title
+defsysv, '!ytitle_grs', !ytitle_ta                 ; default GRS title
+defsysv, '!tmbidl_x_range', [0,0]                 ; store !x.crange 
+defsysv, '!tmbidl_y_range', [0,0]                 ; store !y.crange
+;
+; rtr's additions
+;
+defsysv, '!sm_vel',8.0             ; default gaussian smoothing velocity
+defsysv, '!line_sm_vel',0.0        ; gaussian smoothing velocity used on this spectrum
+defsysv, '!bfit_rms',0.0           ; RMS of baseline fit 
+defsysv, '!gfit_rms',0.0           ; RMS of gaussian fit
+;
+print,'TMBIDL V8.0 GLOBALS loaded from '+getenv('PWD')
+print
+$'pwd'
+print

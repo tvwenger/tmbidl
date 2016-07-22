@@ -1,0 +1,83 @@
+;============================================
+;  THIS IS THE 8.0 TMBIDL VERSION JULY 2014
+;============================================
+;
+;  define file handling variables  
+;  define data structure definition parameters
+;
+;       Data definition 
+;
+defsysv, '!nchan', 0L        ; number of data channels in a single spectrum from SDFITS 
+defsysv, '!data_points', 0L  ;  same as above
+defsysv, '!kount', 0L        ; number of data records in database from SDFITS
+defsysv, '!kon', 0L          ; number of data records in ONLINE data file
+defsysv, '!koff', 0L         ; number of data records in OFFLINE data file
+;
+;       I/O variables
+;
+defsysv, '!datafile',      '' ; <== GBT SDFITS data file name
+defsysv, '!line_data',     '../data/line/Ldata.tmbidl'      ; decoded {tmb_idl} data
+defsysv, '!online_data',   '../data/line/Ldata.tmbidl'      ; <== ONLINE data file name
+defsysv, '!offline_data',  '../data/continuum/Cdata.tmbidl' ; <== OFFLINE data file name
+defsysv, '!nsavefile',     '../data/nsaves/nstest.LNS'       ;     NSAVE file name 
+defsysv, '!nslogfile',     '../data/nsaves/nstest.LNS.key'   ;     nsave KEY file 
+defsysv, '!plot_file',     '../figures/tmbidl.ps'           ;  PLOT file
+defsysv, '!plotfile_default','../figures/tmbidl.ps'         ;  Default PLOT file name
+defsysv, '!jpeg_file',     '../jpeg/tmbidl.jpg'             ;  default JPEG file
+defsysv, '!jrnl_file',     '../saves/journal.dat'              ;  default JOURNAL file
+defsysv, '!save_idl_state','../saves/state.dat'                ;  file with vars + !vars
+defsysv, '!save_idl_procs','../saves/procs.dat'                ;  file with *.pro  
+defsysv, '!messfile',      '../saves/messages'                 ;  default MESSAGE file RTRNEW
+defsysv, '!archivefile',   '../archive/archive'                ;  default ARCHIVE file
+;
+defsysv, '!dataunit', 0       ;  logical unit numbers for the files
+defsysv, '!nsunit', 0         
+defsysv, '!nslogunit', 0                             
+defsysv, '!offunit', 0  
+defsysv, '!onunit', 0 &    
+defsysv, '!messunit', 0       ; lun for MESSSAGE file
+defsysv, '!archiveunit', 0    ; lun for ARCHIVE file
+;
+defsysv, '!nsave', 0        ;  current position of nsave record pointer
+defsysv, '!nsave_max', 16384 ;  maximum # records in nsave file  
+defsysv, '!nsave_log', intarr(!nsave_max) ; keep track if this slot has been written to 
+
+;  ===========================================================
+;  define system variable globals for CONTINUUM data reduction
+;  ===========================================================
+defsysv, '!c_flag',   0      ; default OFF  CONTINUUM flag for screen output
+defsysv, '!c_print',  0      ; default OFF  CONTINUUM flag for file   output
+defsysv, '!continuum_fits', '../data/analysis/Cdata.gfits' ; CONTINUUM gaussian fits
+                             ; this is for fitted gaussian parameters *not* FITS !
+defsysv, '!cfitunit', 0                               ; fit file unit
+;
+; next three files are for converting SDFITS continuum data into TMBIDL 
+; !source_catalog is a master catalog of J2000. source positions
+; !c_SDFITS       is the SDFITS GBT data mode=cal file set by Cmake.pro
+; !condar_log     is a log of the continuum SDFITS file
+; !continuum_data is the decoded continuum TMBIDL data file
+;
+defsysv, '!source_catalog', '../catalogs/source_catalog'
+defsysv, '!c_SDFITS',       ' '                         ; <== Continuum SDFITS data 
+defsysv, '!condar_log',     '../data/continuum/condar.log'
+defsysv, '!cmake_log',      '../data/continuum/cmake.log'
+defsysv, '!continuum_data', '../data/continuum/Cdata.tmbidl'
+;
+;  define system variable globals for LINE data reduction
+;
+defsysv, '!l_flag',   0      ; default OFF  LINE flag for screen output
+defsysv, '!l_print',  0      ; default OFF  LINE flag for file output
+defsysv, '!line_fits', '../data/analysis/Ldata.gfits'   ; <== LINE fits file name
+defsysv, '!lfitunit', 0                               ; fit file unit
+;
+;   Get LUNs for files 
+;
+get_lun,lun & !nsunit=lun          ; NSAVE file unit lun ; we keep this lun throughout 
+get_lun,lun & !nslogunit=lun       ; NSKEY file lun
+get_lun,lun & !onunit=lun          ; ONLINE data file unit
+get_lun,lun & !offunit=lun         ; OFFLINE data file unit
+get_lun,lun & !cfitunit=lun        ; CONTINUUM fit data file unit
+get_lun,lun & !lfitunit=lun        ; LINE fit data file unit
+get_lun,lun & !messunit=lun        ; MESSAGE file lun
+get_lun,lun & !archiveunit=lun     ; ARCHIVE file lun
+;

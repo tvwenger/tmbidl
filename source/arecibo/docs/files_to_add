@@ -1,0 +1,62 @@
+
+
+DSB
+
+some changes:  please chance the name of this package to He3_IDL so that
+there is no confusion with GBTIDL v1.1 This also means that the .html
+page should be called:
+
+file:///home/tbania/he3/idl/v3.3/DOCS/he3_idl_v3.3.html
+
+
+the following files should be added to the .html documentation....
+
+/home/tbania/he3/idl/arecibo/ARECIBO_README 
+
+this should be placed at the TOP of the List of Documents:  i.e. ahead of OVERVIEW
+
+looks like the code automatically grabs the other new .pro's written, or did
+you go through the directory and find them?  
+
+--------------------------------------------------------------------------------
+  ARECIBO PROCEDURES:
+--------------------------------------------------------------------------------
+
+==> The following IDL procedures were written to interface AO Correlator data to 
+    3HeIDL v3.3:
+
+; Arecibo routines:  July 2005 !!! N.B. order below is important...
+;
+.compile ../v3.3/init_data_bozo.pro   ; Package setup for Arecibo.  Hardwired for 3He.
+.compile ../v3.3/make_bozo_ONLINE.pro ; create ONLINE data file in {gbt_data} format
+.compile ../v3.3/start_arecibo.pro    ; INITIALIZES THIS PACKAGE
+.compile ../v3.3/ao2gbt.pro           ; Convert Arecibo {corget} into {gbt_data}
+.compile ../v3.3/getbozo.pro          ; use 'corrposonoff' to make a PS spectrum
+.compile ../v3.3/update_bozo.pro      ; Update ONLINE data file by appending new data 
+.compile ../v3.3/update.pro           ; Automatically updates 'online.bozo' data file
+.compile ../v3.3/cshift.pro           ; calculate channel shift needed to align spectra
+;
+
+init_data_bozo.pro         ;  Package setup for Arecibo.  Hardwired for 3He.
+start_arecibo,infile       ; STARTS THIS PACKAGE
+update                     ; updates online.bozo data file by appending new data
+                           ; automatically searches for valid new telescope data
+update_bozo,on_scan_number ; the primitive that does the work
+make_bozo_data             ; converts AO raw telescope into {gbt_data} format
+                           ; for an entire data file. 
+
+ao2gbt,nboard,npol,in,out  ; Convert the Arecibo {corget} data structure into 
+                           ; the GBT data structure {gbt_data}
+                           ;       'in'  is {corget}   data structure input
+                           ;      'out'  is {gbt_data} data structure output
+                           ;    'nboard' is the number of the subcorrelator boards (tunings)
+                           ;      'npol' is the number of polarizations sampled
+
+getbozo,scan_number        ;  for scan_number, use 'corrposonoff' to
+                           ;  calibrate and process a PS TP pair, convert into  
+                           ;  {gbt_data} structure HE3IDL package and put the
+                           ;  4 tunings x 2 polarizations = 8 PS spectra into
+                           ;  !b[7] to !b[15]
+
+cshift,vel,ichan           ; calculate channel shift needed to align spectra
+                           ; taken at incorrect source velocity 

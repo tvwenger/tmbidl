@@ -1,0 +1,35 @@
+From: rtr@mail.astro.virginia.edu (Robert T. Rood)
+To: bania@bu.edu, dbalser@nrao.edu
+Cc: rtr@mail.astro.virginia.edu
+Subject: he3 nsave archive
+Date: Fri, 15 Jun 2007 11:44:55 -0400 (EDT)
+
+
+gb ~tbania/he3arc/nsaves.arc
+                  log.arc
+                  arclog.chk
+
+nsaves.arc   all he3 nsaves
+             generally nn00 nregions
+                       nn01--nnmm  epavs
+                       nn91--nn9m  grandavs
+                       nn70's nn80's various fits
+log.arc     log conversions
+
+arclog.chk  output from a fortran pgm to do a read through of nsaves.arc
+
+Each nsave is a 394 element header followed by a 256 element spectrum.
+One element per line
+
+We always used bdrop=42 so the first 42 elements of the spectrum are sometimes
+things other than spectrum, e.g. gaussian fit parameters. 
+
+====================================================================
+
+This was a bigger pain than anticipated, because of a forgotten ``feature''
+of Unipops. Executing procs keep eating up core. So long loops crash.
+
+I had to do one source at a time rather than one big loop.
+
+rtr
+

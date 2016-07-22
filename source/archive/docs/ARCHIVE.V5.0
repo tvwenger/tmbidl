@@ -1,0 +1,534 @@
+====================================================================================
+              ARCHIVE SYSTEM THAT STORES AND RECOVERS 
+        ANALYSIS INFORMATION AND BASELINE AND GAUSSIAN FITS 
+        OR, IDEOSYNCRATICALLY, ANYTHING ELSE YOU MIGHT WANT
+
+        STORES THIS INFORMATION IN AN EXTERNAL, USER DEFINED, FILE.
+   
+TMBIDL V5.0 July 2007
+====================================================================================
+
+V5.0 now has a complete and general ARCHIVE filing system.  There are
+some standard archiving modes available.  One can use existing .pro's
+as templates, craft any sort of output data to be saved, and then
+recover these data within IDL as a structure.  Since these are
+ASCII string files any external program can also read these data.
+
+The user creates an ARCHIVE file and then writes to it.  Each data
+record is a single string variable that contains a sequence of
+multiple variables separated by embedded blanks.  These blanks are
+used later to split the data record into individual variables.
+Importantly, each ARCHIVE record can be of a different length and
+contain different information.  Parseing procedures are then used to
+elucidate the contents of each ARCHIVE record.  The parsing procedures
+return NAMED data structures on a record by record basis where the
+structure tags are TMBIDL variable names and the variables are 
+typed correctly.  
+
+.........................................................................................
+make_ARCHIVE.pro    =  creates an ARCHIVE data file with annotated 3 record
+                       header
+
+setarchive.pro      =  sets !archivetype that selects ARCHIVE output format
+                       current format modes are: LHEAD CHEAD FITINFO CUSTOM
+
+write_archive.pro   =  writes a single record 
+                       USE write_archive,fname,flag 
+                       TO CREATE A NEW ARCHIVE FILE
+                       (an alternate approach to 'make_ARCHIVE')
+<multiple writes>
+close_archive.pro   =  closes ARCHIVE file
+
+.........................................................................................
+open_archive.pro    =  opens existing ARCHIVE file 
+read_archive.pro    =  reads a single ARCHIVE file in a general way
+                       returns a *structure* with all the 
+                       variables as elements.  variables
+                       classified as either floats or strings 
+setarchive.pro
+parse_archive.pro   =  parses the structure returned by read_archive
+                       via format selected by !archivetype
+                       returns a structure with elements
+                       properly named (the structure tags) and typed
+
+<multiple read/setarchive/parse triplets>
+close_archive.pro   =  closes ARCHIVE file
+
+=========================================================================================
+
+Syntax: make_archive,fully_qualified_file_name,file_header
+==========================================================
+
+Creates an ARCHIVE file !archivefile and then writes a three record
+file header.  Prompts for file name if none provided. Prompts for file
+header annotation if none provided.
+
+---------------------------------------------------------------------------------- 
+
+Syntax: setarchive,type
+=======================
+
+Sets the variable !archivetype that selects the format of the ARCHIVE file write
+
+Available formats are:
+          type = 0  LHEAD     Spectral Line Header info
+                 1  CHEAD     Continuum Header info
+                 2  FITINFO   Baseline and Gaussian fit info
+                 3  CUSTOM    Custom format
+
+---------------------------------------------------------------------------------- 
+
+Syntax: open_archive,fully_qualified_file_name      
+===================================================
+
+Opens an ARCHIVE file
+
+Prompts for ARCHIVE file name if none is input. 
+ONLY SUPPLY 'fully_qualified_file_name' IF IT ALREADY EXISTS!
+To create an ARCHIVE file you need to use either MAKE_ARCHIVE 
+or WRITE_ARCHIVE.  MAKE_ARCHIVE can be done in batch mode;
+WRITE_ARCHIVE prompts for all information.
+
+---------------------------------------------------------------------------------- 
+
+Syntax: write_archive,fully_qualified_file_name,create_flag
+===========================================================
+
+Archives information by writing to a user specified file !archivefile
+Default file is !archivefile if no file name input. 
+
+Writes a single formatted string constructed via special procedures, 
+e.g. ../archive/write_archive_LHEAD.pro  
+
+MAKE SURE TO SET '!archivetype' BEFORE INVOKING THIS PROCEDURE !
+Use SETARCHIVE to set !archivetype that then selects which of these
+special procedures to use for the ARCHIVE write.
+
+You can write your own procedure to get exactly the archive information
+that you wish to store.  See the templates and procedures in ../archive/
+for examples.
+
+ONLY SUPPLY 'fully_qualified_file_name' IF IT ALREADY EXISTS !
+
+If 'create_flag' is supplied (anything will do) makes file 
+named input fully_qualified_file_name
+
+if !flag OR !verbose then prints ARCHIVE file information to screen
+
+---------------------------------------------------------------------------------- 
+
+Syntax: close_archive
+=====================
+
+Closes the currently open ARCHIVE file
+
+---------------------------------------------------------------------------------- 
+
+Syntax: read_archive,archive_structure
+======================================
+
+Reads a single record of ARCHIVE information stored in a user
+specified file !archivefile and creates an anonymous structure
+'archive_structure'. Does this in a very general way so the records in
+the ARCHIVE file need not be identical.  Must invoke proper
+translation of the returned structure 'archive_structure' to get the
+variable names and types.  This is done via 'parse_archive'.
+
+---------------------------------------------------------------------------------- 
+
+Syntax: parse_archive,archive_structure_in,parsed_structure_out
+===============================================================
+
+Takes a single input structure 'archive_structure_in' made by
+'read_archive' and translates it into output structure
+'parsed_structure_out' that has proper tag names and variable types.
+These data can then be used meaningfully.
+
+Parses according to the FORMAT specified by !archivetype
+
+If you write a custom format then you also need to write a custom
+parsing procedure, e.g.
+../archive/parse_archive_LHEAD.pro
+
+---------------------------------------------------------------------------------- 
+
+==================================================================================
+COOKBOOK EXAMPLES		
+==================================================================================
+
+OK, so you have a spectral line spectrum that you have baselined and fit Gaussians
+to.  You want to save the standard spectral line header and the baseline and 
+gaussian fit parameters in a brand new ARCHIVE file. You need to have TMBIDL's
+present state such that the !b[0] structure and the system variables containing
+the baseline and gaussian fits are set to the information that you wish to store.
+
+(Besides archiving this information to an external file you can save
+FITINFO information in the !b[0]. structure itself via the HISTORY
+command.  The information is stored as a string variable
+!b[0].history.  You recover this information from the !b[0]. structure
+using the REHASH command.)
+
+To store LHEAD and FITINFO in the ARCHIVE file you do the following
+which is an example of a batch mode approach in that there will be
+almost no messaging and no prompts for missing procedure input
+parameters at all.  (All procedures also have friendly, non-batch
+features that prompt to give you the opportunity to enter the missing
+parameters.)
+
+.....................................................................................
+fname='/idl/idl/archive/example'
+fhead='Example of TMBIDL v5.0 ARCHIVE system'
+;
+make_archive,fname,fhead    ; create the ARCHIVE file
+setarchive,0                ; set output format to LHEAD (spectral line header)
+write_archive,fname         ; write a single LHEAD record to fname
+setarchive,2                ; set output format to FITINFO (baseline and gaussians)
+write_archive,fname         ; write a single FITINFO record to fname
+close_archive                 ; closes !archiveunit so no fname is needed
+.....................................................................................
+
+Now to fetch back this information from the ARCHIVE file into TMBIDL as a named
+structure with its tags being TMBIDL variable names and the variables correctly 
+typed (i.e. long integers, floats, strings, ....) 
+
+.....................................................................................
+open_archive,fname            ; open ARCHIVE file
+setarchive,0                  ; set input format to LHEAD (spectral line header)
+read_archive,arc_rec          ; read a single ARCHIVE record and return a generic
+                              ; structure with generic tag names: arch_rec.(0),
+                              ; arc_rec.(1), etc. Types divided into either 
+                              ; double floats or strings
+parse_archive,arc_rec,LHEAD   ; parse the arc_rec structure and return LHEAD
+                              ; a structure with meaning: e.g. LHEAD.source,
+                              ; LHEAD.lst, etc. 
+setarchive,2                  ; set input format to FITINFO (baseline and gaussians)
+read_archive,arc_rec          ; read the next ARCHIVE file record generically
+parse_archive,arc_rec,FITINFO ; parse the arc_rec structure and return FITINFO
+close_archive                 ; closes !archiveunit so no fname is needed
+.....................................................................................
+
+Here is TMBIDL executing the above:
+----------------------------------
+
+TMBIDL-->fname='/idl/idl/archive/example'
+TMBIDL-->fhead='Example of TMBIDL v5.0 ARCHIVE system'
+TMBIDL-->make_archive,fname,fhead
+Creating ARCHIVE named /idl/idl/archive/example
+TMBIDL-->setarchive,0 
+The format for the ARCHIVE write is: LHEAD
+TMBIDL-->write_archive,fname 
+TMBIDL-->setarchive,2 
+The format for the ARCHIVE write is: FITINFO
+TMBIDL-->write_archive,fname
+
+Here is the contents of the file '/idl/idl/archive/example' that contains
+the ARCHIVE header and two records: LHEAD and FITINFO
+
+================================================================================
+Example of TMBIDL v5.0 ARCHIVE system
+================================================================================
+LHEAD S209      3066 A91 TEST L+R   62.7780  51.1622    0.0    0.0000   0.0000  
+  -49.30 2003-12-07T22:52:42.00  22.6418  -5.54 56.6  48.01 33.4 8587.8609 8665.
+3000  50.0000  3.0   30.4     96.1
+FITINFO  1 CHAN  3  1250  1554  1766  1937  2091  2500  3     7.7357  1835.4648 
+   17.5966    13.6122  1905.3435    64.3407   151.1695  2188.2981    72.7617    
+ 0.9851     1.1135     2.6617     0.5202     1.2123     3.0047     0.4821     0.
+1138     0.2679 
+
+Now let's read this file:
+------------------------
+
+TMBIDL-->open_archive,fname
+TMBIDL-->setarchive,0
+The format for the ARCHIVE write is: LHEAD
+TMBIDL-->read_archive,arc_rec
+
+TMBIDL-->print,arc_rec
+{ LHEAD S209       3066.0000 A91 TEST L+R       62.778000       51.162200
+       0.0000000       0.0000000       0.0000000      -49.300000
+       2003.0000       22.641800      -5.5400000       56.600000
+       48.010000       33.400000       8587.8609       8665.3000
+       50.000000       3.0000000       30.400000       96.100000}
+
+TMBIDL-->help,arc_rec,/structure
+** Structure <84274ac>, 24 tags, length=212, data length=212, refs=1:
+   _______0        STRING    'LHEAD'
+   _______1        STRING    'S209'
+   _______2        DOUBLE           3066.0000
+   _______3        STRING    'A91'
+   _______4        STRING    'TEST'
+   _______5        STRING    'L+R'
+   _______6        DOUBLE           62.778000
+   _______7        DOUBLE           51.162200
+   _______8        DOUBLE           0.0000000
+   _______9        DOUBLE           0.0000000
+   ______10        DOUBLE           0.0000000
+   ______11        DOUBLE          -49.300000
+   ______12        DOUBLE           2003.0000
+   ______13        DOUBLE           22.641800
+   ______14        DOUBLE          -5.5400000
+   ______15        DOUBLE           56.600000
+   ______16        DOUBLE           48.010000
+   ______17        DOUBLE           33.400000
+   ______18        DOUBLE           8587.8609
+   ______19        DOUBLE           8665.3000
+   ______20        DOUBLE           50.000000
+   ______21        DOUBLE           3.0000000
+   ______22        DOUBLE           30.400000
+   ______23        DOUBLE           96.100000
+
+
+TMBIDL-->parse_archive,arc_rec,LHEAD
+
+TMBIDL-->print,LHEAD
+{ LHEAD S209        3066 A91 TEST L+R      62.7780      51.1622      0.00000
+      0.00000      0.00000     -49.3000       2003.0000      22.6418
+     -5.54000      56.6000      48.0100      33.4000      8587.86      8665.30
+      50.0000      3.00000      30.4000      96.1000}
+
+TMBIDL-->print,LHEAD.source
+S209
+TMBIDL-->print,LHEAD.tsys
+      30.4000
+
+TMBIDL-->help,LHEAD,/structure
+** Structure <8426c9c>, 24 tags, length=140, data length=140, refs=1:
+   ARCHIVE_TYPE    STRING    'LHEAD'
+   SOURCE          STRING    'S209'
+   SCAN            LONG              3066
+   LINEID          STRING    'A91'
+   TYPE            STRING    'TEST'
+   POL             STRING    'L+R'
+   RA              FLOAT           62.7780
+   DEC             FLOAT           51.1622
+   EPOCH           FLOAT           0.00000
+   L_GAL           FLOAT           0.00000
+   B_GAL           FLOAT           0.00000
+   SRCVEL          FLOAT          -49.3000
+   DATE            DOUBLE           2003.0000
+   LST             FLOAT           22.6418
+   HA              FLOAT          -5.54000
+   ZA              FLOAT           56.6000
+   AZ              FLOAT           48.0100
+   EL              FLOAT           33.4000
+   FSKY            FLOAT           8587.86
+   FREST           FLOAT           8665.30
+   BW              FLOAT           50.0000
+   TCAL            FLOAT           3.00000
+   TSYS            FLOAT           30.4000
+   TINTG           FLOAT           96.1000
+
+
+TMBIDL-->setarchive,2
+The format for the ARCHIVE write is: FITINFO
+TMBIDL-->read_archive,arc_rec
+TMBIDL-->parse_archive,arc_rec,FITINFO
+
+TMBIDL-->print,arc_rec
+{ FITINFO       1.0000000 CHAN       3.0000000       1250.0000       1554.0000
+       1766.0000       1937.0000       2091.0000       2500.0000
+       3.0000000       7.7357000       1835.4648       17.596600
+       13.612200       1905.3435       64.340700       151.16950
+       2188.2981       72.761700      0.98510000       1.1135000
+       2.6617000      0.52020000       1.2123000       3.0047000
+      0.48210000      0.11380000      0.26790000}
+
+TMBIDL-->help,arc_rec,/structure      
+** Structure <841541c>, 29 tags, length=240, data length=240, refs=1:
+   _______0        STRING    'FITINFO'
+   _______1        DOUBLE           1.0000000
+   _______2        STRING    'CHAN'
+   _______3        DOUBLE           3.0000000
+   _______4        DOUBLE           1250.0000
+   _______5        DOUBLE           1554.0000
+   _______6        DOUBLE           1766.0000
+   _______7        DOUBLE           1937.0000
+   _______8        DOUBLE           2091.0000
+   _______9        DOUBLE           2500.0000
+   ______10        DOUBLE           3.0000000
+   ______11        DOUBLE           7.7357000
+   ______12        DOUBLE           1835.4648
+   ______13        DOUBLE           17.596600
+   ______14        DOUBLE           13.612200
+   ______15        DOUBLE           1905.3435
+   ______16        DOUBLE           64.340700
+   ______17        DOUBLE           151.16950
+   ______18        DOUBLE           2188.2981
+   ______19        DOUBLE           72.761700
+   ______20        DOUBLE          0.98510000
+   ______21        DOUBLE           1.1135000
+   ______22        DOUBLE           2.6617000
+   ______23        DOUBLE          0.52020000
+   ______24        DOUBLE           1.2123000
+   ______25        DOUBLE           3.0047000
+   ______26        DOUBLE          0.48210000
+   ______27        DOUBLE          0.11380000
+   ______28        DOUBLE          0.26790000
+
+
+TMBIDL-->print,FITINFO
+{ FITINFO           1 CHAN           3        1250        1554        1766
+        1937        2091        2500
+           3
+      7.73570      1835.46      17.5966      13.6122      1905.34      64.3407
+      151.169      2188.30      72.7617
+     0.985100      1.11350      2.66170     0.520200      1.21230      3.00470
+     0.482100     0.113800     0.267900
+}
+
+
+TMBIDL-->help,FITINFO,/structure
+** Structure <81dd2fc>, 8 tags, length=132, data length=132, refs=1:
+   ARCHIVE_TYPE    STRING    'FITINFO'
+   NFIT            LONG                 1
+   NUNIT           STRING    'CHAN'
+   NRSET           LONG                 3
+   NREGS           LONG      Array[6]
+   NGAUSS          LONG                 3
+   AGAUSS          FLOAT     Array[9]
+   GSIGMA          FLOAT     Array[9]
+
+TMBIDL-->print,FITINFO.nunit
+CHAN
+TMBIDL-->print,FITINFO.nregs
+        1250        1554        1766        1937        2091        2500
+
+So the structure FITINFO has correct variable types.  In the above
+example the NREGIONs are stored in CHANnels and so are integers.
+
+================================================================================
+Currently supported ARCHIVE formats:  LHEAD FITINFO
+
+                                      Since I have written special code to deal
+                                      with saving TCJ continuum fits there in 
+                                      fact may never need to be a CHEAD format
+================================================================================
+
+The FITINFO information is:
+--------------------------
+Archive      NREGION
+Type    Nfit Units  nrset
+
+FITINFO  1    CHAN  3
+
+NREGIONS:
+  1250  1554  1766  1937  2091  2500
+NGAUSS:
+ 3
+    Tpk mK  center       fwhm     in NUNIT units
+    7.7357  1835.4648    17.5966
+   13.6122  1905.3435    64.3407
+  151.1695  2188.2981    72.7617
+
+Sigmas on these quantities
+    0.9851     1.1135     2.6617
+    0.5202     1.2123     3.0047
+    0.4821     0.1138     0.2679
+
+.........................................................................................
+The LHEAD information is:
+------------------------
+Source Name = S209
+Scan Number =      3066
+Line ID     = A91
+Scan Type   = TEST
+Pol ID      = L+R
+R.A.        =   62.7780 deg
+Dec.        =  51.1622 deg
+Epoch       =    0.0
+L_gal       =    0.0000 deg
+B_gal       =   0.0000 deg
+Source Vel  =    -49.30 km/sec
+Date        = 2003-12-07T22:52:42.00
+LST         =  22.6418 hrs
+Hour Angle  =  -5.54 hrs
+Zenith Angle= 56.6 deg
+Azimuth     =  48.01 deg
+Elevation   = 33.4 deg
+Fsky        = 8587.8609 MHz
+Frest       = 8665.3000 MHz
+Band Width  =  50.0000 MHz
+Tcal        =  3.0 K
+Tsys        =   30.4 K
+Tintg       =     96.1
+
+LHEAD S209      3066 A91 TEST L+R   62.7780  51.1622    0.0    0.0000   0.0000    -49.30 2003-12-07T22:52:42.00  22.6418  -5.54 56.6  48.01 33.4 8587.8609 8665.3000  50.0000  3.0   30.4     96.1
+
+.........................................................................................
+The CHEAD information is:
+------------------------
+
+=========================================================================================
+17 July 2007
+=========================================================================================
+
+
+04 January 2008   Here is another cookbook example of a LINE archive event:
+
+Process scan, fitting baselines and gaussians.
+
+TMBIDL-->fname='/users/tbania/idl/data/line/archive/test.file'
+TMBIDL-->fhead=' Test file for LINE Archive Data: JA08'
+TMBIDL-->make_archive,fname,fhead
+Creating ARCHIVE named /users/tbania/idl/data/line/archive/test.file
+TMBIDL-->setarchive,0
+The format for the ARCHIVE write is: LHEAD
+TMBIDL-->write_archive
+TMBIDL-->setarchive,2
+The format for the ARCHIVE write is: FITINFO
+TMBIDL-->write_archive
+TMBIDL-->close_archive
+
+The writes above wrote to default !archivefile defined by make_archive
+
+Now read this back via: 
+
+TMBIDL-->open_archive,fname 
+TMBIDL-->setarchive,0
+The format for the ARCHIVE write is: LHEAD
+TMBIDL-->read_archive,arc_rec
+TMBIDL-->parse_archive,arc_rec,LHEAD
+TMBIDL-->setarchive,2
+The format for the ARCHIVE write is: FITINFO
+TMBIDL-->read_archive,arc_rec
+TMBIDL-->parse_archive,arc_rec,FITINFO
+TMBIDL-->close_archive
+
+TMBIDL-->help,LHEAD,/structure
+** Structure <8578c3c>, 24 tags, length=140, data length=140, refs=1:
+   ARCHIVE_TYPE    STRING    'LHEAD'
+   SOURCE          STRING    'DR7'
+   SCAN            LONG                29
+   LINEID          STRING    'rx3.2'
+   TYPE            STRING    'PS:TP:Pair'
+   POL             STRING    'RR'
+   RA              FLOAT           306.592
+   DEC             FLOAT           40.6949
+   EPOCH           FLOAT           0.00000
+   L_GAL           FLOAT           0.00000
+   B_GAL           FLOAT           0.00000
+   SRCVEL          FLOAT          -39.1700
+   DATE            DOUBLE           2008.0000
+   LST             FLOAT           22.0596
+   HA              FLOAT           1.62000
+   ZA              FLOAT           18.4000
+   AZ              FLOAT           285.170
+   EL              FLOAT           71.6000
+   FSKY            FLOAT           9813.34
+   FREST           FLOAT           9183.00
+   BW              FLOAT           50.0000
+   TCAL            FLOAT           1.40000
+   TSYS            FLOAT           29.8000
+   TINTG           FLOAT           11.9000
+
+TMBIDL-->help,FITINFO,/structure
+** Structure <8201184>, 8 tags, length=124, data length=124, refs=1:
+   ARCHIVE_TYPE    STRING    'FITINFO'
+   NFIT            LONG                 2
+   NUNIT           STRING    'CHAN'
+   NRSET           LONG                 2
+   NREGS           LONG      Array[4]
+   NGAUSS          LONG                 3
+   AGAUSS          FLOAT     Array[9]
+   GSIGMA          FLOAT     Array[9]
+

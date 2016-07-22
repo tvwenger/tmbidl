@@ -1,0 +1,24 @@
+;===============================================
+; GRS Sanity Test Batch Script
+;===============================================
+; This script reproduces the final test described at length
+; in the .../tmbidl/v7.1/GRS/0SANITY file
+; 
+; The spectrum plotted should match 
+; .../tmbidl/v7.1/GRS/test_figure.ps
+;
+fname='/idl/tmbidl/v7.1/GRS/test_figure.ps'
+;printon,fname
+lgal=32.838
+bgal=+0.019
+beamlb,lgal,bgal
+xx
+zline
+;printoff
+;
+; This should give output:
+;
+;../../data/grs/grs_data/grs-32.dat Dist=       3023.91          17
+;../../data/grs/grs_data/grs-33.dat Dist=       588.967          18
+;second cube is closer
+;

@@ -1,0 +1,104 @@
+#
+#  TMBIDL V8.0 INITIALIZATION FILE
+#
+#  V8.0 note the capital "V"
+#       tmb 30june2015
+#
+#  new installations should change lines 11 and 14
+#
+# this is the default IDL path. 
+# ***THIS IS DEPENDENT ON YOUR IDL INSTALLTION AND SHOULD BE CHANGED***
+# start normal idl, and get the path from there
+# idl
+# print,!path
+# then copy that path here 
+setenv DEFAULT_IDL_PATH /usr/local/itt/idl/idl81/lib/hook:/usr/local/itt/idl/idl81/lib/bridges:/usr/local/itt/idl/idl81/lib/wavelet/source:/usr/local/itt/idl/idl81/lib/wavelet/data:/usr/local/itt/idl/idl81/lib/datatypes:/usr/local/itt/idl/idl81/lib/graphics:/usr/local/itt/idl/idl81/lib/dicomex:/usr/local/itt/idl/idl81/lib/imsl:/usr/local/itt/idl/idl81/lib/utilities:/usr/local/itt/idl/idl81/lib/itools/ui_widgets:/usr/local/itt/idl/idl81/lib/itools/components:/usr/local/itt/idl/idl81/lib/itools/framework:/usr/local/itt/idl/idl81/lib/itools:/usr/local/itt/idl/idl81/lib/obsolete:/usr/local/itt/idl/idl81/lib:/usr/local/itt/idl/idl81/examples/mjpeg2000:/usr/local/itt/idl/idl81/examples/doc/dicom:/usr/local/itt/idl/idl81/examples/doc/bridges:/usr/local/itt/idl/idl81/examples/doc/objects:/usr/local/itt/idl/idl81/examples/doc/image:/usr/local/itt/idl/idl81/examples/doc/plot:/usr/local/itt/idl/idl81/examples/doc/sdf:/usr/local/itt/idl/idl81/examples/doc/utilities:/usr/local/itt/idl/idl81/examples/doc/itools:/usr/local/itt/idl/idl81/examples/doc/shaders:/usr/local/itt/idl/idl81/examples/doc/language:/usr/local/itt/idl/idl81/examples/doc/signal:/usr/local/itt/idl/idl81/examples/doc/widgets:/usr/local/itt/idl/idl81/examples/doc/file_io:/usr/local/itt/idl/idl81/examples/ogc/wcs:/usr/local/itt/idl/idl81/examples/ogc/wms:/usr/local/itt/idl/idl81/examples/HP_TIFF:/usr/local/itt/idl/idl81/examples/data:/usr/local/itt/idl/idl81/examples/imsl:/usr/local/itt/idl/idl81/examples/demo/demodata:/usr/local/itt/idl/idl81/examples/demo/demosrc:/usr/local/itt/idl/idl81/examples/demo/demoslideshows/slideshowsrc:/usr/local/itt/idl/idl81/examples/demo:/usr/local/itt/idl/idl81/examples/widgets/wexmast:/usr/local/itt/idl/idl81/examples/widgets:/usr/local/itt/idl/idl81/examples/misc:/usr/local/itt/idl/idl81/examples
+
+# this is the location of tmbidl on your system AND SHOULD BE CHANGED
+setenv LOCAL_TMBIDL /idl/tmbidlV8/
+
+# This is where we are going to set the new path
+setenv IDL_PATH ~
+
+setenv VERSION V8.0
+
+setenv IDL_STARTUP ${LOCAL_TMBIDL}startup/STARTUP.TMBIDL
+
+#setenv IDL_PATH ${IDL_PATH}:${LOCAL_IDL}data/
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}data/
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/pro/
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/pro/flags
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/colors
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/lines
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/astrolib
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/astrolib/pro
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/astrolib/DOC
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/astrolib/DOC/html
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/textoidl
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/coyote     
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/markwardt
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/saves
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/archive
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/utilities
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/RRL
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/RRL/pro
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/KANG
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/KANG/pro
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/HI_Models
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/HI_Models/pro
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/vegas
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/vegas/pro
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}sandboxes/tmb/
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}sandboxes/lda/
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}sandboxes/dsb/
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}sandboxes/rtr/
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}sandboxes/tvw/
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}sandboxes/dan/
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/unipops
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/GRS
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/GRS/pro
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/buao
+
+setenv IDL_PATH ${IDL_PATH}:${LOCAL_TMBIDL}source/arecibo
+
+# Now, stick on the default IDL path
+setenv IDL_PATH ${IDL_PATH}:${DEFAULT_IDL_PATH}
+
+#
+setenv PSPRINTER 'lp0'         # printer in main office at BU
+#setenv PSPRINTER 'lp2'        # printer in TMB's office
+#setenv PSPRINTER 'lp'         # printer	in Reber 105
+#setenv PSPRINTER 'ops4050'    # printer in GBT control room

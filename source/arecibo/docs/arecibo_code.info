@@ -1,0 +1,339 @@
+
+IDL Spectral Line Procedures at Arecibo
+
+see http://www2.naic.edu/~phil/#Software documentation
+;
+On-line data during acquisition are in:
+
+file='/share/olcor/corfile' until one exists the observing GUI at end of
+run whence the data are stored in, e.g. 
+
+file='/share/olcor/corfile.30may03.a1704.1'
+
+Execute IDL with appropriate AO specific IDL startup file and attach the
+file:
+
+openr,lun,file,/get_lun
+;
+; list the file
+;
+corlist,lun
+;
+>      SOURCE       SCAN   GRPS    PROCEDURE     STEP  LST   RCV
+>    G43.2+0.0 315000007   300        onoff      on 18:00:10 11
+>    G43.2+0.0 315000008   300        onoff     off 18:06:12 11
+>    G43.2+0.0 315000009     1     calonoff      on 18:11:15 11
+>    G43.2+0.0 315000010     1     calonoff     off 18:11:26 11
+>    G43.2+0.0 315000011   300        onoff      on 18:19:52 11
+>    G43.2+0.0 315000012   300        onoff     off 18:25:54 11
+>    G43.2+0.0 315000013     1     calonoff      on 18:30:57 11
+>    G43.2+0.0 315000014     1     calonoff     off 18:31:08 11
+> G43.24-0.045 315000015   300        onoff      on 18:37:20 11
+> G43.24-0.045 315000016   300        onoff     off 18:43:22 11
+> G43.24-0.045 315000017     1     calonoff      on 18:48:25 11
+> G43.24-0.045 315000018     1     calonoff     off 18:48:36 11
+> G43.24-0.045 315000019   300        onoff      on 18:50:42 11
+> G43.24-0.045 315000020   300        onoff     off 18:56:44 11
+> G43.24-0.045 315000021     1     calonoff      on 19:01:47 11
+> G43.24-0.045 315000022     1     calonoff     off 19:01:58 11
+>    B1857+129 315000035   300        onoff      on 19:21:37 11
+>    B1857+129 315000036   300        onoff     off 19:27:39 11
+>    B1857+129 315000037     1     calonoff      on 19:32:42 11
+>    B1857+129 315000038     1     calonoff     off 19:32:53 11
+>  G45.12+0.13 315000039   300        onoff      on 19:35:28 11
+>  G45.12+0.13 315000040   300        onoff     off 19:41:30 11
+>  G45.12+0.13 315000041     1     calonoff      on 19:46:32 11
+>  G45.12+0.13 315000042     1     calonoff     off 19:46:43 11
+>  G45.12+0.13 315000043   300        onoff      on 19:47:52 11
+>  G45.12+0.13 315000044   300        onoff     off 19:53:54 11
+>  G45.12+0.13 315000045     1     calonoff      on 19:58:56 11
+>  G45.12+0.13 315000046     1     calonoff     off 19:59:07 11
+>  G45.12+0.13 315000047   300        onoff      on 20:00:13 11
+>  G45.12+0.13 315000048   300        onoff     off 20:06:15 11
+> Enter return to continue, q to quit q
+>     SOURCE       SCAN   GRPS    PROCEDURE     STEP  LST   RCV
+>  G45.12+0.13 315000049     1     calonoff      on 20:11:17 11
+>  G45.12+0.13 315000050     1     calonoff     off 20:11:28 11
+
+To rewind the file to the beginning:
+
+rew,lun
+; scan the entire file once...
+; for offline processing
+;sl=getsl(lun)
+;
+print,sl  ; shows for day 1
+IDL> help,sl
+SL              STRUCT    = -> SL Array[32]
+where each structure element looks like:
+
+{   315000007           0           0   0  11   4   3         300      9179.91
+      8874.52      8586.71      8311.21
+       2452789.7 G43.2+0.0 onoff}
+
+To get at a specific scan number it seems that one needs *sometimes* 
+to finagle the file positioning:  e.g. after the commands above trying 
+to process a TP on/off pair via:
+               ; note use of IDL longword integer
+scan=315000047L  
+istat=corposonoff(lun,b,t,cals,/sclcal,scan=scan,/han)
+
+b is buffer of spectral values
+t is 
+cals are the cals used
+/sclcal makes spectrum in Kelvins
+scan is searched for as first on of on/off pair
+/han smoothes the data via hanning
+
+; to plot the data
+
+corplot,b       ; plots data in buffer b for all subcorrelators
+corplot,b,m=4   ; plots only board 3
+hor,1410,1415   ; hor and ver scaling
+ver,0,.4
+corplot,b
+corplot,b,/vel  .. velocity
+corplot,b,/ch   .. channnels
+
+; average together three on/off pairs for G45.12+0.13 
+scan=315000039L
+istat=corposonoff(lun,b,t,cals,/sclcal,scan=scan,/han)
+coraccum,b,baccum,/new
+scan=315000043L
+istat=corposonoff(lun,b,t,cals,/sclcal,scan=scan,/han)
+coraccum,b,baccum
+scan=315000047L
+istat=corposonoff(lun,b,t,cals,/sclcal,scan=scan,/han)
+coraccum,b,baccum
+; average these 3 pairs plus the two polarizations
+avg=coravg(baccum,/pol)
+;
+can now plot via corplot either baccum or bavg.  baccum plot is normalized
+automatically by corplot but it leaves baccum unaltered so that one can
+continue to accum there.
+
+; automatically remove a baseline fit;  note that mask0 has already
+;been defined by cormask routine
+istat=corbl(bavg,blfit,maskused,deg=4,mask=mask0,auto=1,sub=1,svd=svd)
+; this fits a 4th order svd polynomial using mask0 and auto takes this
+; info from the command line and then subtracts the baseline model 
+; from the data and returns it in blfit
+
+If you do not use the /sub keyword, then the FITS are returned. The
+baseline can then be removed using:
+
+   bldat=cormath(bavg,blfit,/sub)
+
+; now average together the 4 Rx's just averaged in RCP/LCP for all
+; data to date.  first extract individual spectra:
+rx1=corsubset(blfit,1)
+rx2=corsubset(blfit,2)
+rx3=corsubset(blfit,3)
+rx4=corsubset(blfit,4)
+;
+sumrx=cormath(rx1,rx2,/add)
+sumrx=cormath(sumrx,rx3,/add)
+sumrx=cormath(sumrx,rx4,/add)
+avgrx=cormath(sumrx,smul=0.25)   <-- this produces an error message:
+
+IDL> avgrx=cormath(sumrx,smul=0.25)
+% REFORM: Expression must be an array in this context: SCALER.
+% Error occurred at:  CORMATH           185 /home/phil/idl/Cor2/cormath.pro
+%                     $MAIN$                 
+% Execution halted at:  $MAIN$                 
+IDL> 
+
+;  try using coreaccum;
+coraccum,rx1,avgrx,/new
+coraccum,rx2,avgrx
+coraccum,rx3,avgrx
+coraccum,rx4,avgrx
+avgrx=coravg(avgrx)
+
+; this works 
+
+; now do this in one swell foop withouth hanning:
+
+; average together three on/off pairs for G45.12+0.13 
+scan=315000039L
+istat=corposonoff(lun,b,t,cals,/sclcal,scan=scan)
+coraccum,b,baccum,/new
+scan=315000043L
+istat=corposonoff(lun,b,t,cals,/sclcal,scan=scan)
+coraccum,b,baccum
+scan=315000047L
+istat=corposonoff(lun,b,t,cals,/sclcal,scan=scan)
+coraccum,b,baccum
+; average these 3 pairs plus the two polarizations
+avg=coravg(baccum,/pol)
+;
+
+istat=corbl(bavg,blfit,maskused,deg=4,mask=mask0,auto=1,sub=1,svd=svd)
+
+rx1=corsubset(blfit,1)
+rx2=corsubset(blfit,2)
+rx3=corsubset(blfit,3)
+rx4=corsubset(blfit,4)
+;
+coraccum,rx1,avgrx,/new
+coraccum,rx2,avgrx
+coraccum,rx3,avgrx
+coraccum,rx4,avgrx
+avgrx=coravg(avgrx)
+
+************************************************************************
+
+To print from screen:
+
+corplot, b   -- plot on X window
+ps           -- switch to .ps file 'idl.ps'
+corplot, b   -- plot there
+hardcopy     -- flush .ps buffer
+x            -- switch back to X window
+ 
+lpr -Pop1 fname  -- print on laserprinter in control room
+
+************************************************************************
+
+Parsing the IDL header: 
+
+
+IDL> help,b,/str
+** Structure <82681f4>, 4 tags, length=36784, data length=36784, refs=1:
+   B1              STRUCT    -> <Anonymous> Array[1]
+   B2              STRUCT    -> <Anonymous> Array[1]
+   B3              STRUCT    -> <Anonymous> Array[1]
+   B4              STRUCT    -> <Anonymous> Array[1]
+IDL> help,b.b1,/struc
+** Structure <82769dc>, 4 tags, length=9196, data length=9196, refs=2:
+   H               STRUCT    -> HDR Array[1]
+   P               INT       Array[2]
+   ACCUM           DOUBLE           0.0000000
+   D               FLOAT     Array[1024, 2]
+IDL> help,b.b1.h,/struc
+** Structure HDR, 6 tags, length=992, data length=992:
+   STD             STRUCT    -> HDRSTD Array[1]
+   COR             STRUCT    -> HDRCORV2 Array[1]
+   PNT             STRUCT    -> HDRPNT Array[1]
+   IFLO            STRUCT    -> HDRIFLO Array[1]
+   DOP             STRUCT    -> HDRDOP Array[1]
+   PROC            STRUCT    -> HDRPROC Array[1]
+IDL> help,b.b1.h.std,/struc
+** Structure HDRSTD, 26 tags, length=128, data length=128:
+   HDRMARKER       BYTE      Array[4]
+   HDRLEN          LONG               992
+   RECLEN          LONG              9184
+   ID              BYTE      Array[8]
+   VERSION         BYTE      Array[4]
+   DATE            LONG           2003150
+   TIME            LONG             14255
+   EXPNUMBER       LONG              1234
+   SCANNUMBER      LONG         315000047
+   RECNUMBER       LONG                 1
+   STSCANTIME      LONG             14254
+   SEC             STRUCT    -> STRSEC Array[1]
+   FREE14          LONG                 0
+   FREE13          LONG                 0
+   FREE12          LONG                 0
+   FREE11          LONG                 0
+   GRPNUM          LONG               300
+   GRPTOTRECS      LONG                 4
+   GRPCURREC       LONG                 1
+   DATATYPE        BYTE      Array[4]
+   AZTTD           LONG           4193318
+   GRTTD           LONG            140013
+   CHTTD           LONG             88350
+   POSTMMS         LONG          14254995
+   FREE1           LONG                 0
+   FREE2           LONG                 0
+
+***** So, one can say:
+*****
+***** IDL> print,b.b1.h.std.scannumber
+*****      315000047
+
+IDL> help,b.b1.h.cor,/struc
+** Structure HDRCORV2, 30 tags, length=160, data length=160:
+   ID              BYTE      Array[4]
+   VER             BYTE      Array[4]
+   MASTERCLKPERIOD LONG                20
+   DUMPLEN         LONG          50000000
+   DUMPSPERINTEG   LONG                 1
+   LAGSBCIN        LONG              1024
+   LAGSBCOUT       LONG              1024
+   NUMSBCIN        LONG                 8
+   NUMSBCOUT       LONG                 2
+   BWNUM           LONG                 2
+   LAGCONFIG       LONG                 9
+   STATE           LONG        -803191800
+   FRQBUF          LONG                 1
+   CYCLELEN        LONG                 1
+   CALCYC          BYTE      Array[8]
+   FRQCYC          BYTE      Array[8]
+   BOARDID         LONG                 6
+   NUMBRDSUSED     LONG                 4
+   ATTNDB          LONG      Array[2]
+   PWRCNT          FLOAT     Array[2]
+   LAG0PWRRATIO    FLOAT     Array[2]
+   CALOFF          FLOAT     Array[2]
+   CALON           FLOAT     Array[2]
+   STATE2          LONG               128
+   FILL            LONG                 0
+   BAUDLEN         LONG                20
+   CODELEN         LONG              1023                    
+   CODEDELAY       LONG                 0
+   COHADD          LONG                 1
+   FILL2           LONG      Array[4]
+IDL> help,b.b1.h.pnt,/struc
+** Structure HDRPNT, 8 tags, length=240, data length=240:
+   ID              BYTE      Array[4]
+   VER             BYTE      Array[4]
+   M               STRUCT    -> HDRPNTM Array[1]
+   R               STRUCT    -> HDRPNTR Array[1]
+   ERRAZRD         FLOAT      -1.11181e-05
+   ERRZARD         FLOAT       9.02580e-07
+   STAT            LONG           7962739
+   FILLER          LONG      Array[5]
+IDL> help,b.b1.h.iflo,/struc
+** Structure HDRIFLO, 5 tags, length=136, data length=136:
+   ID              BYTE      Array[4]
+   VER             BYTE      Array[4]
+   IF1             STRUCT    -> HDRIF1 Array[1]
+   IF2             STRUCT    -> HDRIF2 Array[1]
+   FILL            BYTE      Array[8]
+IDL> help,b.b1.h.iflo.if1,/struc
+** Structure HDRIF1, 10 tags, length=48, data length=48:
+   ST1             LONG        1547190305
+   ST2             LONG       -1258053362
+   RFFRQ           DOUBLE       8.7428936e+09
+   LO1             DOUBLE       1.8742894e+10
+   ATTN            STRUCT    -> HDRIF1ATTN Array[1]
+   PWRDBM          FLOAT     Array[2]
+   PWRTMSTAMP      LONG             14245
+   HYBLOPH         BYTE         0
+   HYBSIGPH        BYTE        71
+   FILL            BYTE      Array[2]
+
+IDL> help,b.b1.h.dop,/struc
+** Structure HDRDOP, 10 tags, length=88, data length=88:
+   ID              BYTE      Array[4]
+   VER             BYTE      Array[4]
+   FACTOR          DOUBLE          0.99992685
+   VELORZ          DOUBLE           57.000000
+   FREQBCREST      DOUBLE           8743.5332
+   FREQOFFSETS     DOUBLE    Array[4]
+   VELOBSPROJ      DOUBLE           35.068630
+   TMDOP           LONG             14245
+   STAT            LONG       -1720678526
+   FILL            LONG      Array[2]
+IDL> help,b.b1.h.proc,/struc
+** Structure HDRPROC, 8 tags, length=240, data length=240:
+   ID              BYTE      Array[4]
+   VER             BYTE      Array[4]
+   PROCNAME        BYTE      Array[12]
+   PROCVER         BYTE      Array[4]
+   SRCNAME         BYTE      Array[16]
+   DAR             DOUBLE    Array[10]
+   IAR             LONG      Array[10]
+   CAR             BYTE      Array[8, 10]
+I

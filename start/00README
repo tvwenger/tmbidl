@@ -1,0 +1,9 @@
+======================================================================
+TMBIDL v8.0
+START files
+======================================================================
+
+These are the start scripts for TMBIDL. They can be modified to the
+specifications of the user. They are useful for setting default files,
+setting up various data reduction parameters, and personallizing
+TMBIDL features.

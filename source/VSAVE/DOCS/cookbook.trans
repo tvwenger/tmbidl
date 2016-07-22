@@ -1,0 +1,86 @@
+Cookbook for setting up transition table
+
+A transition table will automatically setup first pass baselines and
+guassian guesses,.
+
+..Get a NSAVE for a good source
+
+TMBIDL-->getns,17
+TMBIDL-->xxf
+
+..setup baseline and nregions
+..srset allows you to pick a standard range in x (default 1200 channels)
+..      you have the option of specifying the left or right edge or center
+..      if you're happy with the xrange, respond y
+..      and set up 3 negions like with mrset
+
+TMBIDL-->srset,3
+start spectral range of  1200 click on the left (l), center (c), or right of the region
+respond l, c, or r
+now click cursor appropriately
+Do you want to set the x-axis to this region (y)
+rxid=HE3a
+set nreg=   1  2607.00  2996.00
+set nreg=   2  3139.00  3257.00
+set nreg=   3  3490.00  3807.00
+
+RMS in NREGIONs =    0.00467299
+
+TMBIDL-->bb,6
+: 
+
+RMS in NREGIONs =    0.00401643
+
+TMBIDL-->smov
+Smoothing with  8.02 km/sec FWHM gaussian
+TMBIDL-->xxf
+
+..Now fit gaussians
+TMBIDL-->gg,2
+Click: bgauss #_gauss(center,hw_right) egauss
+
+..Transfer the fit to a transition table
+TMBIDL-->put_tr
+Enter a transition name (no quotes necessary)
+Transition name: 144beta
+Transition name set to 144beta
+144beta
+Existing table entries for transition: 144beta
+The transition table is empty
+There are no preexisting entries for: 144beta
+Enter a Comment to describe this transition, e.g., C,He,H (<16 characters)
+: He,H
+Is this a new transition (n) or an update (u)?
+New transition   1
+
+..While you're here also set up an H line only option
+TMBIDL-->xxf
+rxid=HE3a
+TMBIDL-->gg,1
+
+..Save this transition
+TMBIDL-->put_tr
+Enter a transition name (no quotes necessary)
+Transition name: 114beta
+Transition name set to 114beta
+114beta
+Existing table entries for transition: 114beta
+There are no preexisting entries for: 114beta
+Enter a Comment to describe this transition, e.g., C,He,H (<16 characters)
+: H only
+Is this a new transition (n) or an update (u)?
+New transition   2
+
+..Write the transition table to a file
+..I have been putting these in a directory called tables
+
+TMBIDL-->write_tr_file
+No argument given. Using ../tables/tr_tab.te
+Is this ok?(y,n)
+New file name:../tables/tr_tab.he3
+File ../tables/tr_tab.he3 not found
+Create ../tables/tr_tab.he3 ?(y)
+Using lun  109
+File contains    2 transitions
+
+

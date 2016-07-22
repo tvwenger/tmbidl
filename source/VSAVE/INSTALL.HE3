@@ -1,0 +1,21 @@
+;
+; Install VSAVE with 3Helium configuration
+;
+
+@../VSAVE/GLOBALS.VSAVE
+@../VSAVE/COMPILE.VSAVE
+;
+;start,2
+;!config=0
+files
+@../VSAVE/TRANS_DEF
+@../VSAVE/LPARM_DEF
+@../VSAVE/VSAVE_DEF
+!vsinfo_file='../tables/vsinfo.he3'
+;attach,3,lsdat,/auto
+!vsavefile='../nsaves/n3242_av'
+!nslogfile='../nsaves/s209_9B22.LNS.key'
+!nsavefile='../nsaves/s209_9B22.LNS'
+!tr_file='../tables/tr_tab.he3'
+!this_epoch=byte('JN09')
+ldata='/users/tbania/idl/data/line/dat/s209/ls209_9B22.s1'

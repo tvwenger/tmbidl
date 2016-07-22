@@ -1,0 +1,44 @@
+
+here is the GRS FITS header:
+
+GRS-IDL-->print,hdr
+SIMPLE  =                    T / file does conform to FITS standard             
+BITPIX  =                  -32 / number of bits per data pixel                  
+NAXIS   =                    3 / number of data axes                            
+NAXIS1  =                  326 / length of data axis 1                          
+NAXIS2  =                  342 / length of data axis 2                          
+NAXIS3  =                  659 / length of data axis 3                          
+EXTEND  =                    T / FITS dataset may contain extensions            
+COMMENT   FITS (Flexible Image Transport System) format is defined in 'Astronomy
+COMMENT   and Astrophysics', volume 376, page 359; bibcode: 2001A&A...376..359H 
+CTYPE1  = 'GLON-GLS'           / L = (X-CRPIX1)*CDELT1+CRVAL1                   
+CRVAL1  =                   0. / Degrees                                        
+CDELT1  =   -0.006150000045741 / Degrees                                        
+CRPIX1  =     2602.62599691041 / Pixels                                         
+CROTA1  =                   0. / Radians                                        
+CTYPE2  = 'GLAT-GLS'           / B = (Y-CRPIX2)*CDELT2+CRVAL2                   
+CRVAL2  =                   0. / Degrees                                        
+CDELT2  =    0.006150000045741 / Degrees                                        
+CRPIX2  =     171.731706047246 / Pixels                                         
+CROTA2  =                   0. / Radians                                        
+CTYPE3  = 'VELOCITY'           / V = (Z-CRPIX3)*CDELT3+CRVAL3                   
+CRVAL3  =       40000.10369346 / Meters Per Second                              
+CDELT3  =       212.5358581543 / Meters Per Second                              
+CRPIX3  =       212.5087890625 / Pixels                                         
+CROTA3  =                   0. / Radians                                        
+GLAT    = '0.0000000000000E+00' / Galatic Latitude                              
+GLON    = '0.0000000000000E+00' / Galatic Longitude                             
+EQUINOX =                1950.                                                  
+DATAMAX =     9.99848365783691                                                  
+DATAMIN =    -9.99969863891602                                                  
+BUNIT   = 'K       '           / Antenna Temperature, Tb = Ta/0.48              
+HIERARCH TELESCOPE = 'FCRAO   ' / Five College Radio Astronomy                  
+HIERARCH INSTRUMENT = 'SEQUOIA '                                                
+HIERARCH REST FREQUENCY = '110.201353' / GHZ                                    
+HIERARCH TRANSITION = '13CO J=1->0'                                             
+OBJECT  = '(16.000,-1.050) to (14.000,1.050)' / Degrees                         
+COMMENT Created by FITS STITCH by Rick Lavoie                                   
+DATE    = '2005-05-20T17:21:16' / file creation date (YYYY-MM-DDThh:mm:ss UT)   
+CHECKSUM= 'UaR6VXP5UaP5UWP5'   / HDU checksum updated 2005-05-20T17:21:16       
+DATASUM = '842487093'          / data unit checksum updated 2005-05-20T17:21:16 
+END                                                                             

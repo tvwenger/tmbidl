@@ -1,0 +1,37 @@
+;==================================================================
+; BATCH SCRIPT TO TEST IF UNIPOPS PACKAGE IS SANE
+;
+; execute this file via
+;
+; @../unipops/0SANITY
+;
+;==================================================================
+print
+print,'hello world this is 1983 when observers wore black belts and spectrometers sucked'
+print
+print,'hit the spacebar to remove this baseline'
+;
+get,1102
+;
+!b[0].yunits=byte('K') ; unipops code predated yunits tracking 
+;
+dcsub
+mk   
+freey
+xx
+;
+!nfit=3
+!nrset=2
+!nregion[0:2*!nrset-1]=[48,127,168,245]
+bbb,3
+scaley
+xx
+zline
+;
+;
+; This should produce a plot that is identical to the sanityPlot.ps file
+;
+; This is the 140FT average H114 beta spectrum for the Galacti HII region G29.9
+;
+; 13.2 hr integration  20 MHz BW 256 channels  first 42 channels used as primitive history 
+;

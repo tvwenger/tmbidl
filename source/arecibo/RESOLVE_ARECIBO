@@ -1,0 +1,42 @@
+;==============================================================
+; Arecibo Data Analysis Package       -- v7.0 may 2013 tmb/tvw
+;==============================================================
+; Based on:
+;-----------------------------------------------------------------------
+; TMBIDL v5.1 Procedure Compilations for ARECIBO interim correlator data
+; 25aug08  tmb  This needs revision based on July08 Arecibo run efforts
+;
+; ==> july2013 tmb Process has always been to convert from Arecibo format
+;                  to TMBIDL *at* *Arecibo* because Phil P's IDL code
+;                  is there and would be nearly impossible to import
+;                  correctly given how embedded it is in their system
+;                  (not to mention the snarly nature of his code)
+;
+;-----------------------------------------------------------------------
+;
+oldpath=!path
+local_TMBIDL=getenv('LOCAL_TMBIDL')
+;
+path=local_TMBIDL+'source/arecibo/pro/'
+!path=path
+;
+; Arecibo procedures 
+;
+resolve_routine,'init_data_bozo',/either,/compile   ; Package setup for Arecibo.  Hardwired for 3He.
+resolve_routine,'make_bozo_ONLINE',/either,/compile ; create ONLINE data file in {gbt_data} format
+resolve_routine,'cshift',/either,/compile           ; calculate channel shift needed to align spectra
+resolve_routine,'find_vel',/either,/compile           ; HRDS code -- find source velocity
+;
+; Code below is for use at Arecibo in conjunction with Phil Perillat's ICORR IDL code 
+;
+;resolve_routine,'start_arecibo',/either,/compile    ; INITIALIZES THIS PACKAGE
+;resolve_routine,'ao2gbt',/either,/compile           ; Convert Arecibo {corget} into {gbt_data}
+
+;resolve_routine,'getbozo',/either,/compile          ; use 'corrposonoff' to make a PS spectrum
+;resolve_routine,'update_bozo',/either,/compile      ; Update ONLINE data file by appending new data 
+;resolve_routine,'update',/either,/compile           ; Automatically updates 'online.bozo' data file
+;
+; now put !path back to original
+;
+!path=oldpath
+;

@@ -1,0 +1,80 @@
+***  Relevant Data files:
+
+-->  The real time raw telescope data files are:
+
+/share/olcor/corfile   <-- spectral line data
+/share/olcor/calfile   <-- calibration (continuum) data 
+
+These real-time files give you access to the data as you are observing.
+
+Once you finish a session, the AO system automatically copies these  
+online files into files called something like:
+
+/share/olcor/corfile.05jul05.a1804.1
+/share/olcor/calfile.05jul05.a1804.1
+/share/olcor/corfile.06jul05.a1804.1
+etc.
+
+where the string 'a1804' is your AO project ID number
+
+-->  Somewhen the next day these files are copied to a more permanent place:
+
+/proj/a1804/corfile.05jul05.a1804.1
+/proj/a1804/calfile.05jul05.a1804.1
+etc.
+
+---------------------------------------------------------------------------
+
+When you exit CIMA you can no longer access the real time files.  
+If you could, you would be able to steal someone else's data.
+
+When you run INITIDL to start TMBIDL it issues the command:
+
+start_arecibo,'/share/olcor/corfile'
+
+which automatically attaches the real time spectral line data file
+and the online.bozo file.
+
+So if you fuckup like Rood did on 9Jan2009 and exit CIMA before translating
+all the line data via update you will have an incomplete online.bozo file.
+
+You need to recover all the data:
+
+First identify the raw data file that you want to translate:
+
+cd /share/olcor
+ll *a1804*
+...
+-r--r--r--  1 vxw vxw 272287232 Jan  7 00:14 corfile.07jan09.a1804.1
+-r--r--r--  1 vxw vxw 287495936 Jan  8 00:04 corfile.08jan09.a1804.1
+-r--r--r--  1 vxw vxw 287495936 Jan  9 00:06 corfile.09jan09.a1804.1
+...
+
+dataline='/share/olcor/corfile.09jan09.a1804.1'
+
+Now edit the TMBIDL STARTUP file:
+
+/home/tbania/he3/idl/v3.3/STARTUP.IDL.V3.3
+
+near the end of the file replace (by commenting it out!)
+
+start_arecibo,'/share/olcor/corfile' ; <--- real time online raw data file 
+
+with
+
+start_arecibo,'/share/olcor/corfile.09jan09.a1804.1'
+
+and then fire up TMBIDL as per usual, creating a NEW online.bozo file.
+
+UPDATE this new, empty online.bozo file.  This will take some time, especially if you 
+are translating an entire day, as I am doing now.
+
+There are only two OnOff pairs for J900.  Whatever Rood did, he lost the last pair.
+
+
+==================================================================================
+DO NOT FORGET TO RETURN THE STARTUP.IDL.V3.3 FILE TO ITS ORIGINAL STATE WHEREIN IT 
+CONNECTS TO THE REAL TIME SPECTRAL LINE DATA FILE: /share/olcor/corfile
+==================================================================================
+
+

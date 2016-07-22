@@ -1,0 +1,32 @@
+;=======================================================================
+;  COMPILE ARCHIVE PROCEDURES V5.0 (THERE IS NOTHING MORE RECENT)
+;=======================================================================
+; 
+oldpath=!path
+local_TMBIDL=getenv('LOCAL_TMBIDL')
+;
+path=local_TMBIDL+'source/archive/pro/'
+!path=path
+;
+resolve_routine,'write_archive_lhead',/either,/compile       ; write LHEAD format
+resolve_routine,'write_archive_chead',/either,/compile       ;       CHEAD
+resolve_routine,'write_archive_fitinfo',/either,/compile     ;       FITINFO
+resolve_routine,'write_archive_custom',/either,/compile      ;       CUSTOM
+resolve_routine,'parse_archive_lhead',/either,/compile       ; parse LHEAD format
+resolve_routine,'parse_archive_chead',/either,/compile       ;       CHEAD
+resolve_routine,'parse_archive_fitinfo',/either,/compile     ;       FITINFO
+resolve_routine,'parse_archive_custom',/either,/compile      ;       CUSTOM
+;
+resolve_routine,'make_archive',/either,/compile     ; create an ARCHIVE file
+resolve_routine,'setarchive',/either,/compile       ; sets the ARCHIVE file type !archivetype
+resolve_routine,'open_archive',/either,/compile     ; opens an ARCHIVE file
+resolve_routine,'close_archive',/either,/compile    ; waddya think it does?
+resolve_routine,'write_archive',/either,/compile    ; writes a record to ARCHIVE file
+resolve_routine,'read_archive',/either,/compile     ; reads a record from the ARCHIVE file 
+resolve_routine,'parse_archive',/either,/compile    ; parses above output record into structure
+;
+; now put !path back to original
+;
+!path=oldpath
+;
+

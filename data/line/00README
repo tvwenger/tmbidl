@@ -1,0 +1,8 @@
+======================================================
+TMBIDL Spectral Line  Data default file location 
+======================================================
+
+Lmake.pro converts GBT ACS SDFITS data to TMBIDL 
+format and stores it by default here as Ldata.tmbidl 
+
+======================================================

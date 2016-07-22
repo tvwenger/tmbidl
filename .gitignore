@@ -1,0 +1,22 @@
+# TMBIDL .gitignore file
+# Last modified 1 July 2014 by TVW
+
+# ignore directories specifically meant to be filled with user info
+# or meant to be changed based on user's TMBIDL installation
+catalogs
+data
+figures
+journal
+sandboxes
+saves
+start
+startup
+tables
+
+#=====================================================================
+# The following lines should *always* be at the end of this file
+
+# always ignore emacs ~,# files
+*~
+\#*
+.\#*

@@ -1,0 +1,14 @@
+==========================================================
+TMBIDL v7.0 default location of NSAVE files 
+==========================================================
+
+Vanilla version loads  nstest.LNS and nstest.LNS.key 
+
+LNS  means line nsave
+CNS  means continuum nsave
+
+These are default file names triggered by !online status 
+
+
+==========================================================
+

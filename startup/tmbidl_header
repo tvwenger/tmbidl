@@ -1,0 +1,120 @@
+;=======================================================================
+;  THIS IS THE V8.0 TMBIDL HEADER :  it has a fixed length of 1024 bytes
+;=======================================================================
+;  Define the basic TMBIDL internal data structure format
+;  TMBIDL package requires at least these variables
+;
+;  Variables passed via SDFITS vx.x?? release
+;  
+;  GBT ACS and DCR implemented
+;      VEGAS implementation still ongoing as of Aug 2015
+;                                                  
+; MODIFICATION HISTORY
+;  
+;  Modified to include 3-He information for UniPops to TMBIDL translation
+;
+;  v5.0  July 2007  :  !data_points to 0L precision was NOT a bug: 0L is 4 bytes
+;                      ADDED: UniPops, continuum, and Y-axis variables
+;
+;  v5.1  Oct 2007   :  ADDED: size of Continuum data record and string
+;                             identification of observing procedure
+;
+; V7.1 August 2013  This format has not changed.  It needs to be static so
+;                   that TMBIDL is always backwards compatible. 
+; V8.0 July   2015  Same for VEGAS.  format labels changed
+;============================================================================
+;
+tmb = {tmbidl_header,    $            ;  # bytes -> # bytes
+       source:bytarr(32), $           ;    32          32   source name
+       observer:bytarr(32), $         ;    32          64   observer ID
+       obsid:bytarr(32), $            ;    32          96   observation description
+       scan_num:0L, $                 ;     4         100   scan number 
+       last_on:0L,  $                 ;     4         104   last ON  scan: PS
+       last_off:0L, $                 ;     4         108   last OFF scan: PS
+       procseqn:0L, $                 ;     4         112   procedure sequence #
+       procsize:0L, $                 ;     4         116   # scans in procedure
+       pol_id:bytarr(4), $            ;     4         120   polarization ID string
+       line_id:bytarr(32), $          ;    32         152   line ID via corr sampler 
+       scan_type:bytarr(32), $        ;    32         184   scan type ON/OFF etc
+       lst:0.0D, $                    ;     8         192   LST at scan start in sec
+       date:bytarr(32), $             ;    32         224   date/time string
+       frontend:bytarr(16), $         ;    16         240   frontend ID string
+       ra:0.0D, $                     ;     8         248   RA in degrees       
+       dec:0.0D, $                    ;     8         256   DEC in degrees
+       epoch:2000.0D, $               ;     8         264   EPOCH of ra/dec
+       l_gal:0.0D, $                  ;     8         272   l_gal in degrees
+       b_gal:0.0D, $                  ;     8         280   b_gal in degrees
+       hor_offset:0.0D, $             ;     8         288   map horizontal offset pos'n
+       ver_offset:0.0D, $             ;     8         296   map vertical offset position
+       az:0.0D, $                     ;     8         304   AZIMUTH in degrees
+       el:0.0D, $                     ;     8         312   ELEV in degrees
+       vel:0.0D, $                    ;     8         320   Source velocity m/sec
+       sky_freq:0.0D, $               ;     8         328   center frequency Hz  
+       rest_freq:0.0D, $              ;     8         336   rest frequency at band center
+       ref_ch:0.0D, $                 ;     8         344   reference ('center') channel
+       delta_x:0.0D, $                ;     8         352   delta freq of x-axis in Hz 
+       vel_def:bytarr(8), $           ;     8         360   velocity reference frame ID  
+       vframe:0.0D, $                 ;     8         368   frame radial velocity m/sec
+       rvsys:0.0D, $                  ;     8         376   Vsource - Vtelescope  m/s 
+       bw:0.0D, $                     ;     8         384   bandwidth in Hz       
+       tsys:0.0D, $                   ;     8         392   system temperature in Kelvin
+       tsys_on:0.0D, $                ;     8         400   Tsys ON source/freq
+       tsys_off:0.0D, $               ;     8         408   Tsys OFF source/freq
+       tcal:0.0D, $                   ;     8         416   cal value in Kelvin
+       tintg:0.0D, $                  ;     8         424   effective integ. time sec
+       feed:0.0D, $                   ;     8         432   signal feed number
+       srfeed:0.0D, $                 ;     8         440   reference feed number 
+       beamxoff:0.0D, $               ;     8         448   beam XEL offset in degrees
+       beameoff:0.0D, $               ;     8         456   beam EL offset  in degrees
+       freqoff:0.0D, $                ;     8         464
+       sideband:bytarr(4), $          ;     4         468   resulting sideband U/L
+       data_points:!data_points, $    ;     4         472   # data points in spectrum 
+       calfact:bytarr(8), $           ;     8         480   140-ft calibration factor
+       calstat:bytarr(32), $          ;    32         512   calibration status string
+       dstat:bytarr(32), $            ;    32         544   data reduction status
+       rxobs:bytarr(16), $            ;    16         560   Rx combo ID string
+       comment:bytarr(32), $          ;    32         592   e.g. 'solid' detection    
+       cmt:bytarr(16), $              ;    16         608   may not be used at all
+       yunits:bytarr(8), $            ;     8         616   Y-AXIS UNITS
+       ytype:bytarr(8), $             ;     8         624   Y-AXIS Type, e.g. T_A
+       c_pts:0L, $                    ;     4         628   # continuum data points
+       s_pts:0L, $                    ;     4         632   # spectral data points 
+       proc_id:bytarr(8), $           ;     8         640   procedure identifier
+       history:bytarr(384) $          ;   384        1024   annotation string   
+}; END OF DEFINITION
+;
+; The data array is concatenated to this header in the start_PACKAGE.pro
+;
+;      data:fltarr(!data_points) $ ;   16,384      17,408   the data array    ;  
+;
+;  --> uses !data_points value to set size of data array
+;  --> size = 4bytes * !data_points : 4 x 4096 = 16,384 bytes 
+;
+;      unformated read/write files and the ASSOC IDL command all need for
+;      the data to have fixed length records for maximum utility
+;
+;      thus all string variables from SDFITS are stored here as byte
+;      arrays of ASCII codes with one ASCII character coded by each
+;      byte.  note that we are keeping this structure aligned on
+;      16 byte boundaries for obvious reasons
+;
+;      all declariations match SDFITS precision
+;
+;  V5.0 July 2007  modifications and additions to this structure include:
+;
+;  1. A smaller 'history', but header size is still 1024 bytes.
+;  2. Additional header variables for CONTINUUM data analysis.  
+;  3. Additional header variables for UniPops archival data.
+;  4. Additional header variables for Y-axis units and type.
+;
+;  V5.1 October 2007  additions for continuum data reduction:
+;
+;  1. Added c_pts to store the number of continuum data points in this record
+;  2. Added proc_id to give a string identification of the observing procedure
+;     used to get these data.  Originally for continuum, e.g. TCJ, TCJ2, PEAK
+;     but can be for any procedure
+;  3. Added s_pts to store the number of spectral line data points actually
+;     in the spectrum
+;  4. History string is again smaller to maintain 1024 byte header length
+;
+;--------------------------------------------------------------------------------

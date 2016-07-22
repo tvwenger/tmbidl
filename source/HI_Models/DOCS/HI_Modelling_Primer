@@ -1,0 +1,363 @@
+=============================================
+Tutorial for synthetic HI experiment software
+=============================================
+Trey Wenger
+twenger@bu.edu
+tvwenger@gmail.com
+Department of Astronomy
+Institute for Astrophysical Research
+Boston University
+29 March 2013
+
+=============================================
+
+Package software (required):
+AS312_IDL or TMBIDL IDL environments
+
+synthlv.pro 
+radtrans.pro 
+los.pro 
+vlos.pro
+makegclouds.pro 
+pspiral.pro 
+circle.pro
+intersect2d.pro 
+closest2d.pro
+synthlvimage.pro
+progressbar_tvw.pro
+
+=> Recommend that these be compiled at IDL startup.
+=> Compilation order does not matter. 
+(Insofar as we are aware.)
+=============================================
+
+Other required software:
+
+histogram_clip.pro       <= LDA .pro
+rotcurv_wbb.pro          <= TMBIDL
+rotcurve_dpc.pro         <= TMBIDL
+rotcurv_nmg.pro          <= TMBIDL
+get_help.pro             <= TMBIDL
+(maybe others...)
+
+=============================================
+
+If you get stuck or have questions, try
+ 
+AS312_IDL-->get_help,'procedure_name'
+
+or
+
+AS312_IDL-->procedure_name,/help
+
+Section 1: Creating line-of-sight clouds
+========================================
+
+Procedure ==> los.pro
+
+This procedure creates a series of HI clouds along a line of sight. Without any
+arguments or keywords, the user simply enters the cloud parameters on the way:
+
+--------------------------------
+Example 1.1)
+
+AS312_IDL-->los            
+Enter cloud parameters: 
+los distance [kpc]   = 5.
+los velocity [km/s]  = 50.
+diameter [pc]        = 1000.
+density [#/cm^3]     = 0.5
+spin temperature [K] = 150.
+dispersion [km/s]    = 15.
+
+Define another cloud? (y/n)
+--------------------------------
+
+The result of los.pro is to display a diagram of the line of sight which displays a
+visual representation of the location of the clouds.
+
+The user can also create just one single cloud with these parameters by passing them
+as arguments:
+
+--------------------------------
+Example 1.2)
+
+AS312_IDL-->d=5. & vel=50. & size=1000. & den=0.5 & temp=150. & disp=15.
+AS312_IDL-->los,d,vel,size,den,temp,disp
+--------------------------------
+
+This gives the same cloud as in example 1.1.
+
+Another way to give los.pro some clouds is via the CLOUDS keyword.  The CLOUDS
+keyword takes an array of cloud structures, the template of which is this:
+
+   {cloud,d:0.d,vel:0.d,size:0.d,den:0.d,temp:0.d,sigma:0.d}
+
+Another way to set up the same cloud as in examples 1.1 and 1.2 is like this:
+
+--------------------------------
+Example 1.3)
+
+AS312_IDL-->cloudtemplate={cloud,d:0.d,vel:0.d,size:0.d,den:0.d,temp:0.d,sigma:0.d}
+AS312_IDL-->newcloud={cloud,5.,50.,1000.,0.5,150.,15.}
+AS312_IDL-->clouds=[newcloud]
+AS312_IDL-->los,clouds=clouds
+--------------------------------
+
+The CLOUDS keyword is most useful if you want to repeat an experiment. If you pass in
+an empty variable (or zero), the CLOUDS keyword is filled with the clouds you would
+create as in example 1.1 or 1.2:
+
+--------------------------------
+Example 1.4)
+
+AS312_IDL-->clouds=0
+AS312_IDL-->los,clouds=clouds
+Enter cloud parameters: 
+los distance [kpc]   = 5.
+los velocity [km/s]  = 50.
+diameter [pc]        = 1000.
+density [#/cm^3]     = 0.5
+spin temperature [K] = 150.
+dispersion [km/s]    = 15.
+
+Define another cloud? (y/n)
+
+AS312_IDL-->print,clouds
+{       5.0000000       50.000000       1000.0000      0.50000000       150.00000       15.000000}
+--------------------------------
+
+Now our array clouds has been filled with the cloud we created the ol' fashioned way.
+If the user needs to re-run this experiment s/he need not re-enter the cloud
+parameters by hand all over. All s/he needs to do is pass this clouds array in to the
+CLOUDS keyword.
+
+This procedure also allows for the creation of a flat background continuum of a
+temperature passed to the CONT keyword. To create a background continuum of 10000K:
+
+--------------------------------
+Example 1.5)
+
+TMBIDL-->radtrans,clouds=clouds[0],cont=10000
+--------------------------------
+
+Section 2: Radiative Transfer on line-of-sight clouds
+==========================================================
+
+Procedure ==> radtrans.pro
+
+This procedure creates a synthetic HI spectrum with given or created clouds. Just
+calling the procedure invokes los.pro to create the clouds.
+
+--------------------------------
+Example 2.1)
+
+TMBIDL-->radtrans
+Enter cloud parameters: 
+los distance [kpc]   = 5.
+los velocity [km/s]  = 50.
+diameter [pc]        = 1000.
+density [#/cm^3]     = 0.5
+spin temperature [K] = 150.
+dispersion [km/s]    = 15.
+
+Define another cloud? (y/n)
+--------------------------------
+
+This result is to display the line-of-sight clouds (as with los.pro) and the spectrum
+that this cloud setup creates.
+
+Clouds can be passed to radtrans using the CLOUDS keyword just as with los.pro. This
+is useful for repeated experiments.
+
+Section 3: Galactic Clouds
+==========================
+
+Procedure ==> makegclouds.pro
+
+This procedure makes model clouds in a Galactic face-on map instead of just down a
+line of sight as with los.pro. It is simple to run:
+
+--------------------------------
+Example 3.1)
+
+TMBIDL-->makegclouds
+Select cloud location with the mouse
+Cursor at x=       8.1025641 and y=       14.358974
+diameter [pc]        = 1000.
+density [#/cm^3]     = 0.4
+spin temperature [K] = 150.
+dispersion [km/s]    = 5.0
+Make another cloud? (y/n)
+
+--------------------------------
+
+This example displays a face-on image of the galaxy with the location of the Sun and 
+Galactic Center (GC) labeled. Then, the user is prompted to set the location of a cloud
+with his or her cursor. Finally, the user enters the parameters of this cloud.
+
+The GCLOUDS keyword can be filled with an array of gcloud structures, just as the
+CLOUDS keyword can with los.pro. If it is empty or a 0, it is filled with the created
+gclouds. The template of the gclouds structures is:
+
+      {gcloud,x:0.d,y:0.d,size:0.d,den:0.d,temp:0.d,sigma:0.d}
+
+--------------------------------
+Example 3.2)
+
+TMBIDL-->makegclouds,gclouds=gclouds
+Select cloud location with the mouse
+Cursor at x=       7.5897436 and y=       15.999999
+diameter [pc]        = 1000.
+density [#/cm^3]     = 0.5
+spin temperature [K] = 150.
+dispersion [km/s]    = 5.
+Make another cloud? (y/n)
+TMBIDL-->print,gclouds
+{       7.5897436       15.999999       1000.0000      0.50000000
+       150.00000       5.0000000}
+-------------------------------
+
+Once again, this is useful for repeated experiments.
+
+Section 4: Getting a line-of-sight from Galactic Clouds
+           and radiative transfer along that line-of-sight
+==========================================================
+
+Procedure ==> los.pro
+
+Now that we can create Galactic clouds, we need to determine a line-of-sight
+distribution of clouds on the galactic scale given an observed Galactic longitude.
+To do this, we use the keywords  LGAL and CURVE in los.pro.
+
+Passing LGAL tells los.pro that we want to invoke makegclouds.pro to create Galactic
+clouds.  LGAL tells los.pro what Galactic longitude we are observing, and CURVE tells
+los.pro what model rotation curve for the Galaxy we should use. The default curve is
+the Brandt/Burton rotation curve.
+
+--------------------------------
+Example 4.1)
+
+TMBIDL-->los,lgal=35.
+Select cloud location with the mouse
+Cursor at x=       6.7692308 and y=      -1.5384621
+diameter [pc]        = 3000.
+density [#/cm^3]     = 10.
+spin temperature [K] = 20.
+dispersion [km/s]    = 30.
+Make another cloud? (y/n)
+--------------------------------
+
+The MODEL keyword is a way to create a simple homogeneous distribution of HI throughout
+the Galaxy. It can be called in two ways: /MODEL, or MODEL=model. The first uses the
+default values and the second allows the user to pass in values. The values must be passed
+in as an array in the following order: [spin_temp,density,dispersion]. For example:
+
+--------------------------------
+Example 4.2)
+AS312_IDL-->model=[150.,0.4,5.0]
+AS312_IDL-->makegclouds,model=model,/noclouds
+--------------------------------
+
+Here, we also use the NOCLOUDS keyword to signify that we don't want to use any other
+clouds; we only want that homogeneous cloud. Without NOCLOUDS, the user can create
+other clouds as well.
+
+Similarly, the SMODEL keyword is a way to create a simple spiral galaxy distribution
+of HI. We will also use the NOCLOUDS keyword since we don't want any other clouds
+besides the spiral. The SMODEL array takes parameters in the following order:
+[spin_temp,density,dispersion,narms,r0, theta0,pitch,nturns] It can be assigned in
+three ways: /SMODEL to use defaults, [spin_temp,density,dispersion] and use the other
+defaults, or assign everything. These parameters define the gas in the bulge and
+spiral arms.
+
+--------------------------------
+Example 4.3)
+AS312_IDL-->makegclouds,/noclouds,/smodel      
+AS312_IDL-->smodel=[200.,1.0,5.0]
+AS312_IDL-->makegclouds,curve=1,lgal=30.,/noclouds,smodel=smodel
+AS312_IDL-->smodel=[200.,1.0,5.0,2.,2.62,0.,12.,1.6]            
+AS312_IDL-->makegclouds,curve=1,lgal=30.,/noclouds,smodel=smodel
+--------------------------------
+
+The SMODEL keyword will create the necessary clouds where the line of sight intersects
+the spiral arms or bulge.
+
+Procedure ==> radtrans.pro
+
+By passing LGAL to radtrans.pro, the user is prompted to create Galactic clouds
+via los.pro and makegclouds.pro. The equations of radiative transfer are applied to that 
+line-of-sight to generate a spectrum.
+
+--------------------------------
+Example 4.4)
+
+TMBIDL-->radtrans,lgal=35.
+Select cloud location with the mouse
+Cursor at x=      -17.333333 and y=      -1.5384621
+diameter [pc]        = 3000.
+density [#/cm^3]     = 10.
+spin temperature [K] = 10
+dispersion [km/s]    = 10
+Make another cloud? (y/n)
+--------------------------------
+
+You can also pass the other Galactic keywords: GCLOUDS, MODEL, SMODEL
+
+Section 5: L-V Maps
+======================
+
+Procedure ==> synthlv.pro
+
+This procedure implements radtrans.pro to create a synthetic longitude-velocity map
+of a given cloud distribution. Cloud distributions are created with the same keywords
+as they are in the previously discussed procedures.
+
+Note that this procedure may take a long time to run. A progress bar is displayed and
+can be used to monitor the progress. Once can also cancel or pause the procedure
+using this progress bar.
+
+This procedure can be run with 3 simple experiments right from the get-go:
+0 = a homogeneous cloud
+1 = a simple spiral galaxy
+2 = a combination of 0 and 1
+
+--------------------------------
+Example 5.1)
+AS312_IDL-->synthlv,2,dl=5.,ct=1,/ps,fname='bluelvmap'
+--------------------------------
+
+In this example I've used one of these pre-defined experiments. The
+other keywords I've used are DL, CT, PS, and FNAME. DL changes the
+resolution (or increment) of the longitude value for our l-v
+map. Ideally, we want this as small as possible to get the best
+looking map. However, the smaller it is, the longer the run-time. I
+make it big here for the sake of time. CT changes the color table. The
+color table defines the color scheme used in our l-v map. PS prints
+the l-v map to a file with the name FNAME.
+
+This procedure can take some time to run depending on the cloud distributions
+used. To reduce runtime, increase DX (the increment along the line-of-sight used in
+the radiative transfer calculations) and/or increase DL (the increment of Galactic
+longitude used in the L-V map creation). Both changes will reduce the quality and
+accuracy of the result.
+
+Procedure ==> synthlvimage.pro
+
+The L-V map parameters are saved after running synthlv.pro. To re-make the image, run
+synthlvimage.pro. This procedure takes all the data from the original L-V map and
+remakes the figure. This can be used to change the color table or save the map to a
+PS file.
+
+====================================
+Example Run-times
+====================================
+DL=0.1 degrees, DX=0.001 kpc, MODEL 2
+51 hours
+
+DL=1.0 degrees, DX=0.1 kpc, MODEL 2
+10 minutes
+
+DL=10.0 degrees, DX=0.1 kpc, MODEL 2
+1 minute
+

@@ -1,0 +1,43 @@
+;=============================================================
+; BUAO DATA ANALYSIS PACKAGE SANITY CHECK BATCH SCRIPT
+;=============================================================
+; @../buao/0SANITY
+;=============================================================
+;
+;==> BUAO Galactic HI data have 681 channel spectra that
+;    span LSR velocities +/- 175 km/s 
+;
+;    Package startup attaches the survey data to the ONLINE 
+;    file: ../../data/buao/buao_survey.tmbidl 
+;
+;==> Package startup also attaches generic NSAVE and OFFLINE
+;    files that are not from the BUAO and so will NOT WORK.
+;    (These are GBT files used to test ACS package. This was
+;    done this way to minimize size of this installation.)
+;
+;=============================================================
+;=============================================================
+print
+print,'Alas! The AreBOZO Obscuratory BUAO correlator had 1008 channels.'
+print,'                      (ask tmb for the reason)'
+print
+print,'BUAO HI Survey taken in the 1980s:'
+print,'===>>> Line Feed Paramp Rx Tsys 86 K Tintg 30 s'   
+print,'       SO WHAT DID YOU EXPECT ???'
+;
+nroff
+setx,-150,150 
+sety,-5,75
+;
+lgal=33.0 & bgal=0. ; in honor of Larry Bird
+getlb,lgal,bgal,nrec
+xx
+zline
+flag,0
+;
+print,'                                               ===================='
+print,'What you are looking at should be identical to ../buao/LarryBird.ps'
+print,'==================================================================='
+print
+
+

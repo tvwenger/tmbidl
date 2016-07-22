@@ -1,0 +1,50 @@
+
+============================================================
+        TMBIDL ARCHIVE PACKAGE V7.0 
+                      tmb May 2013 based on v5.0 
+============================================================
+
+read the documentation in:  ../v5.1/DOCS/ARCHIVE.V5.0
+
+this code has never been used to any great extent 
+rtr made up his own stuff for the 3-He baseline analysis
+
+=============================================================
+ COOKBOOK
+=============================================================
+
+This package is not a major mode of TMBIDL.  That is, it does
+NOT have its own start_ARCHIVE.pro.  Rather, to use it one
+must first establish TMBIDL in one of its major modes and 
+the invoke the Archive package using package.pro
+
+Example:
+
+TMBIDL--> start,10
+TMBIDL--> package,'ARC'
+
+Which then returns:
+
+=======================================================
+  TMBIDL ARCHIVE DATA PACKAGE INSTALLED
+                      V7.0 May 2013 runs but not tested
+=======================================================
+
+% Compiled module: WRITE_ARCHIVE_LHEAD.
+% Compiled module: WRITE_ARCHIVE_CHEAD.
+% Compiled module: WRITE_ARCHIVE_FITINFO.
+% Compiled module: WRITE_ARCHIVE_CUSTOM.
+% Compiled module: PARSE_ARCHIVE_LHEAD.
+% Compiled module: PARSE_ARCHIVE_CHEAD.
+% Compiled module: PARSE_ARCHIVE_FITINFO.
+% Compiled module: PARSE_ARCHIVE_CUSTOM.
+% Compiled module: MAKE_ARCHIVE.
+% Compiled module: SETARCHIVE.
+% Compiled module: OPEN_ARCHIVE.
+% Compiled module: CLOSE_ARCHIVE.
+% Compiled module: WRITE_ARCHIVE.
+% Compiled module: READ_ARCHIVE.
+% Compiled module: PARSE_ARCHIVE.
+
+
+

@@ -1,0 +1,26 @@
+=======================================================================
+ HI Modelling Cookbook 
+=======================================================================
+
+This code calculates model HI spectra for a wide variety of cases.  It
+models a single line of sight that can have an arbitrary distribution
+of H I clouds with varying properties.
+
+Too, this line of sight can be assigned to a specific galactic
+longitude and given a velocity field -- LSR velocity as a function of
+distance from the Sun -- based on a model for Galactic rotation.
+
+=======================================================================
+
+radtrans.pro is the key procedure and it is very powerful. 
+
+radtrans,/help gives a summary of its functionality and lists its
+keywords.  
+
+=======================================================================
+
+=======================================================================
+
+=======================================================================
+
+=======================================================================

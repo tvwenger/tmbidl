@@ -1,0 +1,191 @@
+Let me give you an overview of the functionality of the GRS IDL
+code which is now fully integrated into my spectral line package.
+Recall that this is based on stand alone general procedures which
+are linked by system variables used to minimize parameter passing
+and to maximize lucid coding.
+
+This means powerful, command line processing which is easily
+scripted and/or included in higher level procedures for batch
+processing.  
+
+* Easy, fast data access: I have taken all the GRS FITS data
+cubes -- recall that they are 2x2 degress and overlap by 1deg--,
+translated them into my internal package format, and written
+them out to an eqivalent number of files in this format.
+
+Which means that we can direct access the data very, very
+quickly via the IDL 'associate' construct.  
+
+Here are some procedures:
+==============================================================================
+pro findGRS,l_gal,b_gal,found,imap,dist
+;+
+; NAME:
+;       findGRS
+;
+; PURPOSE: Search for the correct survey data file given
+;          an input (l,b) galactic position.  Finds FITS cube
+;          whose center is closest to requested position.
+;
+; CALLING SEQUENCE:
+;       findGRS,l_gal,b_gal,found,GRS_file_name
+;
+; INPUTS:
+;       l_gal and b_gal in degrees.
+;
+; KEYWORD PARAMETERS:
+;       None.
+;
+; OUTPUTS:
+;       found -- Boolean:  0 -> position NOT in GRS
+;                          1 -> position in GRS
+;       imap -- index in !grsFiles[] array of GRS file for (l_gal,b_gal)
+;      
+;       dist -- distance between requested (l,b) and map center in degrees
+;
+;+
+;   getlb.pro   takes input (l_gal,b_gal) and loads nearest GRS spectrum 
+;   ---------   from the appropriate IDL data file which is assumed
+;               to be attached to the ONLINE file....
+;             
+;               Syntax:  getlb,l_gal,b_gal,found,imap,offset
+;                         
+;                        with (l,b) in degrees
+;-
+
+found is a flag telling you it found valid GRS data.
+offset is the distance (arcsec) between requested l,b and nearest
+       GRS l,b
+imap is the integer index of the IDL datafile this spectrum lives in
+==============================================================================
+pro beamlook,l_gal,b_gal,found,offset,lpix,bpix
+;+
+; NAME:
+;       beamlook
+;
+; PURPOSE: Show all GRS spectra within a single FCRAO GRS beam
+;          centered at input (l,b) galactic position
+;          Find 8 nearest neighbor positions and overplot in 
+;                 red for 4 nearest and yellow for other 4 
+;
+; CALLING SEQUENCE:
+;       beamlook,l_gal,b_gal,found,offset
+;
+; INPUTS:
+;       l_gal and b_gal in degrees.
+;
+; KEYWORD PARAMETERS:
+;       None.
+;
+; OUTPUTS:
+;       found -- Boolean:  0 -> position NOT in GRS
+;                          1 -> position in GRS
+;       offset -- angular difference in degrees between input (l_gal,b_gal)
+;                 and position in GRS
+=======================================================================================
+pro getgrsBeam,l_gal,b_gal,found,offset
+;+
+; NAME:
+;       getgrsBeam
+;
+; PURPOSE: Fetch an input (l,b) galactic position from the GRS
+;          IDL database and convolve adjoing voxels with the FCRAO beam
+;
+; CALLING SEQUENCE:
+;       getgrsBeam,l_gal,b_gal
+;
+; INPUTS:
+;       l_gal and b_gal in degrees.
+;
+; KEYWORD PARAMETERS:
+;       None.
+;
+; OUTPUTS:  GRS spectrum which is weighted average of FCRAO beam atop
+;           GRS data
+;
+; MODIFICATION HISTORY:
+;   31 May 2006, written by T.M. Bania
+;   8 June 2006, TMB modified from FITS to IDL database
+;
+===================================================================================
+pro Beamlb,l_gal,b_gal,found,imap,offset
+;+
+; NAME:
+;       Beamlb
+;
+; PURPOSE: Fetch an input (l,b) galactic position from the GRS
+;          IDL database and convolve adjoing voxels with the FCRAO
+;          beam.  Do this silently and leave result in !b[0].data.
+;          THIS IS THUS SUITABLE FOR BATCH PROCESSING. 
+;
+; CALLING SEQUENCE:
+;       Beamlb,l_gal,b_gal
+;
+; INPUTS:
+;       l_gal and b_gal in degrees.
+;
+; KEYWORD PARAMETERS:
+;       None.
+;
+; OUTPUTS:  GRS spectrum which is weighted average of FCRAO beam atop
+;           GRS data
+;
+; MODIFICATION HISTORY:
+;   10 June 2006, written by T.M. Bania
+=======================================================================================
+;+
+;   bvmap.pro   takes input l_gal and makes a (b,v) contour map
+;   ---------   of GRS data 
+;               each spectrum has the GRS beam  convolved with
+;               adjacent data
+;             
+;               Syntax:  bvmap,l_gal
+;                         
+;                        l_gal in degrees
+====================================================================================
+
+so to get a b,v map over all GRS velocities and latitudes you merely say:
+
+bscan,28.0  to get the l=28.0 deg map wherein the data have been convolved
+            with the FCRAO beam and so have much better S/N
+
+you can quickly look around with a command line such as:
+
+for l_gal=28.,29.,!grsSpacing do begin& bscan,l_gal&pause&end&
+
+which shows the 28deg b-v map and stops, waiting for any key to be hit,
+and then increments l by the GRS grid spacing and ....
+
+================================================================================
+;+
+;   lvmap.pro   takes input l_gal and makes an (l,v) contour map
+;   ---------   of GRS data for input b_gal 
+;               each spectrum has the GRS beam convolved with
+;               adjacent data. hardwired for T_main_beam
+;             
+;               Syntax:  lvmap,l_gal,b_gal,l_range
+;                         
+;                        l_gal,b_gal,l_range in degrees
+;-
+================================================================================
+;+
+;   lscan.pro   takes input l_gal and displays spectra over l_range
+;   ---------   at constant b_gal. each spectrum has the GRS beam  
+;               convolved with adjacent data
+;             
+;               Syntax:  lscan,l_gal,b_gal,l_range,found,imap,offset
+;                         
+;                        with (l,b) in degrees
+=================================================================================
+;+
+;   lbmap.pro   takes input (l_gal,b_gal) and makes a pos-pos map
+;   ---------   centered there of W_co over input interval delta_vel 
+;               centered at input v_lsr
+;               map dimensions are input (l_range,b_range)
+;             
+;               Syntax:  lbmap,l_gal,b_gal,v_lsr,l_range,b_range,v_range
+;                         
+;                        l_gal,b_gal,l_range,b_range in degrees
+;                        v_lsr,v_range in km/sec
+;-
+================================================================================= 

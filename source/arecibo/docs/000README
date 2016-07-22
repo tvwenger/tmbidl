@@ -1,0 +1,18 @@
+=========================================================
+   "DOCUMENTATION" FOR ARECIBO TMBIDL PACKAGE
+=========================================================
+
+==> These files are not a coherent, polished documentation
+    of what tmb did.  They are, however, *all* the information
+    available in electronic form from the Arecibo installation.
+
+==> Some of these files, e.g. Tsys.saga, were part of the
+    original crafting of the ICORR to TMBIDL conversion code. 
+
+==> Some of these files, e.g. RECOVERING_DATA, are only
+    relevant at Arecibo.  They are here because we want
+    to have a record of this stuff as part of the 
+    Arecibo package distribution. 
+
+=========================================================
+=========================================================

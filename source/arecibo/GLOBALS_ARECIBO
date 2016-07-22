@@ -1,0 +1,18 @@
+;
+;=========================================================================
+; ARECIBO DATA ANALYSIS PACKAGE FOR ICORR DATA
+;         V7.0 May 2013  tmb based on v3.3 original code 
+;              installed and running but NOT tested in detail 
+;=========================================================================
+;print
+print,'==================================================='
+print,' Arecibo ICORR Data Analysis Package Installed'
+print,'    V7.0 May 2013  tmb based on v3.3 original code '
+;print
+;print,' Data files hardwired for NSAVE    J320'
+;print,'                          ONLINE  A2351'
+;print,'                          OFFLINE A1804'
+print,'==================================================='
+;print
+;
+; There are NO special GLOBAL or SYSTEM variables used here. 

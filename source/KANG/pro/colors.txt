@@ -1,0 +1,28 @@
+255 192 203 pink
+255 0 255 magenta
+255 0 0 red
+255 99 71 tomato
+255 165 0 orange
+255 255 0 yellow
+173 255 47 green yellow
+0 250 154 spring green
+0 255 0 green
+107 142 35 olive drab
+176 224 230 powder blue
+0 255 255 cyan
+70 130 180 steel blue
+0 0 255 blue
+0 0 128 navy
+238 130 238 violet
+160 32 240 purple
+176 48 96 maroon
+139 69 19 saddle brown
+222 184 135 burlywood
+245 245 220 beige
+255 255 255 white
+230 230 230 light gray
+210 210 210 medium gray
+190 190 190 gray
+110 110 110 dark gray
+70 70 70 charcoal
+0 0 0 black

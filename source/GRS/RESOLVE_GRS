@@ -1,0 +1,54 @@
+;
+;--------------------------------------------
+; TMBIDL GRS V7.0 COMPILE AS RESOLVE_ROUTINEs
+;--------------------------------------------
+;
+oldpath=!path
+local_TMBIDL=getenv('LOCAL_TMBIDL')
+path=local_TMBIDL+'source/GRS/pro/'
+!path=path
+;
+;  GRS procedures
+;
+resolve_routine,'plt_grshdr',/either,/compile   ; modify plot header for GRS params
+resolve_routine,'freegrs',/either,/compile      ; free x,y axis scaling for GRS case
+resolve_routine,'position',/either,/compile     ; plot source position and error for GRS lbmaps
+resolve_routine,'grs2idl',/either,/compile       ;     
+resolve_routine,'grs_datafile',/either,/compile  ;
+resolve_routine,'grsinfo',/either,/compile       ;
+resolve_routine,'cubeinfo',/either,/compile      ;
+resolve_routine,'findgrs',/either,/compile       ;
+resolve_routine,'getgrs',/either,/compile        ;
+resolve_routine,'getgrsbeam',/either,/compile    ;
+resolve_routine,'beamlook',/either,/compile      ;
+resolve_routine,'getlb',/either,/compile         ; get GRS spectrum at l,b
+resolve_routine,'beamlb',/either,/compile        ; get beam-convolved spectrum for l,b
+resolve_routine,'lscan',/either,/compile         ;
+resolve_routine,'bscan',/either,/compile         ;
+resolve_routine,'ta',/either,/compile            ;
+resolve_routine,'tmb',/either,/compile           ; convert to Ta from Tmb
+resolve_routine,'vt',/either,/compile            ; convert to Tmb from Ta
+resolve_routine,'bvmap',/either,/compile         ; b-v contour map
+resolve_routine,'lvmap',/either,/compile         ; l-v contour map
+resolve_routine,'lbmap',/either,/compile         ; l-b contour map 
+resolve_routine,'remap',/either,/compile         ;
+resolve_routine,'fillmap',/either,/compile       ;
+resolve_routine,'findvt',/either,/compile        ; find terminal velocity
+resolve_routine,'l_vt',/either,/compile
+resolve_routine,'bv_vt',/either,/compile
+;
+; these originally in tmb sandbox 
+; they seem to be HRDS specific
+;
+resolve_routine,'grsdisplay',/either,/compile
+resolve_routine,'pgvname',/either,/compile
+resolve_routine,'cofit',/either,/compile
+resolve_routine,'initgrs',/either,/compile
+resolve_routine,'grsfits',/either,/compile
+resolve_routine,'plotgrs',/either,/compile
+resolve_routine,'loopco',/either,/compile
+;
+; now put !path back to original
+;
+!path=oldpath
+;

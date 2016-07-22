@@ -1,0 +1,9 @@
+=========================================================
+TMBIDL Line and Continuum Gaussian Fits Default Files 
+=========================================================
+
+When instructed to store the results of gaussian fits
+to data TMBIDL defaults to these file names:
+
+Cdata.gfits and Ldata.gfits for continuum and line data
+respectively.

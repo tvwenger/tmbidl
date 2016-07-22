@@ -1,0 +1,54 @@
+;
+;  information to READ from ARCHIVE file created with:  
+;  
+;  @../archive/write_archive_history
+;
+openr,!archiveunit,fname
+;
+; three line header for all ARCHIVE files
+;
+hdr1=' ' & hdr2=' ' & hdr3=' '    ;  file starts with three line header
+readf,!archiveunit,hdr1
+readf,!archiveunit,hdr2
+readf,!archiveunit,hdr3
+print,hdr1
+print,hdr2
+print,hdr3
+;
+buff=' '
+readf,!archiveunit,buff
+print,buff
+;
+xbuff=strsplit(buff,' ',count=cols,/extract)
+print,'Number of parameters in this record is '+fstring(cols,'(I3)')
+;
+close,!archiveunit
+;
+strname='arc'                ; name of data structure
+tag_names=indgen(cols)       ; must supply a unique tag name
+tag_names=string(tag_names)
+;
+tag=tag_names[0]             ; first make the named array
+rec=create_struct(name=strname,tag,0.0d)
+;
+for i=1,cols-1 do begin      ; then fill in the rest of the columns
+      var=xbuff[i]
+      tag=tag_names[i]
+      case (test_for_string(var)) of
+           0: rec=create_struct(rec,tag,0.0d)
+           1: rec=create_struct(rec,tag,' ')
+      endcase
+endfor
+;
+; now fill the structure
+;
+for i=0,cols-1 do begin
+      var=xbuff[i]
+      case (test_for_string(var)) of
+           0: rec.(i) = double(var)
+           1: rec.(i) = var
+      endcase
+endfor
+;
+print,rec
+;

@@ -1,0 +1,50 @@
+;
+;  STARTUP_TMBIDL 
+;
+;  THIS IS THE TMBIDL STARTUP FILE FOR:  V8.0
+;
+;  05aug2013  tmb 
+;  01jul2014  tvw
+;
+;  Add new directories to path in setenv IDL_PATH in  TMBIDL.INIT file !!!
+;
+;  Compile functions --- DO NOT rearrange the ordering of these compilations
+;                        All packages compile the same functions at present.
+;
+@COMPILE.TMBIDL  ;  compile the basic package for TMBIDL with GBT functions
+;
+@INIT.COLORS      ;  define colors for TMBIDL 
+;
+;  Define globals for files 
+;
+@INIT_FILES
+;
+;---------------------------------
+;  Start the relevant package:
+;---------------------------------
+print,'======================='
+print,'TMBIDL V8.0 INITIALIZED'
+print,'======================='
+;
+START
+;
+; --------------------------------------------------------------------------
+;
+;  START executes:  @tmbidl_data   -- the basic data structure
+;                   @globals       -- the system variables including !b[]
+;                   a journal file
+; 
+;  Each subpackage then has its own special initialization of TMBIDL commands
+;
+;----------------------------------------------------------------------------
+;
+@../data/INIT_DATA_FILES
+;
+; Batch script defining short names for FITS and TMBIDL data files
+; Generic Ldata and Cdata files valid for any observing run.
+; These files created from telescope FITS files via
+; Lmake.pro and Cmake.pro
+;
+lfile='../data/line/Ldata.tmbidl'         ; this is TMBIDL format for ONLINE  file
+cfile='../data/continuum/Cdata.tmbidl'    ; this is TMBIDL format for OFFLINE file
+;

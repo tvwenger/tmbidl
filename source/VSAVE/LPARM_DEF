@@ -1,0 +1,105 @@
+; Structure to store measured line parameters
+;       
+;   The basic plan is not to try to reduce entire bands with one fitted
+;       baseline, because that baseline could quite possibly be very
+;       complex and would weaken our case with readers even if we can
+;       convince ourselves that it is reliable.
+;   Lines will be considered in BANDS (or receivers), e.g., H89 or rx1
+;                               TRANSITIONS or groups of nearby lines
+;                                          to be fitted with one
+;                                          baseline.
+;                                          In H89 the bands are 89AL, 140DEL, 178TH
+;                               LINES      In 89AL the lines are H89\alpha, He89\alpha, C89\alpha
+;
+;   Most often a transition will contain 3 lines, but in most cases we will not fit all
+;        lines within a transition. Because of this I felt it important to attach names 
+;        to lines, because the number in a fit sequence does not tell the tale. 
+;	Under different circumstances gaussian 1 could be the C, He, or H line. A few 
+;        `transitions' have other lines, e.g., 91AL contains H154\epsilon.
+;
+;   After each line (or group of lines) is measured all of the
+;        parameters measured and all of the information required to
+;        reconstruct the fit will be stored in a structure,
+;        lparm. lparm will have two parts, a header, lph, which will
+;        have common values for all lines within a BAND, and lpv, which
+;        will have values of many parameters associated with the fit.
+;
+;   The fit will be associated with a given nsave bin or a list of
+;        nsaves. E.g., DSB has already done the equivalent of old daily
+;        averages for each polarization separately and given
+;        lparm.nsaves could have the nsave for the LL and RR
+;        averages. Typically I imagine only using one or two nsaves but
+;        can imagine circumstances where I would use more.
+;
+;   I think that the lparm structure should be written into something
+;        like the nsave file.  Using slightly modified set and select
+;        commands many tables can be constructed from this sort of
+;        data.
+;
+;   I'm working on procedures to automatically set nregions and
+;        gaussian fit initial guesses for each transition.
+;
+;   Below are proposed lpv and lph structures. I have to see how or if
+;        they can be combined.
+;
+;
+;
+lp     = {lparm,         $            ;  # bytes 
+       vs_type:bytarr(8), $           ;     8               type of saved info
+       source:bytarr(32), $           ;    32          32   source name
+       scan_num:0L, $                 ;     4         100   scan number 
+       pol_id:bytarr(4), $            ;     4         120   polarization ID stringmake_psave.pro
+       line_id:bytarr(32), $          ;    32         152   line ID via corr sampler 
+       scan_type:bytarr(32), $        ;    32         184   EPOCH or other INFO
+       date:bytarr(32), $             ;    32         224   date/time string
+       sky_freq:0.0D, $               ;     8         328   center frequency Hz
+;                                                           necessary to convert channels to freq  
+       delta_x:0.0D, $                ;     8         352   delta freq of x-axis in Hz 
+       tsys:0.0D, $                   ;     8         392   system temperature in Kelvin
+       tsys_on:0.0D, $                ;     8         400   Tsys ON source/freq
+       tsys_off:0.0D, $               ;     8         408   Tsys OFF source/freq
+       tintg:0.0D, $                  ;     8         424   effective integ. time sec
+       calfact:bytarr(8), $           ;     8         480   140-ft calibration factor
+       calstat:bytarr(32), $          ;    32         512   calibration status string
+       dstat:bytarr(32), $            ;    32         544   data reduction status
+       comment:bytarr(32), $          ;    32         592   e.g. 'solid' detection    
+       l_name:bytarr(16),  $         ;  line name, e.g., H91\alpha
+       trans:bytarr(16),   $         ;  transition; name for the transtion(s) within a band or rx
+       mk_on:0,            $         ;  are intensities in Mk?
+       hgt:0.0,           $         ;  line intensity
+       hgterr:0.0,        $         ;  Line intensity error
+       cen:0.0,           $         ;  Center (channels)
+       cenerr:0.0,        $         ;  Center error
+       fwhm:0.0,          $         ;  FWHM (channels)
+       fwhmerr:0.0,       $         ;  FWHM error
+       delta_c:0.0,       $         ;  separation of line center
+;                                         from associated marker
+       src_delta_v:0.0,   $         ;  velocity shift reqired to shift src
+;                                         to markers, regions
+       src_delta_c:0.0,   $         ;  channel shift src
+       bfit_rms:0.0,      $         ;  RMS in NREGIONS before smoothing; set in BB
+       fixc:0,            $         ;  Is fit center fixed
+       fixhw:0,           $         ;  Is fit FWHM fixed
+       sm_stat:0.0,       $         ;  Smoothing info (v fwhm of gaussian smoothing function?)
+       nsaves:intarr(16), $         ;  Associated nsaves or
+;                                         records; plural ==> an average 
+       nsave_file:bytarr(16), $     ;  File identifier for nsave file
+       ngauss:0,          $         ;  !ngauss 
+       igauss:0,          $         ;  in a multi-gaussian fit, the number in the sequence
+;                                      1 to ngauss  not 0 to ngauss-1
+       bgauss:0,          $         ;  !bgauss
+       egauss:0,          $         ;  !egauss
+       xrange:fltarr(2),  $         ;  !x.range
+       nfit:0L,           $         ;  !nfit
+       nrset:0,           $         ;  !nrset
+       sregion:lonarr(16), $        ;  first 16 values of !nregion
+       lcom:bytarr(16)     $        ;  a comment          
+}; END OF DEFINITION
+defsysv,'!lp_blk',replicate({lparm},1) ; a blank LP record
+!lp_blk.vs_type=byte('LP')           ; set save_type in blank to 'LP'
+defsysv,'!lp_rec',replicate({lparm},1) ; define an lp record
+!lp_rec=!lp_blk
+defsysv,'!lp_hdr',replicate({lparm},1) ; an lp record in which to store hdr info
+!lp_hdr=!lp_blk
+ngauss=!ngauss_max
+defsysv,'!lp',replicate({lparm},ngauss) ; define an lp array

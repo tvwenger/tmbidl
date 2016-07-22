@@ -1,0 +1,30 @@
+;==========================================
+; fetch and store the existing CT 
+; do NOT play games with the windows
+; OR the plot ranges....
+; trying to deal with in the past has only
+; led to tears 
+;==========================================
+;
+tvlct,oldr,oldg,oldb,/get
+!ct.oldr=oldr
+!ct.oldg=oldg
+!ct.oldb=oldb
+;
+; recover and install TMBIDL color table
+;
+r=!ct.red
+g=!ct.green
+b=!ct.blue
+tvlct,r,g,b
+;
+; keep track of IDL window state
+;
+;setwin, /set_state  ; store current window state in !window_state
+;                     then set correct TMBIDL graphics window
+;
+; keep tmbidl plot parameters
+;
+;!x.range=!tmbidl_x_range
+;!y.range=!tmbidl_y_range
+;

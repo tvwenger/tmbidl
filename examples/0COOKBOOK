@@ -1,0 +1,232 @@
+============================================================
+ COOKBOOK EXAMPLES FOR TMBIDL V7.0: GBT ACS AND DCR DATA 
+============================================================
+First, you need to attach the relevant data files to TMBIDL.
+See ../tmbidl/examples/00README for instructions. 
+============================================================
+This gives you access to to GBT ACS spectral line data 
+for the 3-Helium experiment's session number 76 for project
+AGBT12A_114.  The H II regions W3 and S206 were observed
+in TP mode with the ACS tuned to 8 different frequencies
+at two orthogonal polarizations for a total of 16 spectra
+per PS OffOn pair.  So each GBT ACS PS observation yields 
+16 TMBIDL spectra that are the basic TMBIDL data unit, 
+a "record".
+
+AGBT12A_114_76.avg.acs.fits  3-Helium experiment GBT SDFITS 
+===========================
+L_12A_114_76.tmbidl          these data in TMBIDL format 
+===================
+============================================================
+RUN THE FOLLOWING IDL BATCH FILE TO SEE THE FINAL RESULT 
+OF WHAT YOU ARE ABOUT TO LEARN :
+TMBIDL--> @../../examples/examples.pro
+============================================================
+
+To look at these data issue the follow commands at the
+TMBIDL==> command line.  All TMBIDL commands have a /help
+keyword.  Check this out with 'online,/help'.  When you
+ask for /help that is all you get -- help.  The command
+is NOT executed.
+============================================================
+
+online         <== points TMBIDL to the ONLINE data file
+list,400,431   <== gives info anent the 32 ACS spectra for 
+                   a single OffOn TP pair made on W3
+===============
+DISPLAY SPECTRA
+===============
+fetch,431     <== get ON record 431 from ONLINE, find its
+                  associated OFF and calculate the TP 
+                  spectrum.  
+xx           <==  display the spectrum which is for the 
+                  RR polarization of the 'rx8' ACS tuning
+xroll        <==  you are looking at all 4096 data points
+                  this commands throws away 5% of the 
+                  channels at both ends to mask filter
+                  roll off
+xx          <==   see? much prettier
+rrlflag     <==   flags for radio recombination lines
+                  the 'strong' line is H131 gamma  
+
+=======================
+AVERAGING SPECTRAL DATA
+=======================
+tellset        <== gives search parameters for SELECTing
+                   spectra from the ONLINE data file. 
+                   Selected spectra are added to the STACK.
+setsrc,'W3'   <==  search for W3 data
+settype,'ON'  <==  search for ON source spectra
+setid,'rx2'   <==  search for ACS rx2 tuning 
+tellset       <==  check search parameters
+                   '*' wildcard means both LL and RR
+                   polarizations will be found 
+select        <==  search ONLINE for matches, putting
+                   matched record numbers in the STACK
+tellstk       <==  print these matched record numbers
+cat           <==  CATalog info about spectra in the STACK
+                   There are 16 spectra that match the 
+                   selection criteria stemming from 8 
+                   TP OffOn observations at LL and RR
+                   polarizations.
+avgstk       <==   averages contents of STACK
+                   currently defaults to displaying this average
+xx           <==   display this 190.7 minute integration
+setx,1500,3000 <== set x-axis channel range
+xx
+rrlflag      <==  this is the H91 alpha RRL transition
+                  He91alpha and C91alpha are there 
+                  H154 epsilon as well
+dcsub       <==   subtract the average of the spectrum
+                  from itself "DCsubtract"
+xx
+scaley      <==   make the y-axis choice pretty
+xx
+zline       <==   draw zero intensity
+
+clearset    <==   restores SELECTion parameters to wild cards
+tellset     <==   confirm the validity of this assertion 
+
+==================
+REMOVING BASELINES  
+==================
+This example assumes you have the spectrum generated above 
+displayed in channels.
+
+freey <== let y-axis range float
+avgstk
+setx,1500,3000
+rrlflag
+
+nrset,/help <==   information on how to define the NREGIONs
+                  used to mask the data for a baseline model fit
+nrset,4     <==   set 4 NREGION masks which requires 8 mouse clicks
+nron        <==   turn on NREGION display boxes that are 3 sigma
+                  high based on RMS inside the boxes
+xx
+bbb,3      <==    fits third order baseline to data in the 
+                  NREGION boxes, pauses (needs <CR>), and
+                  then subtracts
+
+bb,3 <== invokes nrset in GBTIDL mode and then does bbb
+
+=================
+FITTING GAUSSIANS
+=================
+
+==> A baseline MUST be removed before attempting any Gaussian
+    fits.  That is, the mean of the data inside the NREGION
+    boxes must be zero.
+
+Starting with the baseline removed spectra from the above 
+example, change the y-axis units to milliKelvins 
+
+mk
+xx
+
+==> since W3's H91 alpha like is over 3K, focus instead on
+    He and C 91 alpha by resetting the y-axis range:
+
+sety,-50,450
+xx
+setx,1500,2300  <==  concentrate on the He and C lines
+xx
+zline <== draw line at zero intensity
+rrlflag
+
+gg,/help <==  info on how to fit gaussians 
+
+xx
+gg,2  <== fit 2 gaussians for the C and He line
+          no need to be too anal vis a vis your mouse
+          clicks as this is a Marqwardt fitter and hence
+          is very robust.
+
+Here are my fits.  Yours should be very close to these.
+
+G#1 is Carbon G#2 is Helium 
+
+TMBIDL-->gg,2
+Click: bgauss #_gauss(center,hw_right) egauss
+Cursor is at Xpos=       1820.3425 Ypos=       30.151262 in PLOT units
+Cursor is at Xpos=       1840.8904 Ypos=       60.588452 in PLOT units
+Cursor is at Xpos=       1848.5959 Ypos=       65.200147 in PLOT units
+Cursor is at Xpos=       1905.1027 Ypos=       90.103303 in PLOT units
+Cursor is at Xpos=       1929.0753 Ypos=       99.326693 in PLOT units
+Cursor is at Xpos=       1971.0274 Ypos=       71.656521 in PLOT units
+
+G#       Height +/- sigma     Center +/- sigma       FWHM +/- sigma   ==>     kHz        km/sec
+ 1     121.834       6.166   1843.347       0.294     11.816       0.695    144.241       5.035
+ 2     303.252       3.026   1905.947       0.241     49.372       0.575    602.683      21.038
+Center/FWHM in channels
+
+RMS in NREGIONs =       14.5509
+
+% Program caused arithmetic error: Floating underflow
+
+==> IGNORE THIS ERROR MESSAGE.  IT DOESN'T MATTER.  WE CANNOT MAKE IT GO AWAY.  SIGH. 
+
+Finally, let's fit C, He, and H simultaneously:
+
+sety,-100,3200
+setx,1500,2500
+xx
+gg,3  <== fit 3 Gaussians for C, He, and H
+
+TMBIDL-->gg,3
+Click: bgauss #_gauss(center,hw_right) egauss
+Cursor is at Xpos=       1818.0223 Ypos=       276.81238 in PLOT units
+Cursor is at Xpos=       1839.4264 Ypos=       319.42445 in PLOT units
+Cursor is at Xpos=       1847.9880 Ypos=       331.59932 in PLOT units
+Cursor is at Xpos=       1904.7089 Ypos=       404.64858 in PLOT units
+Cursor is at Xpos=       1928.2534 Ypos=       422.91089 in PLOT units
+Cursor is at Xpos=       2189.3836 Ypos=       824.68180 in PLOT units
+Cursor is at Xpos=       2213.9983 Ypos=       849.03155 in PLOT units
+Cursor is at Xpos=       2291.0531 Ypos=       769.89485 in PLOT units
+
+G#       Height +/- sigma     Center +/- sigma       FWHM +/- sigma   ==>     kHz        km/sec
+ 1     121.839       9.875   1843.349       0.471     11.820       1.113    144.292       5.037
+ 2     303.340       4.848   1905.943       0.386     49.340       0.920    602.298      21.025
+ 3    2998.646       4.186   2192.782       0.045     65.719       0.106    802.232      28.004
+Center/FWHM in channels
+
+RMS in NREGIONs =       14.5509
+
+=========================
+CHANGING THE X-AXIS UNITS
+=========================
+
+This far we've stayed in CHANNELS.  TMBIDL recognizes the following x-axis units for spectra:
+
+chan
+velo
+freq  
+
+All of the procedures described thus far work for any x-axis definition.
+Be sure, however, to use the correct units when invoking any commands....!!!
+
+velo
+xx     <==  change x-axis to LSR velocity.  This is only correct if the source velocity
+            Vsrc shown on the graph header is correct 
+setx,-200,75
+xx
+
+TMBIDL-->gg,3
+Click: bgauss #_gauss(center,hw_right) egauss
+Cursor is at Xpos=      -138.14854 Ypos=      -3.2097666 in PLOT units
+Cursor is at Xpos=      -129.61366 Ypos=       45.489737 in PLOT units
+Cursor is at Xpos=      -126.96490 Ypos=       63.752051 in PLOT units
+Cursor is at Xpos=      -103.12607 Ypos=       148.97618 in PLOT units
+Cursor is at Xpos=      -94.885488 Ypos=       167.23850 in PLOT units
+Cursor is at Xpos=       19.305435 Ypos=       362.03651 in PLOT units
+Cursor is at Xpos=       31.960615 Ypos=       404.64858 in PLOT units
+Cursor is at Xpos=       59.331119 Ypos=       392.47370 in PLOT units
+
+G#       Height +/- sigma     Center +/- sigma       FWHM +/- sigma   ==>     kHz        km/sec
+ 1     121.840       9.798   -128.532       0.199      5.037       0.471     61.483       2.146
+ 2     303.337       4.810   -101.859       0.163     21.025       0.389    256.655       8.959
+ 3    2998.793       4.154     20.368       0.019     28.001       0.045    341.808      11.932
+Center/FWHM in LSR velocity (km/sec)
+
+RMS in NREGIONs =       0.00000
+

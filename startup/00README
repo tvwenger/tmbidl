@@ -1,0 +1,166 @@
+=====================================
+TMBIDL V7.1 August 2013 STARTUP files
+=====================================
+
+Define very useful aliases for starting the TMBIDL package:
+
+alias inittmbidl    'cd /home/groups/3helium/idl/v7.1/startup/ ; source TMBIDL.INIT; idl; cd -'
+alias inittmbidlde  'cd /home/groups/3helium/idl/v7.1/startup/ ; source TMBIDL.INIT; idlde; cd -'
+alias inittmbidl32  'cd /home/groups/3helium/idl/v7.1/startup/ ; source TMBIDL.INIT; idl -32; cd -'
+                     ========================
+***************==>   THIS PART OF THE PATH DEPENDS ON YOUR LOCAL INSTALLATION 
+
+1. idl -32 ==> runs IDL in 32-bit mode.  Needed for some packages, e.g. GRS
+2. cd -    ==> construction returns you to the directory you issued "inittmbidl" from 
+               after you exit from TMBIDL.  Is not necessary. Tis your choice. 
+
+Running in IDL is recommended, except for coding and debugging whence IDLDE is better.
+
+TMBIDL.INIT  --  defines the location of the IDL startup file STARTUP.TMBIDL 
+                 defines the IDL path(s) to locate the files in TMBIDL 
+                 N.B. There are two versions depending on what Linux shell you use:
+                 TMBIDL.INIT.TCSH and TMBIDL.INIT.BASH
+
+STARTUP.TMBIDL  -- the IDL startup file which executes the following sequence 
+                    of IDL files:
+
+     @COMPILE.TMBIDL   ;  batch file compiles the basic package for TMBIDL with GBT functions
+
+     @INIT.COLORS      ;  batch file defines colors for TMBIDL 
+
+     @INIT_FILES       ;  batch file defines  global system variables for files
+
+     START             ;  .pro that configures for various input data streams
+
+TMBIDL-->start
+
+========> This TMBIDL command dynamically compiles the basic TMBIDL procedures and ends with: 
+
+...
+% Compiled module: MODELGAUSS.
+% Compiled module: STRETCH.
+
+Display Device  : X
+Visual Class    : TrueColor
+Visual Depth    : 24-Bit
+Color Table Size: 256
+Number of Colors: 16777216
+Decomposed Color: 0
+
+=======================
+TMBIDL V7.1 INITIALIZED
+=======================
+
+Select Data Type to Analyze with TMBIDL: 
+
+ (0) none     : Generic TMBIDL  package:
+                defaults to 4096 !data_points
+ (1) 140FT    : NRAO 140-FT UniPops NSAVE data
+ (2) GBT_ACS  : GBT ACS spectral line data
+ (3) GBT_DCR  ; GBT DCR continuum data
+ (4) GRS      : BU-FCRAO GRS data
+ (5) BOZO     : Arecibo Interim Correlator ICORR data
+ (6) HRDS     : H II Region Discovery Survey data
+ (7) MPI      : MPIfR 100-m AK90 data
+ (8) BUAO     : BU-AO HI survey data
+ (9) USER     : User supplied startup file
+(10) TMB      : TMB startup file
+(11) RTR      : RTR startup file
+(12) DSB      : DSB startup file
+(13) LDA      : LDA startup file
+(14) TVW      : TVW startup file
+
+
+===============================================================
+Syntax: start,telescope_no, "fully_qualified_data_file_name"   
+        OR
+        start,"telescope_name","fully_qualified_data_file_name"
+        OR 
+FOR GENERIC PACKAGE WITH #_DATA_POINTS SEE START_GENERIC,/HELP
+===============================================================
+
+
+TMBIDL-->start,2   ;  initializes for GBT_ACS and executes the following sequence:
+
+@tmbidl_header               ; batch file defines the {tmbidl_header} structure
+@GLOBALS                     ; batch file defines the global system variables 
+@../../data/INIT_DATA_FILES  ; batch file defines data files
+                               File names ideosyncratic to local TMBILD installation
+                               so this batch file is placed in .../tmbidl/data/ 
+
+==> INIT_DATA_FILES can contain SDFITS, TMBIDL, NSAVE files, etc.  Or anything at all. 
+
+For GBT data, TMBIDL needs the SDFITS filler program to be run in a specific way that 
+creates files with names:
+
+  ".avg.acs.fits" is REQUIRED mode for ACS data
+  ".cal.dcr.fits" is REQUIRED mode for DCR data 
+
+e.g., in Green Bank our 3-helium group's SDFITS data has names:
+
+lfile01="/home/scratch/dbalser/gbtdata/he3/AGBT08A_006_01/AGBT08A_006_01.avg.acs.fits"
+cfile01="/home/scratch/dbalser/gbtdata/he3/AGBT08A_006_01/AGBT08A_006_01.cal.dcr.fits"
+
+==> START also defines default file names for the ONLINE, OFFLINE and NSAVE files 
+and ATTACHes these files. 
+======================================================================================
+        
+The "start,2" command should give you the following output: 
+
+======================================================================================
+
+
+=======================
+TMBIDL V7.1 INITIALIZED
+=======================
+
+Initializing GBT ACS Spectral Line TMBIDL
+
+TMBIDL V7.1 loaded from /ninkasi0/idl/tmbidl/v7.1/startup
+
+
+
+ONLINE data file is ../../data/line/Ldata.tmbidl
+
+
+OFFLINE data file is ../../data/continuum/Cdata.tmbidl
+
+
+NSAVE write protection turned ON
+
+
+NSAVE data file is ../../data/nsaves/nstest.LNS
+NSAVE KEY file name is ../../data/nsaves/nstest.LNS.key
+
+NSAVE file has         4096 slots of which           36 are used
+Files currently being used are:
+
+Spectral Line SDFITS  Data  file= 
+              LUN=   0
+Continuum     SDFITS  Data  file= 
+              
+ONLINE  Data  file= ../../data/line/Ldata.tmbidl LUN= 102
+OFFLINE Data  file= ../../data/continuum/Cdata.tmbidl LUN= 103
+
+Nsave file= ../../data/nsaves/nstest.LNS LUN= 100
+NSlog file= ../../data/nsaves/nstest.LNS.key LUN= 101
+
+PLOT    file= ../../figures/tmbidl.ps
+MESSAGE file= ../saves/messages
+ARCHIVE file= ../archive/archive
+
+Journal   = ../saves/jrnl_GBT_ACS.log
+SAVE_state= ../saves/state.dat
+SAVE_procs= ../saves/procs.dat
+STACK is now empty
+
+Journal   = ../saves/jrnl_GBT_ACS.log
+SAVE_state= ../saves/state.dat
+SAVE_procs= ../saves/procs.dat
+STACK is now empty
+Journal   = ../saves/jrnl_GBT_ACS.log
+SAVE_state= ../saves/state.dat
+SAVE_procs= ../saves/procs.dat
+STACK is now empty
+
+======================================================================================

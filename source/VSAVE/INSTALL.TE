@@ -1,0 +1,25 @@
+@../rtr/GLOBALS.RTR
+@../rtr/compile.rtr
+; nsave files for te08
+;
+lsdat='/net/home/rtr/linux/radio//idl/saves/te08.dat'
+lslog='/net/home/rtr/linux/radio//idl/saves/te08.log'
+!nsavefile=lsdat
+!nslogfile=lslog
+;
+;
+; gbt data file for te08
+ldata='/local/radio/he3/data/line/gbt/on08/lon08.s1'
+fitsdata='/local/radio/he3/data/line/gbt/on08/on08.s1'
+start,2
+attach,1,ldata
+!config=1
+xroll
+files
+@../rtr/TRANS_DEF
+@../rtr/LPARM_DEF
+getns,1
+xxf
+xroll
+xxf
+

@@ -1,0 +1,44 @@
+;
+;   script to start looking at continuum data
+;
+
+on_error,2
+;
+file='/idl/idl/data/AGBT02A_041_01.cal.dcr.fits'   ; SDFITS file
+openr,lun,file,/get_lun
+sdf=mrdfits(lun,1,hdr,status=status)
+;
+print,hdr
+kount=n_elements(sdf)
+;
+in=sdf[0]
+out=!rec
+sd2Cgbt,in,out
+!b[0]=out
+;
+idx=!data_points
+!b[0].data=sdf[0:idx-1].data        ; pack first idx data points into buffer 0
+;                                   ; pack data into buffers 1-15 with !b[0]=!b[1] 
+;
+print,'Read SDFITS file= '+file
+print,'Put continuum data in buffers 1->15 with buffer 0 = buffer 1'
+;
+;!c_pts=4096
+;
+for i=0,14 do begin                                    & $
+              in=sdf[i*idx]                            & $
+              sd2Cgbt,in,out                           & $
+              !b[i+1]=out                              & $             
+              !b[i+1].data=sdf[i*idx:(i+1)*idx-1].data & $
+              endfor                                   &
+;
+close,lun
+;
+ia=''
+for i=1,15 do begin    & $
+              copy,i,0 & $
+              show     & $
+              read,ia  & $
+              endfor   &
+
+

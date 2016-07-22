@@ -1,0 +1,13 @@
+;=====================================================================
+;  GLOBAL VARIABLES FOR ARCHIVE PACKAGE V7.0
+;=====================================================================
+;
+defsysv, '!num_archive_recs', 0L   ; number of records in ARCHIVE file
+defsysv, '!archivetype', 0L        ; flag for type of ARCHIVE file
+;
+print
+print,'======================================================='
+print,'  TMBIDL ARCHIVE DATA PACKAGE INSTALLED'
+print,'                      V7.0 May 2013 runs but not tested'
+print,'======================================================='
+print

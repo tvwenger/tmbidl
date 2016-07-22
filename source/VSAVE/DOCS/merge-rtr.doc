@@ -1,0 +1,104 @@
+New versions
+
+========================================================================
+**** TMB added to V6.0
+;       ACS_FLAGS
+
+RTR added some additionam line ids
+
+========================================================================
+**** TMB added to V6.0 
+;      BB
+;   RTR  8/08 modified to default to !nfit in no argumemt supplied
+;   RTR  8/08 placed rms in global !bfit_rms
+
+========================================================================
+;      BAM
+;             RTR adds writes to a message file 505
+;             0609 RTR fixes the -NaN loop buster
+========================================================================
+**** TMB added to V6.0 with some minor modifications
+;
+; NAME:
+;      MOVENR
+;
+;            ====================
+;            Syntax: movenr
+;            ====================
+;
+;  movenr.pro   moves the boundary of on nregion with a cursor click
+;  ---------    If !cursor=0 (CUROFF) then returns with error.
+; 
+;
+;  rtr: 8/08    tmb version of useful unipops proc
+;-
+========================================================================
+***** NOT ADDED TO V6.0 BECAUSE THIS IS ALREADY TAKEN CARE OF IN V5.0 
+***** THIS SYSTEM VARIABLE IS NOT NEEDED
+;       MK
+; 9/08 RTR  added flag !mk_on
+========================================================================
+**** TMB added to V6.0 
+;      PUTNS
+; March 09 RTR modified to change scan_num to NSAVE bin and
+;                                 last_on to previous scan number
+========================================================================
+**** TMB added to V6.0 
+; NAME:
+;       SMOV
+;
+;            ======================================
+;            Syntax: smov, velocity=fwhm_of_smooth
+;            ======================================
+;
+;   smov  Smooth with gaussian weighting with fwhm= in velocity.
+;   ----  If argument is omitted, defaults to system variable !sm_vel
+;         Works with any x-axis definition.
+;
+;        FLAGON/FLAGOFF toggle RESHOW and information on smoothing
+;
+; RTR  8/08
+========================================================================
+;       START_SRC
+; August 2008 modified by rtr to eliminate automatic invocation of 
+;             wham
+========================================================================
+; NAME:
+;       SUM1_STK
+;
+;            ======================
+;            Syntax: sum1_stk, tabfile 
+;            ======================
+;
+;   sum1_stk    Prints a singal line of info about a spectral line pair
+;   --------    for each entry in the stack
+;               if tabfile is given it also writes to file=tabfile
+;        
+;        
+;
+;  V5. July 2008
+========================================================================
+; NAME:
+;       SUM1
+;
+;            ======================
+;            Syntax: sum1, rec#, luntab 
+;            ======================
+;
+;   sum1    Prints a singal line of info about a spectral line pair
+;   --------  rec# = record number (assumed to be ON)
+;             luntab = lun for file
+;        
+;        
+;
+;  V5. July 2008
+========================================================================
+;       WHAM
+; August 08      rtr added option to combine both pols in averages
+;                (set pol=0)
+; 06/09          rtr modified the exit option
+;                rtr may have fixed a bug someplace
+========================================================================
+
+
+

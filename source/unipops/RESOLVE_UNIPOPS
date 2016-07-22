@@ -1,0 +1,24 @@
+;
+;-------------------------------------------------
+; TMBIDL UNIPOPS  V7.0 COMPILE AS RESOLVE_ROUTINEs
+;-------------------------------------------------
+;
+; BEWARE:  NONE of these will run without modification
+;          they should NOT be needed
+;
+oldpath=!path
+local_TMBIDL=getenv('LOCAL_TMBIDL')
+path=local_TMBIDL+'source/unipops/pro/'
+!path=path
+;
+;  UNIPOPS 140 FT procedures
+;
+;resolve_routine,'archive_data',/either,/compile  ; TMBIDL header superceded by tmbidl_header
+resolve_routine,'archive_140',/either,/compile   ; convert UNIPOPS 140 FT to TMBIDL 
+resolve_routine,'uni2tmb',/either,/compile       ; do the same record by record
+resolve_routine,'unipops',/either,/compile       ; parse UNIPOPS NSAVE record 
+;
+; now put !path back to original
+;
+!path=oldpath
+;

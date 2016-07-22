@@ -1,0 +1,93 @@
+;=============================================================
+; ARECIBO DATA ANALYSIS PACKAGE SANITY CHECK BATCH SCRIPT
+;=============================================================
+; @../arecibo/0SANITY
+;=============================================================
+;
+;==> Arecibo ICORR configuration supported here has 1024 channels.
+;    Package startup sets this and attaches test nsave files
+;    ../arecibo/data/nsBOZO.dat and nsBOZO.key which are HRDS
+;    data from project A2500.
+;
+;==> Package startup also attaches generic ONLINE and OFFLINE
+;    files that are not from Arecibo and so will NOT WORK.
+;    (These are GBT files used to test ACS package. This was
+;    done this way to minimize size of this installation.)
+;
+;=============================================================
+;=============================================================
+print
+print,'Alas!  We are all Bozos on the AreBOZO Obscuratory bus.'
+print
+;
+chan
+setx,100,900
+!nrset=4
+!nregion[0:2*!nrset-1]=[105,365,478,537,605,638,722,897]
+nron
+clearset
+;
+setsource,'G45.45+0.06'
+setid,'ALL'
+clrstk
+addem,[110,400] ; pick only good data
+!select=1       ; these are NSAVE data 
+catns
+;
+; this should give you
+;
+;STACK of NSAVEs in ../arecibo/data/nsBOZO.dat contains: 
+;
+;STACK
+;  #  NS#   Source      Line  Pol     Type      Tsys  Tintg
+;  0  110  G45.45+0.06  ALL  L+R   PS Average  45.7   80.0
+;  1  400  G45.45+0.06  ALL  L+R   PS Average  96.9   16.0
+;
+avgns
+xx
+print
+print,'=================================================================>>> Hit the spacebar to continue!'
+bbb,3
+scaley
+xx
+zline
+;
+; hardwire flags for the none for this <HnAlpha> spectra composite of
+; H89 H90 H91 H92 Alpha
+;
+chH=424.372 ; Hydrogen RRL channel from mysterious Arecibo TMBIDL find_vel.pro ...
+;             bad tmb!  insufficient documentation  
+flag,chH
+;
+;  Now must kludge offsets for He and C RRLs 
+;
+h89 =rydberg(89,1,'H')   ; the H 89 alpha freq in MHz
+he89 =rydberg(89,1,'He') ; the He 89 alpha freq in MHz
+c89  =rydberg(89,1,'C')  ; the C 89 alpha freq in MHz
+;
+bw=!b[0].bw                    ; spectrum bandwidth in Hz
+nchan=float(!b[0].data_points) ; # data points
+dfperchan=bw/nchan             ; channel width in Hz
+;
+shiftHe=(he89-h89)/dfperchan & shiftHe=shiftHe*1.e+6
+shiftC =(c89-h89)/dfperchan  & shiftC =shiftC*1.e+6
+;
+flag,chH+shiftHe
+flag,chH+shiftC
+;
+print,'Arecibo HRDS composite <Hn Alpha> RRL spectrum for G45.45+0.06 H II Region'
+print
+print,'This 96 minute integration is the average of four consecutive'
+print,'Hydrogen Alpha recombination line transitions, H89 through H92.'
+print,'
+print,'Flags mark the <Hn Alpha>, <Hen Alpha>, and <Cn Alpha> transition.'
+print
+print,'The feature at channel 680 is a higher order RRL transition.'
+print
+;
+print,'                                               ===================='
+print,'What you are looking at should be identical to ../arecibo/G45.45.ps'
+print,'===================================================================='
+print
+
+

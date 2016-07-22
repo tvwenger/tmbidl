@@ -1,0 +1,22 @@
+;=====================================
+; restore original CT on exit
+; do NOT play games with the windows
+; OR the plot ranges....
+; trying this in the past has led to 
+; tears, to say the least...
+;=====================================
+;
+r=!ct.oldr
+g=!ct.oldg
+b=!ct.oldb
+tvlct,r,g,b
+;
+; keep track of IDL window state  
+;
+;setwin, /restore_state   ; restore initial IDL window assignment
+;
+; keep track of tmbidl plot status
+;
+;!tmbidl_x_range=!x.range
+;!tmbidl_y_range=!y.range
+;

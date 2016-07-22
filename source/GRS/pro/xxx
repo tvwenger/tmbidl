@@ -1,0 +1,14 @@
+
+i=11
+span=0.2            ; 12x12 arcmin map extent
+v_range=15.0        ; 15 km/sec wide W_co centered at vlsr
+;
+      src=  !table[i].(0) 
+      name= !table[i].(1)
+      l_gal=!table[i].(2)
+      b_gal=!table[i].(3)
+      vlsr= !table[i].(4)
+
+;
+      lbmap,l_gal,b_gal,vlsr,span,span,v_range
+;

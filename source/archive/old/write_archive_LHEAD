@@ -1,0 +1,73 @@
+;
+;   WRITE to ARCHIVE file Spectral Line HEADER information
+;   This is a modified form of much of the information in the standard
+;   plot header
+;
+;   Outputs 'archive' which is a single string containing the following
+;   information delimited by a ' ' blank
+;
+;   archive_type,source,scan,line_id,scan_type,pol_id,position,v_source,
+;   date,lst,hour_angle,zenith_angle,Azimuth,Elevation,
+;   Fsky,Frest,BW,
+;   Tcal,Tsys,Tintg
+;
+archive_type='LHEAD'
+b=' '                ; force blanks between variables for later strsplit
+;
+; first fetch the variables from !b[0]
+; turn them all to strings via =fstring(,'()') 
+;
+source=strtrim(string(!b[0].source),2) 
+scan=fstring(!b[0].scan_num,'(I9)')                    ; beware BOZO !
+line_id=strtrim(string(!b[0].line_id),2)
+scan_type=strtrim(string(!b[0].scan_type),2)
+pol_id=strtrim(string(!b[0].pol_id),2)
+position=adstring(!b[0].ra,!b[0].dec,0)
+position=strtrim(position,2)
+v_source=fstring(!b[0].vel/1.0d3,'(f9.2)')
+date=strtrim(string(!b[0].date))
+lst=strtrim(adstring(!b[0].lst/3600.))
+ha=(!b[0].lst/3600.)-(!b[0].ra/15.)   ; yes, they send lst in seconds and ra in degrees
+ha = (ha gt 12.) ? (ha-24.) : ha      ; note use of the Ternary operator...!
+hour_angle=fstring(ha,'(f6.2)')
+za=90.0-!b[0].el
+zenith_angle=fstring(za,'(f4.1)')
+Azimuth=fstring(!b[0].az,'(f6.2)')
+Elevation=fstring(!b[0].el,'(f4.1)')
+Fsky=fstring(!b[0].sky_freq/1.0e+06,'(f9.4)')
+Frest=fstring(!b[0].rest_freq/1.0e+06,'(f9.4)') 
+BW=fstring(!b[0].bw/1.0e+06,'(f8.4)')
+Tcal=fstring(!b[0].tcal,'(f4.1)')
+Tsys=fstring(!b[0].tsys,'(f6.1)')
+Tintg=fstring(!b[0].tintg/60.,'(f8.1)')
+;
+print,'Source Name = '+ source
+print,'Scan Number = '+ scan
+print,'Line ID     = '+ line_id
+print,'Scan Type   = '+ scan_type
+print,'Pol ID      = '+ pol_id
+print,'Position    = '+ position
+print,'Source Vel  = '+ v_source + ' km/sec'
+print,'Date        = '+ date
+print,'LST         = '+ lst
+print,'Hour Angle  = '+ hour_angle + ' hrs'
+print,'Zenith Angle= '+ zenith_angle + ' deg'
+print,'Azimuth     = '+ Azimuth + ' deg'
+print,'Elevation   = ', Elevation + ' deg'
+print,'Fsky        = '+ Fsky + ' MHz'
+print,'Frest       = '+ Frest + ' MHz'
+print,'Band Width  = '+ BW + ' MHz'
+print,'Tcal        = '+ Tcal + ' K'
+print,'Tsys        = '+ Tsys + ' K'
+print,'Tintg       = '+ Tintg 
+;
+archive=archive_type+b+source+b+scan+b+line_id+b+scan_type+b+pol_id+b
+archive=archive+position+b+v_source+b+lst+b+date+b+lst+b+hour_angle+b
+archive=archive+zenith_angle+b+Azimuth+b+Elevation+b+Fsky+b+Frest+b
+archive=archive+BW+b+Tcal+b+Tsys+b+Tintg
+;
+; all ARCHIVE scripts must return a single string called 'archive'
+; first entry is ID of archive_type  
+;
+print,archive
+;

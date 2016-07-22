@@ -1,0 +1,90 @@
+==============================================
+  BU-FCRAO 13_CO GALACTIC RING SURVEY (GRS)
+  DATA ANALYSIS PACKAGE 
+
+  V7.1 august 2013  tmb/tvw
+==============================================
+==============================================
+
+==> IMPORTANT <==
+
+Must run IDL in 32 bit mode because of GRS
+data structure's odd number of data points
+in the spectrum (659 blame Robert Simon)
+
+You will find it useful to define the following alias
+(using file names appropriate to your local machine):
+
+inittmbidl32   cd /idl/tmbidl/v7.0/startup/ ; source TMBIDL.INIT; idl -32; cd -
+
+You will know that you're running in 64 bit mode
+if start,4 gives you this error message:
+
+ONLINE data file contains         6830 records
+% End of file encountered. Unit: 102, File: /data/GRS/data/LVmap.dat
+% Execution halted at: $MAIN$ 
+
+==============================================
+==============================================
+
+==> IMPORTANT <==
+
+This mode needs the GRS survey data! 
+
+==> They can be found at BU on NINKASI:
+
+bania@ninkasi /data/           
+> du -h GRS
+133M    GRS/data
+27G     GRS/grs_data
+27G     GRS
+
+==> As you can see, this is a big data set so be warned!                            
+
+==> The TMBIDL GRS package expects these data to be located at 
+
+../tmbidl/data/grs/
+
+so either put them there or use a symbolic link.
+(See ../v7.0/0DATA_FILES)
+
+==============================================
+==============================================
+
+*  !GRSmode and !vgrs Booleans need to be 
+   defined in vanilla TMBIDL due to backwards
+   compatibility with, e.g., show.pro, 
+   def_xaxis.pro, etc. 
+
+==============================================
+ 
+==>   IDL feature!!!!!  resolve_routine.pro
+    DOES NOT WORK UNLESS THE FILENAMES ARE
+    ALL IN LOWER CASE.
+
+    GO FIGURE. 
+
+==============================================
+
+14 May 2013 tmb:  package executes in v7.0 
+                  no extensive testing as yet
+moved all the v6.1 ../sandbox/tmb/ .pro's 
+into ../GRS/  expunged some duplicate .pro's
+(fgetgrsbeam fbeamlook ...)
+
+===============================================               
+
+02 July 2013 tmb:  cleaned up locations of data
+files to have generic file names for other 
+installations.
+
+fixed initialization bug and added NREGION type
+specification 
+
+*****=====>>>> moved the file "hii_cat.dat"
+
+                to ../data/grs/hii_cat.dat
+
+GRS mode fired up ok so don't yet know when this
+move will come back to bite us.
+===================================================

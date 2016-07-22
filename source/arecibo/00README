@@ -1,0 +1,73 @@
+===================================================
+     ARECIBO DATA ANALYSIS PACKAGE 
+(This is the v3.1 code modified for v7.0 protocols)
+        v7.0 May/June/July 2013 tmb
+        v7.1 Aug 2013 tmb 
+
+ => Sample data are NSAVEs from A2500 HRDS
+    > du -h data/
+    21M     data/
+===================================================
+
+This version of the code assumes substantial
+processing at Arecibo using Phil Perillat's
+IDL code.  See Arecibo account for details:
+           tbania@remoto.naic.edu [naic&...]
+
+==> Code currently in use at Arecibo is TMBIDL v3.3 (!!!)
+    This is the original interface code between the 
+    Interim Correlator (ICORR) data and TMBIDL.  tmb 
+    never had the time, energy, or, frankly, the need
+    to update this.
+
+==> Fundamental to the translation is the suite of IDL
+    .pro's written by Phil Perillat for the ICORR.
+    They only reside at Arecibo and are beyong the
+    scope of any TMBIDL packaging.
+
+==> THEREFORE YOU *MUST* TRANSLATE FROM ICORR DATA
+    FORMAT TO TMBIDL WITH THE *ARECIBO* VERSION OF
+    TMBIDL.  The *.tmbidl data files thus made contain 
+    *calibrated* ON, OFF, and TP spectra for each 
+    OffOn TP observing cycle.      
+
+===================================================
+NO special globals or system variables are used.
+Placeholder files are included, however, for possible
+use in the future. 
+===================================================
+===================================================
+
+==> Aparently tmb in fact fetched all the PP Arecibo IDL code:
+
+aoidl/     contains Arecibo TMBIDL code *and* Phil Perillat's
+           ICORR IDL code ca 2004-2005 which should not have
+           changed since this may be the oldest "Interim"
+           Correlator in history...
+
+           > du -h aoidl/
+           92K     aoidl/ri
+           136K    aoidl/data/pnt
+           448K    aoidl/data
+           116K    aoidl/was2/Prefeb05
+           592K    aoidl/was2
+           20K     aoidl/was/Last
+           196K    aoidl/was
+           92K     aoidl/atm
+           180K    aoidl/h
+           40K     aoidl/usrproj
+           140K    aoidl/gen/pnt
+           1.2M    aoidl/gen
+           108K    aoidl/Cor2/proc
+           12K     aoidl/Cor2/test
+           40K     aoidl/Cor2/x111
+           224K    aoidl/Cor2/cormap
+           16K     aoidl/Cor2/bmapazc
+           60K     aoidl/Cor2/Old
+           8.0K    aoidl/Cor2/calibrate
+           16K     aoidl/Cor2/mueller
+           1.5M    aoidl/Cor2
+           212K    aoidl/wapp
+   11M     aoidl/
+
+===================================================

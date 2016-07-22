@@ -1,0 +1,156 @@
+
+KANG  command line protocols
+
+
+
+TMBIDL-->kang, '/idl/tmbidl/v6.0/KANG/cube-007.fits.gz', obj = obj, /nogui
+TMBIDL-->help, obj
+OBJ             OBJREF    = <ObjHeapVar7553(KANG)>
+TMBIDL-->kang->load, '/idl/tmbidl/v6.0/KANG/cube-007.fits.gz'
+% Object reference type required in this context: KANG.
+% Execution halted at: $MAIN$          
+TMBIDL-->obj->load, '/idl/tmbidl/v6.0/KANG/cube-007.fits.gz' 
+TMBIDL-->obj->Change_image, 0
+TMBIDL-->obj->Change_image, 1
+TMBIDL-->obj->GetProperty, filenames = filenames
+TMBIDL-->prinf, filenames
+% Attempt to call undefined procedure/function: 'PRINF'.
+% Execution halted at: $MAIN$          
+TMBIDL-->print, filenames
+/idl/tmbidl/v6.0/KANG/cube-007.fits.gz /idl/tmbidl/v6.0/KANG/cube-007.fits.gz
+
+TMBIDL-->obj->Load_Region, '/idl/tmbidl/v6.0/KANG/regions/text.reg'
+% Attempt to call undefined method: 'KANG::LOAD_REGION'.
+% Execution halted at: $MAIN$          
+TMBIDL-->obj->Load_Regions, '/idl/tmbidl/v6.0/KANG/regions/text.reg'
+ERROR: Region file /idl/tmbidl/v6.0/KANG/regions/text.reg cannot be found.
+TMBIDL-->obj->Load_Regions, '/idl/tmbidl/v6.0/KANG/regions/test.reg'
+TMBIDL-->obj->gui
+% PLOT: Warning: Infinite plot range.
+TMBIDL-->
+% PLOT: Warning: Infinite plot range.
+TMBIDL-->
+% PLOT: Warning: Infinite plot range.
+TMBIDL-->obj->gui
+% PLOT: Warning: Infinite plot range.
+TMBIDL-->obj->gui, /block
+
+
+TMBIDL-->obj->select, /all             <===== select ALL the existing pre-defined and 
+                                              saved regions
+TMBIDL-->help, obj->Get_Stats()
+<Expression>    STRUCT    = -> <Anonymous> Array[1]
+TMBIDL-->stats = obj->Get_Stats()
+TMBIDL-->help, stats, /str
+** Structure <8656aa4>, 9 tags, length=240, data length=240, refs=1:
+   AREA            FLOAT     Array[6]
+   CENTROID        FLOAT     Array[2, 6]
+   PERIMETER       FLOAT     Array[6]
+   NPIX            LONG      Array[6]
+   MAX             FLOAT     Array[6]
+   MIN             FLOAT     Array[6]
+   MEAN            FLOAT     Array[6]
+   STDDEV          FLOAT     Array[6]
+   TOTAL           FLOAT     Array[6]
+TMBIDL-->print, stats. total
+      116.793      432.627      34.6590      51.1025      264.129      313.417
+
+TMBIDL-->help, obj, /obj
+** Object class KANG, 0 direct superclasses, 51 known methods
+   Known Function Methods:
+      KANG::GET_STATS
+      KANG::INIT
+      KANG::PLOT_PARAMS_REALIZED
+      KANG::UPDATE_REGIONS_INFO_REGION
+   Known Procedure Methods:
+      KANG::CHANGE_IMAGE
+      KANG::COLOR
+      KANG::COMBINE
+      KANG::CONTEXT_EVENTS
+      KANG::COPY_DISPLAY
+      KANG::DELETE_REGION
+      KANG::DISSOLVE
+      KANG::DOWN_EVENTS
+      KANG::DRAW
+      KANG::DRAW_SPECTRA
+      KANG::DRAW_WINDOW_EVENTS
+      KANG::EXTRACT_SPECTRUM
+      KANG::FILE_DIALOG_WIDGET
+      KANG::GETPROPERTY
+      KANG::GLOBAL_REGION_PROPERTY
+      KANG::GUI
+      KANG::INDIVIDUAL_REGION_WIDGET_EVENTS
+      KANG::INTERACTIVE_PLOTS
+      KANG::KBRD_FOCUS_EVENTS
+      KANG::KEYBOARD_EVENTS
+      KANG::LIMITS
+      KANG::LOAD
+      KANG::LOAD_FILENAME
+      KANG::LOAD_IMAGE
+      KANG::LOAD_REGIONS
+      KANG::MAKE_REGION
+      KANG::MOTION_EVENTS
+      KANG::MOVE_REGION
+      KANG::PLOT_PARAMS_WIDGET
+      KANG::PLOT_WINDOWS_WIDGET
+      KANG::REGIONBOXES
+      KANG::REGION_PROPERTY
+      KANG::ROTATE_REGION
+      KANG::SAVE_REGIONS
+      KANG::COPY_DISPLAY
+      KANG::DELETE_REGION
+      KANG::DISSOLVE
+      KANG::DOWN_EVENTS
+      KANG::DRAW
+      KANG::DRAW_SPECTRA
+      KANG::DRAW_WINDOW_EVENTS
+      KANG::EXTRACT_SPECTRUM
+      KANG::FILE_DIALOG_WIDGET
+      KANG::GETPROPERTY
+      KANG::GLOBAL_REGION_PROPERTY
+      KANG::GUI
+      KANG::INDIVIDUAL_REGION_WIDGET_EVENTS
+      KANG::INTERACTIVE_PLOTS
+      KANG::KBRD_FOCUS_EVENTS
+      KANG::KEYBOARD_EVENTS
+      KANG::LIMITS
+      KANG::LOAD
+      KANG::LOAD_FILENAME
+      KANG::LOAD_IMAGE
+      KANG::LOAD_REGIONS
+      KANG::MAKE_REGION
+      KANG::MOTION_EVENTS
+      KANG::MOVE_REGION
+      KANG::PLOT_PARAMS_WIDGET
+      KANG::PLOT_WINDOWS_WIDGET
+      KANG::REGIONBOXES
+      KANG::REGION_PROPERTY
+      KANG::ROTATE_REGION
+      KANG::SAVE_REGIONS
+      KANG::SELECT                                                          
+      KANG::SETREALIZED
+      KANG::SET_FOCUS
+      KANG::TAB_EVENTS
+      KANG::THRESHOLD_EVENTS
+      KANG::UPDATE_FILE_DIALOG
+      KANG::UPDATE_REGIONS_BASE
+      KANG::UPDATE_REGIONS_INFO
+      KANG::UP_EVENTS
+      KANG::VELOCITY
+      KANG::VELOCITY_WIDGET
+      KANG::ZOOM
+      KANG::ZOOM_REGION
+
+compilations for KANG
+
+% Compiled module: KANG.
+% Compiled module: KANG__DEFINE.
+% Compiled module: FSC_PSCONFIG__DEFINE.
+% Compiled module: REVERSE.
+% Compiled module: KANG_SPECTRA_CONTAINER__DEFINE.
+% Compiled module: CW_FIELD.
+% Compiled module: XMANAGER.
+% Compiled module: XREGISTERED.
+% Compiled module: CW_BGROUP.
+% Compiled module: CENTERTLB.
+% Compiled module: GET_SCREEN_SIZE.

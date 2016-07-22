@@ -1,0 +1,565 @@
+;
+;---------------------------------------
+; TMBIDL V8.0 Procedure Compilation
+;---------------------------------------
+;
+; V6.0 22june2009 3He team
+; V6.1 28aug09 tmb/lda incorporate KANG into TMBIDL
+;      20march2012 tmb cleanup up things v7.0
+; V7.0   may2013 tmb/tvw 
+; V7.1   aug2013 tmb 
+; V8.0 01jul2014 tvw - updated to v8.0 structure
+; V8.1? 10mar2016 tmb - VEGAS tweaks
+;
+; ==>  Assumes INITTMBIDL points to the ../source/pro/ directory
+;
+;           needs procedures from the following external directories:
+;           these live in ../source/
+;           /colors /astrolib /coyote /markwardt 
+;
+;           add these directories to path via:
+;           setenv IDL_PATH in file TMBIDL.INIT.*
+;
+;     full details in ../00INSTALL
+;
+;----------------------------------------------------------------------
+;
+quiet=1				; Turn off verbose mode during startup. 
+;
+set_plot, 'X'                   ; Initialize X window plot
+;
+; Physical constants of Nature:  defined as read-only system variables
+;
+@PHYSICAL_CONSTANTS
+;
+; define debugging system variable 
+; NEEDS TO BE HERE otherwise none of these procedures will compile 
+;
+defsysv, '!debug', 1             ;  start in debug mode 
+.compile ../source/pro/debugon.pro      ;  Boolean toggles for !debug
+.compile ../source/pro/debugoff.pro     ;
+;
+;  Compile functions --- DO NOT rearrange the ordering of these compilations
+;
+;  I/O and generalized plotting and imaging control
+;
+.compile ../source/pro/fstring.pro  ; make a string via FORTRAN format
+;                              copied from ASTROLIB for backwards compatibility          
+.compile ../source/pro/findpol         ;  function to parse polarization from
+                                 ;  SDFITS header
+.compile ../source/pro/test_for_string ;  is the input variabl
+.compile ../source/pro/setplot.pro     ;  choses variety of output devices
+.compile ../source/pro/syms.pro        ;  defines symbols for plots
+.compile ../source/pro/gbt_win         ;  define the plot window 
+.compile ../source/pro/killwin.pro     ;  kills all open graphics windows
+.compile ../source/colors/setcolors.pro ;  various color definitions we use
+.compile ../source/colors/getcolor.pro  ;
+.compile ../source/colors/color24.pro   ;
+.compile ../source/pro/bw.pro          ;  toggle plots to black and white only
+.compile ../source/pro/clr.pro         ;  toggle plots to color
+.compile ../source/pro/hdron.pro       ;  toggle HEADER in plots ON
+.compile ../source/pro/hdroff.pro      ;  toggle HEADER in plots OFF
+.compile ../source/pro/get_clr.pro     ;  figure out if plot is BW or CLR 
+.compile ../source/pro/axon.pro        ;  turn on plot labels
+.compile ../source/pro/axoff.pro       ;  turn off plot labels 
+.compile ../source/pro/psopen.pro      ;  PS file I/0: Heiles/Robishaw/Bania
+.compile ../source/pro/psclose.pro     ;  ""
+.compile ../source/coyote/cgfixps.pro  ;  flips .ps file for proper landscape view
+.compile ../source/coyote/setdefaultvalue.pro  ; sets argument/keyword values
+.compile ../source/pro/printon.pro     ;  open PS file: printon,'fname'
+.compile ../source/pro/printoff.pro    ;  closes PS file: printoff,[1] 
+.compile ../source/pro/psplot.pro      ;  prints .ps file: psplot,'fname'
+.compile ../source/pro/tmbsave.pro     ;  SAVES IDL variables + procedures
+.compile ../source/pro/tmbrestore.pro  ;  RESTORES  variables + procedures
+.compile ../source/pro/pause.pro       ;  pause execution via get_kbrd(1) 
+.compile ../source/pro/which.pro       ;  Tim Robishaw's proc finder routine
+.compile ../source/pro/get_help.pro    ;  auto HELP documenter 
+.compile ../source/pro/jpeg.pro        ;  write graphics screen as a .jpg
+.compile ../source/pro/bye.pro         ;  write JOURNAL file and EXIT IDL
+;
+;  ASTROLIB routines
+;
+.compile ../source/astrolib/pro/mrdfits.pro  ; FITS reader
+.compile ../source/astrolib/pro/rdplot.pro   ; full screen cursor also contains 'reset_rdplot'
+;                                       use reset_rdplot to clear graphics glitch
+.compile ../source/pro/fixplot.pro           ; use this to fix plot because tmb cannot
+                                      ; remember the name above
+.compile ../source/astrolib/pro/radec.pro    ; RA/DEC formatting 
+.compile ../source/astrolib/pro/adstring.pro ; make RA,DEC string
+.compile ../source/astrolib/pro/sixty.pro    ; segisimal to base10 tmb can't spell
+;
+;  GBT data IO, sorting, cataloging, and listing
+;
+.compile ../pro/makesrclist.pro  ; scans online/offline/nsave file + makes source name list
+.compile ../pro/makelinelist.pro ; scans online/offline/nsave file + makes line ID  list
+.compile ../source/pro/tp.pro           ; toggle !tp=1 -> TP data 
+.compile ../source/pro/fs.pro           ; toggle !tp=0 -> FS data
+.compile ../source/pro/find_file.pro   ; test whether or not a file exists 
+.compile ../source/pro/sd_hdr.pro      ; print minimal contents of SDFITS hdr
+.compile ../source/pro/rec_info.pro    ;
+.compile ../source/pro/gname.pro       ; turn existing l_gal,b_gal into Gname string
+.compile ../source/pro/nameg.pro       ; extract galactic co-ords from a Gname
+.compile ../source/pro/gvname.pro      ; gname plus velocity
+;.compile ../source/pro/namegv.pro     ; GVname into Lgal,Bgal,Vlsr
+.compile ../source/pro/info.pro        ; info on !b[0]
+.compile ../source/pro/hdr_grs.pro      ; GRS header
+.compile ../source/pro/hdr_line.pro     ; GBT spectral line header
+.compile ../source/pro/hdr_cont.pro     ; GBT continuum header
+.compile ../source/pro/hdr.pro         ; lists header information for a record 
+.compile ../source/pro/date.pro        ; lists date of observation 
+.compile ../source/pro/list.pro        ; list contents of ONLINE data file
+.compile ../source/pro/setrec.pro      ; set record range for SELECT search
+.compile ../source/pro/setsrc.pro      ; set src name for SELECT search
+.compile ../source/pro/settype.pro     ; set scan type for SELECT search
+.compile ../source/pro/setpol.pro      ; set polarization for SELECT search
+.compile ../source/pro/setid.pro       ; set line ID for SELECT search
+.compile ../source/pro/setline.pro     ; same as above procedure
+.compile ../source/pro/setscan.pro     ; set scan # for SELECT search
+.compile ../source/pro/setrange.pro    ; set scan range for SELECT search
+.compile ../source/pro/tellset.pro     ; print the SET parameters for the search
+.compile ../source/pro/set.pro         ; set parameters to SELECT : prompts
+.compile ../source/pro/clearset.pro    ; sets all search parameters to wildcard
+.compile ../source/pro/select.pro      ; select and fill STACK with matches
+.compile ../source/pro/editstk.pro     ; Edit (remove) contents of STACK+
+.compile ../source/pro/cat.pro         ; list contents of STACK
+.compile ../source/pro/stackinfo.pro   ; list different contents of STACK 
+.compile ../source/pro/init_NSAVE.pro  ; initialize NSAVE file at startup
+.compile ../source/pro/ns_size         ; determine number of NSAVE slots 
+.compile ../source/pro/make_nsave.pro  ; create an NSAVE + NSAVE_LOG files
+.compile ../source/pro/putns.pro       ; write data to NSAVE=!nsave
+.compile ../source/pro/getns.pro       ; read data from NSAVE=!nsave
+.compile ../source/pro/wipens.pro      ; erases contents of NSAVE location
+.compile ../source/pro/mkns.pro        ; getns in mK with annotation
+.compile ../source/pro/mkfit.pro       ; smooths and does gaussians
+.compile ../source/pro/nson.pro        ; toggle for NSAVE write protection
+.compile ../source/pro/nsoff.pro       ; sets !nsprotect flag
+.compile ../source/pro/avgns.pro       ; averages NSAVE locations stored in STACK
+.compile ../source/pro/putavns.pro     ; saves WHAM averages; scan#->nsave#
+.compile ../source/pro/setnsrange.pro  ; set the ns range for a SELECTNS search
+.compile ../source/pro/setns.pro       ; SET search criteria for NSAVE
+.compile ../source/pro/selectns.pro    ; SELECT and fill STACK with NSAVEs
+.compile ../source/pro/catns.pro       ; List CATalog of NSAVEs in STACK
+.compile ../source/pro/editns.pro      ; Edit the NSAVE file....idiosyncratically
+.compile ../source/pro/avlog.pro       ; logs NSAVE area;
+.compile ../source/pro/comment.pro     ; writes comment to !b[0].history
+.compile ../source/pro/tagsrc.pro      ; writes to !b[0].source
+.compile ../source/pro/tagtype.pro     ; writes to !b[0].scan_type
+.compile ../source/pro/tagid.pro       ; writes to !b[0].line_id
+.compile ../source/pro/tagpol.pro      ; writes to !b[0].pol_id
+.compile ../source/pro/nslog.pro       ; outputs info on contents of NSAVE
+;
+.compile ../source/pro/procs.pro       ; list names of compiled PROCS
+;                                                could also use IDL HELP command
+.compile ../source/pro/files.pro       ; list currently connected files 
+.compile ../source/pro/init_data       ; initialize input data files
+;
+;  Data Analysis    N.B. the order of execution is important! A procedure *must* be compiled
+;                        *before* it is invoked..... SO DO NOT MESS WITH THIS ORDER!
+;
+.compile ../source/pro/show.pro        ; SHOW with toggles
+.compile ../source/pro/xx.pro          ; SHOW with toggles for RTR the lazy bugger
+.compile ../source/pro/xxf.pro         ; SHOW with flags
+.compile ../source/pro/reshow.pro      ; RESHOW
+.compile ../source/pro/plthdr.pro      ; plot header info during SHOW if toggle
+.compile ../source/pro/printhdr.pro    ; BW monochrome of above for hardcopy plots
+.compile ../source/pro/disp.pro        ; disp,n,m : SHOW n RESHOW m
+.compile ../source/pro/mk.pro          ; scale y-axis to milliKelvin
+.compile ../source/pro/unmk.pro        ; scale y-axis to Kelvin
+.compile ../source/pro/idchan.pro      ; find x-array index with given x-axis value
+.compile ../source/pro/idval.pro       ; find x-array value with given x-axis channel
+.compile ../source/pro/mgauss.pro      ; make sure mgauss proceeds next 3 ...
+.compile ../source/pro/tag.pro         ; annotate plot with TEXT and VECTORf
+.compile ../source/pro/pltg.pro        ; annotate plot with gaussfit values
+; put BW pro here 
+;
+.compile ../source/markwardt/mpfit.pro      ; Markwardt curve fitting procs
+.compile ../source/markwardt/mpcurvefit.pro ;
+.compile ../source/markwardt/mpfit2dfun     ;
+.compile ../source/markwardt/mpfit2dpeak    ; 
+.compile ../source/markwardt/mpfitexpr.pro  ; 
+;
+.compile ../source/pro/gauss.pro       ; multi-component Gaussian fit for novice
+.compile ../source/pro/gg.pro          ; our gg : gg,#_components 
+.compile ../source/pro/g.pro           ; our g routine : assumes gg parameters
+.compile ../source/pro/ggg.pro         ; g with forced explicit i/o 
+.compile ../source/pro/cpgcomp.pro     ; put  model gaussian fit(s) into !b[1]
+.compile ../source/pro/gsub.pro        ; subtrace model gaussian(s)
+.compile ../source/pro/gcomp.pro       ; plot G components individually
+.compile ../source/pro/getfit.pro      ; puts current baseline and gaussian
+;                                 fits into structure 'fits'
+.compile ../source/pro/putfit.pro      ; takes FITS structure and sets 
+;                                 relevant !sys_vars for NREGIONs
+;                                 and baselines
+.compile ../source/pro/setx.pro        ; set x-axis scaling cmd or cursor 
+.compile ../source/pro/sety.pro        ; set y-axis scaling cmd or cursor
+.compile ../source/pro/setxy.pro       ; set x+y-axis scaling via box_cursor
+.compile ../source/pro/lastx.pro       ; remember last x-axis scaling
+.compile ../source/pro/lasty.pro       ; remember last y-axis scaling 
+.compile ../source/pro/lastxy.pro      ; remember last x+y-axis scaling
+.compile ../source/pro/freex.pro       ; autoscale x-axis by data range
+.compile ../source/pro/freey.pro       ; autoscale y-axis by data range
+.compile ../source/pro/freexy.pro      ; autoscale x+y
+.compile ../source/pro/xroll.pro       ; set x-range to inner 90% of channels 
+.compile ../source/pro/curon.pro       ; toggle cursor on
+.compile ../source/pro/curoff.pro      ; toggle cursor off
+;
+.compile ../source/pro/chan.pro        ; SHOW channels as x-axis  toggle
+.compile ../source/pro/velo.pro        ; SHOW velocity as x-axis  toggle
+.compile ../source/pro/velx.pro        ; SHOW imported velocity as x-axis toggle
+.compile ../source/pro/freq.pro        ; SHOW frequency as x-axis  toggle
+.compile ../source/pro/azxx.pro        ; SHOW azimuth as x-axis  toggle
+.compile ../source/pro/elxx.pro        ; SHOW elevation as x-axis  toggle
+.compile ../source/pro/raxx.pro        ; SHOW right ascension as x-axis  toggle
+.compile ../source/pro/decx.pro        ; SHOW declination  as x-axis  toggle
+;
+.compile ../source/pro/absxon.pro      ; continuum ABSOLUTE x-axis display ON
+.compile ../source/pro/absxoff.pro     ; continuum RELATIVE x-axis display ON
+.compile ../source/pro/copy.pro        ; COPY,b1,b2  copies buffer b1 to b2
+.compile ../source/pro/get.pro         ; GET a record in data file into b1
+.compile ../source/pro/geton.pro       ; GET an ON TP scan
+.compile ../source/pro/getoff.pro      ; GET an OFF TP scan
+.compile ../source/pro/dcsub.pro       ; subtract DC level from spectrum
+.compile ../source/pro/fetch.pro       ; GET ON/OFF pair: fetch,rec_on
+.compile ../source/pro/ps.pro          ; GET ON/OFF pair: ps,rec_on,rec_off
+.compile ../source/pro/acquire.pro     ; use !tp toggle to either FETCH or GET
+.compile ../source/pro/accum.pro       ; ACCUM command
+.compile ../source/pro/ave.pro         ; AVE command 
+.compile ../source/pro/clrstk.pro      ; empties the STACK
+.compile ../source/pro/clearstack.pro  ; synonym for above 
+.compile ../source/pro/tellstk.pro     ; prints contents of STACK
+.compile ../source/pro/tellstack.pro   ; synonym for above
+.compile ../source/pro/add.pro         ; ADDs single rec# to STACK
+.compile ../source/pro/sub.pro         ; SUBtracts single rec# from STACK
+.compile ../source/pro/addem.pro       ; adds list of rec#s to STACK
+.compile ../source/pro/avgfs.pro       ; average the FS spectra in the STACK
+.compile ../source/pro/fslide.pro      ; FS slide routine:  wrap and invert
+.compile ../source/pro/wrap.pro        ; wrap !b[0] spectrum: wrap,#_channels 
+.compile ../source/pro/dcon.pro        ; toggles  DC level remove ON/OFF
+.compile ../source/pro/dcoff.pro       ; for FETCH, PS, and LOOK 
+.compile ../source/pro/flag.pro        ; flags a channel : flag,Ch#_to_Flag
+.compile ../source/pro/hline.pro       ; draw horizontal line: hline,y-value 
+;.compile ../source/pro/pline.pro       ; draw line x0,y0->x1,y1 in PLOT units
+.compile ../source/pro/srcvlon.pro     ; toggles source velocity flag ON/OFF
+.compile ../source/pro/srcvloff.pro    ;
+.compile ../source/pro/srcvl.pro       ; flags the source velocity
+.compile ../source/pro/zlon.pro        ; toggles zero line ON/OFF
+.compile ../source/pro/zloff.pro       ; 
+.compile ../source/pro/zline           ; draws zero line
+.compile ../source/pro/nron.pro        ; toggle bmark on/off
+.compile ../source/pro/nroff.pro
+.compile ../source/pro/nrtype.pro      ; sets NREGION units
+.compile ../source/pro/nrvalue.pro     ; finds NREGION channels
+.compile ../source/pro/nregions.pro    ; returns NREGION values in X-axis units
+.compile ../source/pro/bmark.pro       ; plot NREGION zones if !bmark=1
+.compile ../source/pro/mask.pro        ; masks x-axis via NREGIONS for fits
+.compile ../source/pro/nrset.pro       ; set NREGIONS:  nrset,#_nregions 
+.compile ../source/pro/mrset.pro       ; set NREGIONS defaulting to plot margins
+.compile ../source/pro/rms.pro         ; prints RMS in region set by cursor
+.compile ../source/pro/rms_mask.pro    ; prints RMS in NREGION 
+.compile ../source/pro/orthofit.pro    ; jack lyon's polynomial fitter
+.compile ../source/pro/bb.pro          ; our bb : bb,nfit (polynomial order)
+.compile ../source/pro/b.pro           ; our b : assumes all and removes 
+.compile ../source/pro/bbb.pro         ; as bb but uses lyon's fitter
+.compile ../source/pro/bsearch.pro     ; find best baseline order: bsearch,nfitmax 
+.compile ../source/pro/boxcar.pro      ; boxcar smooth : boxcar,#_smo_ch (odd)
+.compile ../source/pro/smooth.pro      ; 5-channel gaussian smooth
+.compile ../source/pro/smo.pro         ; smo,n : gaussian smooth fwhm=n channels
+.compile ../source/pro/smov.pro        ; smo,vel : "       "     fwhm=vel km/s
+.compile ../source/pro/look.pro        ; SHOW records in STACK
+.compile ../source/pro/rlook.pro       ; ideosyncratic version invoked by qlook
+.compile ../source/pro/qlook.pro       ; 3He quick look of all acs bands
+.compile ../source/pro/clook.pro       ; CONTINUUM quick look of OFFLINE data
+.compile ../source/pro/check.pro       ; QLOOK of data since last check
+.compile ../source/pro/qav.pro         ; pick rx, select, average, + flag
+.compile ../source/pro/lookav.pro      ; qav for rx1->8
+.compile ../source/pro/flagon.pro      ; toggle !flag sysvariable
+.compile ../source/pro/flagoff.pro
+.compile ../source/pro/batchon.pro     ; toggle !batch sysvariable
+.compile ../source/pro/batchoff.pro    ; 
+.compile ../source/pro/rfi.pro         ; replace region with RFI with baseline values
+.compile ../source/pro/nrfi.pro        ; RFI excision as above but no NREGION prompt
+.compile ../source/pro/xrfi.pro        ; invoke RFI excision for SHOWn spectrum
+.compile ../source/pro/area.pro        ; find peak in spectrum and calculate area
+;
+;   Math functions on !b[0].data array
+;
+.compile ../source/pro/plus.pro        ; plus,n,m   -> b0 = bn + bn
+.compile ../source/pro/minus.pro       ; minus,n,m  -> b0 = bn - bm
+.compile ../source/pro/div.pro         ; div,n,m    -> b0 = bn / bm
+.compile ../source/pro/mult.pro        ; mult,n,m   -> b0 = bn * bm
+.compile ../source/pro/scale.pro       ; b0 = b0 * !fact
+.compile ../source/pro/bias.pro        ; b0 = b0 + !y_offset
+;
+;  ID lines in given tunings with channel based flags 
+;
+.compile ../source/pro/flg_id.pro            ; the generic flag function
+;
+;.compile ../source/pro/flags/he3d.pro        ; 3He+ band         rx1 Dec03
+.compile ../source/pro/flags/h91.pro         ; H91 alpha band    rx2 Dec03
+.compile ../source/pro/flags/h115.pro        ; H115 beta band    rx3 Dec03
+.compile ../source/pro/flags/h92.pro         ; H92 alpha band    rx4 Dec03
+;
+;  ID lines for June04 3He+ configuration  !config=0
+;
+.compile ../source/pro/flags/he3.pro         ; 3He+ band         rx1 Jun04 
+.compile ../source/pro/flags/a91.pro         ; H91 alpha band    rx2 Jun04 
+.compile ../source/pro/flags/b115.pro        ; H115 beta band    rx3 Jun04 
+.compile ../source/pro/flags/a92.pro         ; H92 alpha band    rx4 Jun04
+;                                ; 3He+ band         rx5 Jun04
+.compile ../source/pro/flags/hepp.pro        ; He++ band         rx6 Jun04
+.compile ../source/pro/flags/g131.pro        ; H131 gamma band   rx7 Jun04
+.compile ../source/pro/flags/g132.pro        ; H132 gamma band   rx8 Jun04
+;
+;  ID lines for Jan08 7-alpha configuration X-band !config=1
+;
+.compile ../source/pro/flags/h86.pro         ; H86 alpha corrupt --  Jan08
+.compile ../source/pro/flags/h89.pro         ; H89 alpha         rx1
+.compile ../source/pro/flags/h88.pro         ; H88 alpha         rx2
+.compile ../source/pro/flags/h87.pro         ; H87 alpha         rx3
+                                 ; He3               rx4
+.compile ../source/pro/flags/h93.pro         ; H93 alpha         rx5
+.compile ../source/pro/flags/h92.pro         ; H92 alpha         rx6
+.compile ../source/pro/flags/h91.pro         ; H91 alpha         rx7
+.compile ../source/pro/flags/h90.pro         ; H90 alpha         rx8
+;
+;  ID lines for March08 7-alpha configuration C-band C RRL !config=2
+;
+.compile ../source/pro/flags/h104.pro
+.compile ../source/pro/flags/h105.pro
+.compile ../source/pro/flags/h106.pro
+.compile ../source/pro/flags/h107.pro
+.compile ../source/pro/flags/h108.pro
+.compile ../source/pro/flags/h109.pro
+.compile ../source/pro/flags/h110.pro
+.compile ../source/pro/flags/h112.pro
+;
+;  ID lines for ARECIBO He3 interim correletor configuration !config=3
+;
+.compile ../source/pro/flags/aog132.pro
+.compile ../source/pro/flags/aob115.pro
+.compile ../source/pro/flags/aoa91.pro
+.compile ../source/pro/flags/aohe3.pro
+;
+; must change these next two whenever a new configuration is added
+.compile ../source/pro/setconfig.pro   ; set the !config for the line you want to flag 
+.compile ../source/pro/acs_flags.pro   ; find correct ACS flags for 'rx#' and !config
+.compile ../source/pro/flags.pro       ; uses above .pro to flag chans via !b[0].line_id
+;
+;  Glenn Langstons line ID routines:  caveat emptor
+;
+.compile ../source/lines/recombH.pro
+.compile ../source/lines/recombHe.pro
+.compile ../source/lines/recombC.pro
+.compile ../source/lines/recombN.pro
+.compile ../source/lines/recombO.pro
+.compile ../source/lines/recombAll.pro 
+.compile ../source/lines/moleculeRead.pro
+.compile ../source/lines/molecule.pro
+;
+.compile ../source/pro/sd_to_gbt.pro       ; SDFITS to {gbt_data} conversion
+.compile ../source/pro/rxidrec.pro         ; ID rx's using GBT sampler for a rec
+.compile ../source/pro/rxidrecVEGAS.pro    ; ID rx's using rrls.catalog 
+.compile ../source/pro/Lmake.pro           ; automatic SDFITS->ONLINE file initialization
+.compile ../source/pro/make_ONLINE.pro     ; create ONLINE data file
+.compile ../source/pro/getonline.pro       ; get rec# from ONLINE file
+.compile ../source/pro/getoffline.pro      ; get rec# from OFFLINE file
+.compile ../source/pro/update.pro          ; concatenate new line data onto ONLINE file
+.compile ../source/pro/updateC.pro         ; concatenate new continuum data to OFFLINE file
+.compile ../source/pro/close_datafile.pro  ; close ONLINE and OFFLINE data files
+.compile ../source/pro/attach.pro          ; attach new files, e.g. new data to ONLINE
+.compile ../source/pro/def_xaxis.pro       ; set x-axis definition: CHAN/FREQ/VELO/VGRS
+.compile ../source/pro/def_yaxis.pro       ; set y-axis units and type for label
+.compile ../source/pro/make_data.pro       ; create {gbt_data} file 
+.compile ../source/pro/online.pro          ; choose ONLINE data file for search
+.compile ../source/pro/offline.pro         ; choose OFFLINE data file for search
+.compile ../source/pro/setprinter.pro      ; choose printer via setenv PSPRINTER
+.compile ../source/pro/wreset.pro          ; reset to line/continuum window
+.compile ../source/pro/setwin.pro          ; robust IDL window manager
+.compile ../source/pro/read_table.pro      ; generic table reader makes !data structure
+;                                     with tag names based on file column labels
+.compile ../source/pro/write_table.pro     ; takes data structure and writes to ascii file
+;
+;  start files for various versions of TMBIDL
+;
+.compile ../source/pro/package.pro           ; select different analysis packages 
+.compile ../start/start_GENERIC.pro   ; start GENERIC TMBIDL
+.compile ../start/start_140FT.pro     ; start 140FT UniPops NSAVE archive TMBIDL
+.compile ../start/start_GBT_ACS.pro   ; start GBT ACS spectral line TMBIDL
+.compile ../start/start_GBT_DCR.pro   ; start GBT DCR continuum TMBIDL
+.compile ../start/start_GRS.pro       ; start GRS TMBIDL
+.compile ../start/start_BOZO.pro      ; start Arecibo TMBIDL
+.compile ../start/start_HRDS.pro      ; start HRDS TMBIDL
+.compile ../start/start_BUAO.pro      ; start BUAO TMBIDL
+.compile ../start/start_USER.pro      ; USER must create their own
+                                      ; this is a dummy file
+.compile ../start/start_TMB.pro       ; start TMB custom file
+.compile ../start/start_RTR.pro       ; start RTR custom file
+.compile ../start/start_DSB.pro       ; start DSB custom file
+.compile ../start/start_LDA.pro       ; start LDA custom file
+.compile ../start/start_TVW.pro       ; start TVW custom file
+.compile ../start/start_GBT_VEGAS.pro ; start VEGAS TMBIDL
+.compile ../start/START.pro           ; main TMBIDL start driver invokes the above;
+;
+; CONTINUUM procedures 
+;
+.compile ../source/pro/line.pro            ; toggle to spectral LINE data reduction
+.compile ../source/pro/cont.pro            ; toggle to CONtinuum data reduction
+.compile ../source/pro/map.pro             ; toggle to MAP data reduction
+.compile ../source/pro/continfo.pro        ; Scan SDFITS continuum data file
+.compile ../source/pro/condar.pro          ; Scan SDFITS continuum data file 
+.compile ../source/pro/sd2Cgbt.pro         ; Convert SDFITS continuum record to {tmbidl_data}
+.compile ../source/pro/make_Cdata.pro      ; Turn  SDFITS continuum data into {tmbidl_data}
+.compile ../source/pro/cgbt_win.pro        ; make continuum window
+.compile ../source/pro/pltChdr.pro         ; plot continuum header information
+.compile ../source/pro/make_cfits_file.pro     ; initialize CONTINUUM fits file
+.compile ../source/pro/Cfit_info.pro           ; information about the fits
+.compile ../source/pro/god.pro                 ; semi-automatic Continuum reduction
+.compile ../source/pro/dog.pro                 ; automatic Continuum fits via STACK
+.compile ../source/pro/tcj.pro                 ; above but write fits to !continuum_fits 
+;
+.compile ../source/pro/get_source.pro ; Fetch RA/DEC from Continuum Source Catalog 
+.compile ../source/pro/Cmake.pro      ; more general than make_Cdata.pro  USE THIS ONE
+.compile ../source/pro/peak.pro       ; test
+.compile ../source/pro/tcj2.pro       ; test
+.compile ../source/pro/lpc.pro        ; find LPC offset from nominal source position
+                                ; using continuum scans
+;
+; HISTORY procedures
+;
+.compile ../source/pro/history.pro         ; pack fits/analysis info in 'history'
+.compile ../source/pro/rehash.pro          ; recover this info 
+;
+; Miscellaneous procedures
+;
+.compile ../source/utilities/rotcurv_dpc.pro   ; Clemens Galactic rotation curve
+.compile ../source/utilities/rotcurv_wbb.pro   ; Burton  Galactic rotation curve
+.compile ../source/utilities/rotcurv_nmg.pro   ; McClure-Griffiths rotation curve
+.compile ../source/utilities/table2tex.pro     ; converts read_table to LaTeX
+.compile ../source/utilities/tex2table.pro     ; converts LaTeX to read_table
+;
+.compile ../source/pro/th_rms.pro          ; calculate theoretical radiometer eqn
+.compile ../source/pro/radiom.pro          ; calculate empirical radiometer eqn
+.compile ../source/pro/get_scan.pro        ; display TP pair L/R spectra for scan#
+.compile ../source/pro/qlook4.pro          ; qlook 4 Rx's at a time
+.compile ../source/pro/qqq.pro             ; Syntax: qqq,scan_number -> invokes qlook4
+;
+;.compile ../source/DOCS/html/mk_html_v5_0.pro ; the html help maker for v5.1
+;.compile ../source/DOCS/html/create_v5_0.pro  ; create the v5.1 help mater
+;.compile ../source/DOCS/html/mk_html_libs_v5_0.pro  ; invoke libs help maker 
+;.compile ../source/DOCS/html/create_libs_v5_0.pro  ; create the libs help
+;
+;   Epoch averaging procedures, a la the 3He package in UniPOPS
+;            all rtr procedures as of 21 June 2007 are now here
+;
+.compile ../source/pro/init_MESS     ;initialize message file
+.compile ../source/pro/make_MESS     ;make message file
+.compile ../source/pro/data_tossed   ;writes to message file
+.compile ../source/pro/data_edited   ;writes to message file
+;
+.compile ../source/pro/start_epoch.pro   ; initializes epoch averages
+.compile ../source/pro/start_day.pro     ; initializes daily averages
+.compile ../source/pro/start_src.pro     ; starts daily averages for a source
+.compile ../source/pro/cmarker.pro       ; flags spectra:  Useage: cmarker,rxno
+.compile ../source/pro/lmarker.pro       ; flags lines on basis of line id
+.compile ../source/pro/bam.pro           ; averages stack with editing
+.compile ../source/pro/wham.pro          ; averages stack with editing
+.compile ../source/pro/ewham.pro         ; Make epoch average with editing capability
+.compile ../source/pro/daze.pro          ; averages NSAVEs in the stack with editing
+.compile ../source/pro/epave.pro         ; Epoch averaging with edits
+.compile ../source/pro/avgstk.pro        ; AVErages data for rec#s in STACK
+.compile ../source/pro/estart_src.pro    ; epoch averages for a specific source
+.compile ../source/pro/transns.pro       ; transfers NSAVES 
+.compile ../source/pro/gav1.pro          ; averages 2 EPAVs tags as GAV and SAVEs
+.compile ../source/pro/gav05.pro         ; averages for 05 epoch
+.compile ../source/pro/prtfit.pro        ; creates ps plot of spectrum + fit
+;
+.compile ../source/pro/heget.pro         ; custom GETrec -- changes as needed
+;
+;  V6.0 merges
+;
+.compile ../source/pro/qav.pro          ; rtr's qlook driver that averages
+.compile ../source/pro/sizex.pro
+.compile ../source/pro/sizey.pro      ; test .pro's in jul08
+.compile ../source/pro/sizexy.pro
+.compile ../source/pro/getsky.pro     ; returns HA,ZA,AZ,&EL from !b[0]
+.compile ../source/pro/cget.pro       ; get   for continuum gets right x-axis
+.compile ../source/pro/cgetns.pro     ; getns for continuum gets right x-axis
+.compile ../source/pro/dotcj.pro      ; analyze TCJ2 source
+.compile ../source/pro/cte.pro        ; analyze TCJ2 sources in STACK
+.compile ../source/pro/gfix.pro       ; FIX a Gaussian component to a specific VALUE 
+.compile ../source/pro/tellgfix.pro   ; tell contents of !parinfo for !ngauss fits 
+.compile ../source/pro/freegfix.pro   ; restore !parinfo to free fits to all parameters
+.compile ../source/pro/gfits.pro      ; give current Gaussian fit parameters
+.compile ../source/pro/showstk.pro    ; display contents of STACK either as records or NSAVEs
+.compile ../source/pro/ra2lb.pro      ; RA/DEC to L/B conversion
+.compile ../source/pro/tcjavg.pro     ; average TCJ2 data
+.compile ../source/pro/find_vel.pro   ; find unknown RRL velocity for HII survey
+.compile ../source/pro/cflip.pro      ; flip continuum data 
+.compile ../source/pro/cflag.pro      ; flag continuum center channel
+;
+; v7.1 merges
+;
+.compile ../source/pro/jdate.pro      ; gets modified Julian Date from !b[0] header
+.compile ../source/pro/is_jd_ok.pro   ; tests if !b[0] JD is before 01jan2011
+.compile ../source/pro/zero.pro       ; sets x-axis data to zero 
+.compile ../source/pro/nscat.pro      ; lists either STACK or NSAVE info for that format
+.compile ../source/coyote/cgarrow.pro ; Fanning arrow graphic 
+.compile ../source/pro/rydberg.pro    ; function that calculates RRL frequencies
+.compile ../source/pro/gaussModelNoise.pro ; function that returns model Gaussian + noise 
+;.compile ../source/pro/voigt_fit.pro  ; function dsb found that returns fit to single
+                               ; Voigt function.
+.compile ../source/pro/printRfreq.pro ;  print rest freq
+.compile ../source/pro/pcircle.pro    ; plot circle at input position and radius
+.compile ../source/pro/shift_spec.pro ; shift !b[0].data by input delta freq in MHz 
+.compile ../source/pro/sky_align.pro  ; align 2 NSAVEs by matching header sky frequency
+.compile ../source/pro/readFitsGBT.pro ; read GBT raw FITS files 
+.compile ../source/pro/scaley.pro     ; make y-axis scaling pleasing to the eye
+.compile ../source/pro/nrchan2vel.pro ; convert !nregion channels into frequencies
+.compile ../source/pro/viewCont.pro   ; dsb display multiple TCJ2 observations
+.compile ../source/pro/shiftPlot.pro  ; shift one NSAVE spectrum relative to another 
+.compile ../source/pro/shiftAve.pro   ; do same shift and then average
+;
+; perhaps these go into a package(s) 
+; these are 3-He fixes: 
+.compile ../source/pro/fixfreq.pro    ; fix incorrect SDFITS rest frequencies
+.compile ../source/pro/fixID.pro      ; fix incorrect SDFITS rxNo/LineID assignment
+.compile ../source/pro/copyLdata.pro  ; copy Ldata
+.compile ../source/pro/copyCdata.pro  ; copy Cdata
+.compile ../source/pro/rrlFlag.pro    ; general RRL flags (dsb)
+.compile ../source/pro/he4Area.pro    ; calculate 4He/H line area ratio (dsb)
+.compile ../source/pro/he4Fit.pro     ; uses bbb/gg result to return structure
+                               ; with 4-He/H line ratio parms with errors
+; HRDS specific
+.compile ../source/pro/sx.pro         ; set x-axis range for 7-alpha spectrum
+.compile ../source/pro/brms.pro       ; rms in NREGIONs from HISTORY
+;
+; TEST COMPILE: Commented out but not deleted because these are yet
+;               to be reconciled into v7.1
+;
+;.compile ../source/tmb/spider.pro      ;  tmb SpiderContinuum scan analysis
+;.compile ../source/tmb/test.pro
+;.compile ../source/tmb/ctest.pro 
+;.compile ../source/tmb/daze.pro            ;  with \auto
+;.compile ../source/tmb/epav.pro            ;   "     "
+;
+; CURSOR procedures
+;
+.compile ../source/pro/ccc.pro            ; get red cursor
+.compile ../source/pro/kursor.pro         ; cursor that annotates plot
+.compile ../source/pro/ksr.pro            ; continuous version of kursor
+;
+; NEW V7.0 PRO's
+.compile ../source/pro/addNoise.pro       ; add specified rms noise to data
+.compile ../source/pro/modelGauss.pro     ; model single Gassian set by input params
+;
+; TMBIDL INSTALLATION TESTS
+.compile ../test/installation_tests.pro
+;
+!PROMPT='TMBIDL-->'
+; !EDIT_INPUT = 500    <==  Obsolete in V6.4  
+!x.range=0
+!y.range=0
+;
+device,true_color=24,decomposed=0
+; make IDL refresh hidden windows
+device, RETAIN=2

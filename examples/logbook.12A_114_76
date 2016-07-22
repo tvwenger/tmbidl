@@ -1,0 +1,101 @@
+
+===> This observing session had severe problems with the W3
+     calibration.  Nonetheless, these data are just fine for
+     testing a TMBIDL installation and learning how to use
+     the package
+
+=============================================================
+proj: AGBT12A_114  (Semester 12A) 3-Helium HII Regions 
+=============================================================
+*****************************************************
+NSAVEs in:  /data/gbt/he3/nsaves/line/12A_114/he3.lns.0
+            /data/gbt/he3/nsaves/line/12A_114/he3.lns.key.0
+*****************************************************
+Source       RA            Dec       [hrs]        [pairs] 
+------- -------------  ----------- -----------  -------------
+S206     04:03:15.87    +51:18:54
+3C286    13:31:08.284   +30:30:32.94  
+-------------------------------------------------------------
+ACS Configuration:  linehii4 always
+============================================================
+Session_76:  (AGBT12A_114_76) 23 Jun 2012 ET 17:15 LST 10:03
+============================================================
+It is not clear if Astrid aborted due to the active surface when
+taking data or when slewing to source.  This appears to have happened
+near scan 10, since we peaked again only after one pair.  In Astrid
+the data look okay but check carefully in tmbidl.
+
+tmb inspected that first pair and the H91alpha Tpk is spot on ....
+
+Scan     Source          Proc      Comments
+-------- --------------- --------- -----------------------------------------------------------
+1-4      0337+5045       Peak
+5            "           Focus
+6        S206            OffOn     linehii4; ACS fubar
+7-10     0337+5045       Peak
+11           "           Focus
+12-13    S206            OffOn     linehii4; ok
+14-17    0337+5045       Peak
+18           "           Focus
+19-26    S206            OffOn     linehii4
+27-30    0228+6721       Peak
+31           "           Focus
+32-47    W3              OffOn     linehii4
+
+17:25 ET - Operator's Log: Back ends failure on Spectrometer. Restored
+on 06/23/2012 17:32:00. Data looks bad. Repair entry (159925) comment:
+Did a ResetParameters on spectrometer and began LST_10hr again.
+17:53 ET - Operator's Log: Active Surface/Metrology failure on Active
+Surface. Restored on 06/23/2012 17:56:49. Active surface failed, this
+caused astrid to abort. I had to do a reset on Active Surface from the
+reset box. Repair entry (159928) comment: Began LST_10hr again.
+18:45 ET - Operator's Log: Partly cloudy to mostly clear.
+
+no rfi rx8.2 NaN scn 20 
+
+S206 HA=+6.6 @ EL 24.1 Tsys 35.5 to +7.6 @ EL 16.7 Tsys 37.9          nsaves: 1345 - 1360
+     5 pairs   AZ 317.6                    AZ 248.3
+G#       Height +/- sigma     Center +/- sigma       FWHM +/- sigma   ==>     kHz        km/sec
+He      22.134       0.781   1902.953       1.127     54.033       2.952    659.577      23.026
+H      221.107       0.683   2191.473       0.098     64.758       0.231    790.501      27.597
+Center/FWHM in channels RMS in NREGIONs =       3.70474 mK
+4He/H = 0.100
+H91 alpha standard photometry based on Tpk =  221.8 for S206
+H91 alpha relative to  221.8 =  221.1/ 221.8 = 0.997 =>  0.3 % LOWER than nominal
+
+issue with W3 is that Tc is high
+weak rfi rx7.2
+
+W3 HA=+9.6 @ EL 14.8 Tsys 62.9 to +11.1 @ EL 11.3 Tsys 54.0            nsaves: 1361 - 1376
+   8 pairs   AZ 343.4                    AZ 353.6
+G#       Height +/- sigma     Center +/- sigma       FWHM +/- sigma   ==>     kHz        km/sec
+He    301.058       4.186   1906.867       0.336     49.229       0.825    600.939      20.977
+H    2992.543       3.583   2193.776       0.039     65.653       0.091    801.432      27.976
+Center/FWHM in channels RMS in NREGIONs =       13.0806 mK
+4He/H = 0.101
+H91 alpha standard photometry based on Tpk = 4353.7 for W3
+H91 alpha relative to 4353.7 = 2992.5/4353.7 = 0.687 => 31.3 % LOWER than nominal
+**************
+======> something wrong here: W3 intensity from 11A does not match this.... stay tuned !
+
+OK, look at each pair individually....
+
+scn Pol  H91 Tpk 
+33   LL 4218 mK     <<==== something VERY wrong with W3... 
+     RR 4076               these fits done uniformly with hephotom,/fit 
+35   LL 3980
+     RR 3856        S206 H91 Tpk is just fine.  taken just before these W3 data
+37   LL 3921
+     RR 3774        W3 H91 Tpk for S77 is just fine ....  
+39   LL 3407
+     RR 3282        low elevation?  but S77 the same  active surface? 
+41   LL 2833
+     RR 2720
+43   LL 3352
+     RR 3289
+45   LL 1547
+     RR 1484
+47   LL 2275
+     RR 2189
+
+ 

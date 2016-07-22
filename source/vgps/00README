@@ -1,0 +1,46 @@
+==============================
+VGPS Continuum Display Package
+v7.0 July 2013 tvw
+==============================
+
+Get the data:
+
+To use this package you need to retrieve the VGPS data and
+store it on your machine. The data can be obtained in two ways:
+
+-------------------------------------------
+1)
+Navigate your browser to the following URL.
+
+http://www.ras.ucalgary.ca/VGPS/VGPS_data.html
+
+Follow the guidelines on that website to obtain the data.
+-------------------------------------------
+2)
+The data can be found at BU on NINKASI:
+
+twenger@ninkasi /ninkasi0/data/VGPS/continuum
+> du -h *
+4.1M    VGPS_cont_MOS017.fits
+4.1M    VGPS_cont_MOS021.fits
+4.1M    VGPS_cont_MOS025.fits
+4.1M    VGPS_cont_MOS029.fits
+4.1M    VGPS_cont_MOS033.fits
+4.1M    VGPS_cont_MOS037.fits
+4.1M    VGPS_cont_MOS041.fits
+4.1M    VGPS_cont_MOS045.fits
+4.1M    VGPS_cont_MOS049.fits
+4.1M    VGPS_cont_MOS053.fits
+4.1M    VGPS_cont_MOS057.fits
+4.1M    VGPS_cont_MOS061.fits
+4.1M    VGPS_cont_MOS065.fits
+-------------------------------------------
+
+Once you have obtained the data, put them in the following location
+in your local TMBIDL installation:
+
+../tmbidl/data/vgps/continuum/
+
+or somewhere else and connect via a symbolic link. (See /v7.0/0DATA_FILES)
+
+ln -s /data/VGPS/ /idl/tmbidl/data/vgps

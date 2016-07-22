@@ -1,0 +1,183 @@
+;   ==================================================================================
+;    INITIALIZES GLOBALS for the GRS 13-CO Survey data analysis package V7.0 July 2013  
+;   ==================================================================================
+;
+!GRSMODE=1
+;
+; Set parameters of GRS database and file names.
+;
+fname=['../../data/grs/grs_data/grs-15-cube.fits','../../data/grs/grs_data/grs-16-cube.fits', $
+       '../../data/grs/grs_data/grs-17-cube.fits','../../data/grs/grs_data/grs-18-cube.fits', $
+       '../../data/grs/grs_data/grs-19-cube.fits','../../data/grs/grs_data/grs-20-cube.fits', $
+       '../../data/grs/grs_data/grs-21-cube.fits','../../data/grs/grs_data/grs-22-cube.fits', $
+       '../../data/grs/grs_data/grs-23-cube.fits','../../data/grs/grs_data/grs-24-cube.fits', $
+       '../../data/grs/grs_data/grs-25-cube.fits','../../data/grs/grs_data/grs-26-cube.fits', $
+       '../../data/grs/grs_data/grs-27-cube.fits','../../data/grs/grs_data/grs-28-cube.fits', $
+       '../../data/grs/grs_data/grs-29-cube.fits','../../data/grs/grs_data/grs-30-cube.fits', $
+       '../../data/grs/grs_data/grs-31-cube.fits','../../data/grs/grs_data/grs-32-cube.fits', $
+       '../../data/grs/grs_data/grs-33-cube.fits','../../data/grs/grs_data/grs-34-cube.fits', $
+       '../../data/grs/grs_data/grs-35-cube.fits','../../data/grs/grs_data/grs-36-cube.fits', $
+       '../../data/grs/grs_data/grs-37-cube.fits','../../data/grs/grs_data/grs-38-cube.fits', $
+       '../../data/grs/grs_data/grs-39-cube.fits','../../data/grs/grs_data/grs-40-cube.fits', $
+       '../../data/grs/grs_data/grs-41-cube.fits','../../data/grs/grs_data/grs-42-cube.fits', $
+       '../../data/grs/grs_data/grs-43-cube.fits','../../data/grs/grs_data/grs-44-cube.fits', $
+       '../../data/grs/grs_data/grs-45-cube.fits','../../data/grs/grs_data/grs-46-cube.fits', $
+       '../../data/grs/grs_data/grs-47-cube.fits','../../data/grs/grs_data/grs-48-cube.fits', $
+       '../../data/grs/grs_data/grs-49-cube.fits','../../data/grs/grs_data/grs-50-cube.fits', $
+       '../../data/grs/grs_data/grs-51-cube.fits','../../data/grs/grs_data/grs-52-cube.fits', $
+       '../../data/grs/grs_data/grs-53-cube.fits','../../data/grs/grs_data/grs-54-cube.fits', $
+       '../../data/grs/grs_data/grs-55-cube.fits','../../data/grs/grs_data/grs-56-cube.fits']
+;
+nfiles=n_elements(fname)
+;
+grsMaps=[15.0006, -0.0014, 14.0012, 16.0000,  1.0472, -1.0500,  $
+         15.9992,  0.0062, 14.9999, 16.9986,  0.8180, -0.8057,  $
+         17.0006,  0.0009, 16.0012, 18.0000,  1.1017, -1.1000,  $
+         18.0010, -0.0000, 17.0047, 18.9973,  1.0947, -1.0947,  $
+         19.0006,  0.0009, 18.0012, 20.0000,  1.1017, -1.1000,  $
+         19.9998, -0.0000, 19.0035, 20.9961,  1.0947, -1.0947,  $
+         21.0006,  0.0009, 20.0012, 22.0000,  1.1017, -1.1000,  $
+         21.9985, -0.0000, 21.0022, 22.9948,  1.0947, -1.0947,  $
+         23.0006,  0.0009, 22.0012, 24.0000,  1.1017, -1.1000,  $
+         24.0004, -0.0000, 23.0010, 24.9998,  1.0947, -1.0947,  $
+         25.0006,  0.0009, 24.0012, 26.0000,  1.1017, -1.1000,  $
+         25.9991, -0.0000, 24.9997, 26.9985,  1.0947, -1.0947,  $
+         27.0006,  0.0009, 26.0012, 28.0000,  1.1017, -1.1000,  $
+         28.0011, -0.0000, 27.0048, 28.9974,  1.0947, -1.0947,  $
+         29.0006,  0.0009, 28.0012, 30.0000,  1.1017, -1.1000,  $
+         30.0001, -0.0000, 29.0038, 30.9964,  1.0947, -1.0947,  $
+         31.0006,  0.0009, 30.0012, 32.0000,  1.1017, -1.1000,  $
+         31.9985, -0.0092, 31.0022, 32.9948,  1.0947, -1.1131,  $
+         33.0006,  0.0009, 32.0012, 34.0000,  1.1017, -1.1000,  $
+         34.0003, -0.0000, 33.0009, 34.9997,  1.0947, -1.0947,  $
+         35.0006,  0.0009, 34.0012, 36.0000,  1.1017, -1.1000,  $
+         35.9990, -0.0000, 34.9997, 36.9984,  1.0947, -1.0947,  $
+         37.0006,  0.0009, 36.0012, 38.0000,  1.1017, -1.1000,  $
+         38.0012, -0.0000, 37.0049, 38.9975,  1.0947, -1.0947,  $
+         39.0006,  0.0009, 38.0012, 40.0000,  1.1017, -1.1000,  $
+         39.9997, -0.0000, 39.0034, 40.9960,  1.0947, -1.0947,  $
+         41.0006,  0.0009, 40.0012, 42.0000,  1.1017, -1.1000,  $
+         41.9985,  0.0306, 41.0022, 42.9948,  1.0945, -1.0334,  $
+         43.0006,  0.0009, 42.0012, 44.0000,  1.1017, -1.1000,  $
+         44.0003,  0.0306, 43.0009, 44.9996,  1.0945, -1.0334,  $
+         45.0006,  0.0009, 44.0012, 46.0000,  1.1017, -1.1000,  $
+         45.9991,  0.0304, 44.9997, 46.9985,  1.0943, -1.0336,  $
+         47.0006,  0.0009, 46.0012, 48.0000,  1.1017, -1.1000,  $
+         48.0011,  0.0304, 47.0048, 48.9974,  1.0943, -1.0336,  $
+         49.0006,  0.0009, 48.0012, 50.0000,  1.1017, -1.1000,  $
+         49.9997, -0.0000, 49.0034, 50.9960,  1.0947, -1.0947,  $
+         51.0006,  0.0009, 50.0012, 52.0000,  1.1017, -1.1000,  $
+         51.9982, -0.0000, 51.0019, 52.9945,  1.0947, -1.0947,  $
+         53.0006,  0.0009, 52.0012, 54.0000,  1.1017, -1.1000,  $
+         54.0001, -0.0000, 53.0007, 54.9994,  1.0947, -1.0947,  $
+         55.0006,  0.0009, 54.0012, 56.0000,  1.1017, -1.1000,  $
+         55.3531, -0.0000, 54.9994, 55.7067,  1.0947, -1.0947]
+;
+;
+grsMaps=reform(grsMaps,6,nfiles)
+;
+grsSize=[ 326,  342,  111492,  $
+          326,  265,   86390,  $
+          326,  359,  117034,  $
+          325,  357,  116025,  $
+          326,  359,  117034,  $
+          325,  357,  116025,  $
+          326,  359,  117034,  $
+          325,  357,  116025,  $
+          326,  359,  117034,  $
+          326,  357,  116382,  $
+          326,  359,  117034,  $
+          326,  357,  116382,  $
+          326,  359,  117034,  $
+          325,  357,  116025,  $
+          326,  359,  117034,  $
+          325,  357,  116025,  $
+          326,  359,  117034,  $
+          325,  360,  117000,  $
+          326,  359,  117034,  $
+          326,  357,  116382,  $
+          326,  359,  117034,  $
+          326,  357,  116382,  $
+          326,  359,  117034,  $
+          325,  357,  116025,  $
+          326,  359,  117034,  $
+          325,  357,  116025,  $
+          326,  359,  117034,  $
+          325,  347,  112775,  $
+          326,  359,  117034,  $
+          326,  347,  113122,  $
+          326,  359,  117034,  $
+          326,  347,  113122,  $
+          326,  359,  117034,  $
+          325,  347,  112775,  $
+          326,  359,  117034,  $
+          325,  357,  116025,  $
+          326,  359,  117034,  $
+          325,  357,  116025,  $
+          326,  359,  117034,  $
+          326,  357,  116382,  $
+          326,  359,  117034,  $
+          116,  357,   41412   ]
+grsSize=reform(grsSize,3,nfiles)
+;
+defsysv,'!grsMaps',   grsMaps   ;  GRS map centers and l,b ranges
+defsysv,'!grsFiles',  fname     ;  GRS map FITS files
+defsysv,'!grsSize',   grsSize   ;  GRS map dimensions
+defsysv,'!grsNfiles', nfiles    ;  number of map files 
+defsysv,'!currentGRSfile', ' '  ;  GRS FITS file currently in buffer
+;
+;
+; Set parameters of GRS database and file names.
+;
+fname=['../../data/grs/grs_data/grs-15.dat','../../data/grs/grs_data/grs-16.dat', $
+       '../../data/grs/grs_data/grs-17.dat','../../data/grs/grs_data/grs-18.dat', $
+       '../../data/grs/grs_data/grs-19.dat','../../data/grs/grs_data/grs-20.dat', $
+       '../../data/grs/grs_data/grs-21.dat','../../data/grs/grs_data/grs-22.dat', $
+       '../../data/grs/grs_data/grs-23.dat','../../data/grs/grs_data/grs-24.dat', $
+       '../../data/grs/grs_data/grs-25.dat','../../data/grs/grs_data/grs-26.dat', $
+       '../../data/grs/grs_data/grs-27.dat','../../data/grs/grs_data/grs-28.dat', $
+       '../../data/grs/grs_data/grs-29.dat','../../data/grs/grs_data/grs-30.dat', $
+       '../../data/grs/grs_data/grs-31.dat','../../data/grs/grs_data/grs-32.dat', $
+       '../../data/grs/grs_data/grs-33.dat','../../data/grs/grs_data/grs-34.dat', $
+       '../../data/grs/grs_data/grs-35.dat','../../data/grs/grs_data/grs-36.dat', $
+       '../../data/grs/grs_data/grs-37.dat','../../data/grs/grs_data/grs-38.dat', $
+       '../../data/grs/grs_data/grs-39.dat','../../data/grs/grs_data/grs-40.dat', $
+       '../../data/grs/grs_data/grs-41.dat','../../data/grs/grs_data/grs-42.dat', $
+       '../../data/grs/grs_data/grs-43.dat','../../data/grs/grs_data/grs-44.dat', $
+       '../../data/grs/grs_data/grs-45.dat','../../data/grs/grs_data/grs-46.dat', $
+       '../../data/grs/grs_data/grs-47.dat','../../data/grs/grs_data/grs-48.dat', $
+       '../../data/grs/grs_data/grs-49.dat','../../data/grs/grs_data/grs-50.dat', $
+       '../../data/grs/grs_data/grs-51.dat','../../data/grs/grs_data/grs-52.dat', $
+       '../../data/grs/grs_data/grs-53.dat','../../data/grs/grs_data/grs-54.dat', $
+       '../../data/grs/grs_data/grs-55.dat','../../data/grs/grs_data/grs-56.dat']
+;
+defsysv,'!grsIDLfiles', fname   ;  GRS map files in TMB-IDL format
+defsysv,'!currentIDLfile',  ' ' ;  GRS TMB-IDL format file currently open 
+defsysv,'!currentGRSrec' ,  0L  ;  global to pass specific GRS record number
+;
+defsysv,'!grsSpacing', 0.00615d ;  GRS pixel spacing in degrees
+defsysv,'!grsHPBW',   0.01278   ;  FCRAO 13CO HPBW is 46 arcsec 
+grsSigBeam=!grsHPBW/2.354       ;  sigma of this beam in degrees
+defsysv,'!grsSigBeam', grsSigBeam ; 
+grsWeight=[0.11056406,0.21002059,0.11056406,0.21002059,0.39894199, $
+           0.21002059,0.11056406,0.21002059,0.11056406]
+defsysv,'!grsWeight',grsWeight  ;  Gaussian weighting functions for FCRAO beam
+defsysv,'!grsBEAM',  0          ;  Boolean switch: 1=smooth data with FCRAO beam
+defsysv,'!grsNchan', 659        ;  maximum (fixed) number of spectral channels
+defsysv,'!grsCenCh',  212.5     ;  GRS center channel
+defsysv,'!grsDeltaV', 0.2125    ;  GRS channel spacing km/sec/ch
+defsysv,'!grsVcen',   40.00     ;  GRS center velocity at center channel
+grsSpect=fltarr(!nchan) & grsSpect[0:!nchan-1]=0. &
+defsysv,'!grsSpect', grsSpect   ;  GRS data array
+;
+!y.title=!ytitle_grs   ; default to T_A^*
+;
+; initialize the nregion mask for GRS
+; must force the x-axis 
+vgrs & nrtype & freegrs 
+start=ceil(0.05*!data_points)
+stop =!data_points - start - 1
+!nrset=2
+!nregion[0]=!xx[0]    & !nregion[1]=!xx[start] & 
+!nregion[2]=!xx[stop] & !nregion[3]=!xx[!data_points -1] &
+;

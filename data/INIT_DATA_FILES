@@ -1,0 +1,7 @@
+;
+print,'Loading INIT_DATA_FILES for TMBIDL V8'
+;
+; Example:
+;line05='/data/gbt/vegas/tmbidl/14B/Ldata_14B_431_05_acs.tmbidl'
+;
+print,'Done'

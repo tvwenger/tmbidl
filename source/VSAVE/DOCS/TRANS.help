@@ -1,0 +1,45 @@
+HELP FILE for RTR TRANSITION and Line parameter routines
+
+; Structure to store measured line parameters
+;       
+;   The basic plan is not to try to reduce entire bands with one fitted
+;       baseline, because that baseline could quite possibly be very
+;       complex and would weaken our case with readers even if we can
+;       convince ourselves that it is reliable.
+;   Lines will be considered in BANDS (or receivers), e.g., H89 or rx1
+;                               TRANSITIONS or groups of nearby lines
+;                                          to be fitted with one
+;                                          baseline.
+;                                          In H89 the transitions are 89AL, 140DEL, 178TH
+;                               LINES      In 89AL the lines are H89\alpha, He89\alpha, C89\alpha
+;
+;   Most often a transition will contain 3 lines, but in most cases we will not fit all
+;        lines within a transition. Because of this I felt it important to attach names 
+;        to lines, because the number in a fit sequence does not tell the tale. 
+;	Under different circumstances gaussian 1 could be the C, He, or H line. A few 
+;        `transitions' have other lines, e.g., 91AL contains H154\epsilon.
+;
+;   After each line (or group of lines) is measured all of the
+;        parameters measured and all of the information required to
+;        reconstruct the fit will be stored in a structure,
+;        lparm. lparm will have two parts, a header, lph, which will
+;        have common values for all lines within a BAND, and lpv, which
+;        will have values of many parameters associated with the fit.
+;
+;   The fit will be associated with a given nsave bin or a list of
+;        nsaves. E.g., DSB has already done the equivalent of old daily
+;        averages for each polarization separately and given
+;        lparm.nsaves could have the nsave for the LL and RR
+;        averages. Typically I imagine only using one or two nsaves but
+;        can imagine circumstances where I would use more.
+;
+;   I think that the lparm structure should be written into something
+;        like the nsave file.  Using slightly modified set and select
+;        commands many tables can be constructed from this sort of
+;        data.
+;
+;   I'm working on procedures to automatically set nregions and
+;        gaussian fit initial guesses for each transition.
+;
+;   lparm structure is defined in LPARM.DEF
+;        they can be combined.

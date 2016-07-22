@@ -1,0 +1,528 @@
+======================================================================
+	TMBIDL v8.0 - GIT Instructions
+======================================================================
+
+You can obtain a new installation of TMBIDL for our GitHub repository.
+This document will explain the fundamentals of using TMBIDL with GIT
+as well as how to set up a new GIT TMBIDL installation on a new
+machine or in a new location.
+
+Github TMBIDL Repository Location
+Via the web:        https://github.com/tvwenger/tmbidl
+Via SSH access:     git@github.com:tvwenger/tmbidl.git
+
+======================================================================
+	Setting up GIT for the first time on a new machine
+======================================================================
+
+0. Install GIT. GIT can be found in most default Linux distro
+repositories. For example, on Ubuntu
+
+$ sudo apt-get install git
+
+1. Set up some global information about yourself. This information
+will be attached to all changes you make to the TMBIDL GIT repository.
+
+$ git config --global user.name "Your Name"
+$ git config --global user.email "YourEmail@Domain.com"
+
+2. Set up a GitHub SSH key
+
+2a. If you don't already have one, set up an account on GitHub:
+https://github.com
+
+2b. On your machine, generate a new SSH Key
+$ ssh-keygen -t rsa 
+Press enter to accept the defaults for all questions.
+
+2c. Copy the contents of your new public SSH key.
+$ cat ~/.ssh/id_rsa.pub
+
+2d. On the GitHub website, click on the account settings button
+(top right, near your username)
+
+2e. Push the SSH Keys button (on left menu)
+
+2f. Push the "Add SSH Key" button
+
+2g. Name the SSH Key whatever you'd like. I usually name it whatever
+machine I am using. Paste the contents of ~/.ssh/id_rsa.pub in to
+the key box on the GitHub website. Push the "Add Key" button.
+
+2h. If you plan on contributing to the TMBIDL project, contact a
+member of the TMBIDL team to request to be added as a "contributer" on
+the GitHub repository. Otherwise, you will not be able to push your
+changes to the GitHub repository.
+
+3. (optional) A useful tool for seeing how the repository looks is
+"gitg"
+
+$ sudo apt-get install gitg
+
+Then, executing
+
+$ gitg
+
+from within the TMBIDL installation will bring up a nice GUI for 
+inspecting changes to the TMBIDL repository.
+
+======================================================================
+	Getting the latest version of TMBIDL
+======================================================================
+
+0. After you have installed and set up GIT on your machine, you can
+clone the TMBIDL repository on to your machine. Make an empty
+directory where you want to install TMBIDL. For example,
+
+$ mkdir /idl/tmbidl
+
+1. Clone the GitHub repository 
+
+$ git clone git@github.com:tvwenger/tmbidl.git /idl/tmbidl
+
+The TMBIDL repository will be downloaded in to that directory.
+
+2. One last confiuration
+
+We also don't want GIT to consider changes in file permissions as 
+actual changes, so we will also do
+
+$ cd /idl/tmbidl
+$ git config --global core.filemode false
+
+This will update the GIT configuration so that it will not consider
+a change in file permissions as a real change.
+
+======================================================================
+	Setting up TMBIDL for first use
+======================================================================
+
+Check out 00INSTALL for installation instructions.
+
+======================================================================
+	Using GIT - Part I. Status, adding, committing, and pushing
+======================================================================
+
+Anywhere inside of the TMBIDL installation, you can execute
+
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+
+Let's discuss the various parts of this message. First, "On branch
+master" means that you are currently on the the "master" branch of
+your TMBIDL repository. "up-to-date with origin/master" means that
+your version of the master branch is the same as the master branch
+on the origin (GitHub). 
+
+Alright, you might get a message like
+
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   00INSTALL
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	00GIT
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+Once again, we are on our local "master" branch of the repository. 
+On this branch, we haved edited the 00INSTALL file and git knows that
+it has been changed. There is also an "untracked" file, 00GIT. This
+is a new file that the repository doesn't know about yet. To add
+these files to the repository, I could do
+
+$ git add 00INSTALL
+$ git add 00GIT
+
+Now, I get
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	modified:   00GIT
+	modified:   00INSTALL
+
+GIT knows that I have added these files to be staged for commit. This
+means, we have told GIT that we intend to add these files to the
+repository. To actually add all these new files to our master branch, 
+we do
+
+$ git commit -m 'A message about your commit'
+
+Now, the status of GIT is
+
+$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+So, GIT knows that our local master branch is ahead of the one on
+GitHub by 1 commit. We need to send our changes up to the GitHub
+repository so other people can get our changes. To do this
+
+$ git push origin master
+
+This simply means that we want to push our master branch up to the
+master branch of the "origin" (GitHub).
+
+Similarly, if we delete a file from the repository, you will get see
+
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	deleted:    test.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+To tell GIT that we want to remove the file from the repository,
+we need to explicitly tell it so:
+
+$ git rm test.txt
+$ git commit -m 'removed test.txt'
+$ git push origin master
+
+======================================================================
+	Using GIT - Part II. Branches
+======================================================================
+
+GIT allows for the creation of branches. A branch is simply a copy
+of the repository that you can edit independently of other branches.
+By default, you get a "master" branch which is an exact copy of the
+"master" branch on GitHub. Let's say you want to develop a new piece
+of code. You are worried, however, that your new code might break 
+some functionality of TMBIDL. Luckily, branches are independent of
+eachother. That is, you can make a new branch off of the "master"
+branch and make some changes without affecting the "master" branch
+at all. Graphically, it looks something like this
+
+|
+|
+|\
+| \
+| |
+| new feature branch
+|
+master branch
+
+You can easily switch between the master branch and any branch that
+you create. No matter what changes you make in your new branch, you
+can always switch back to the master branch which will hide all 
+changes that you've made in your branch. When you're ready to go back
+to your branch, you can switch to it and all of your changes will be
+re-instated.
+
+To list all of the branches you have on your local installation, you
+can do
+
+$ git branch
+* master
+
+In this case, I only have the master branch that is a copy of the
+master branch on GitHub. The asterisk (*) indicates that this is
+the branch I am currently using.
+
+I can list all branches, including those only on the GitHub 
+repository, via
+
+$ git branch -a
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/empty_v8
+  remotes/origin/master
+
+In the future, we will use these branches to hold older versions of
+TMBIDL. That way, you can easily switch to using an older version.
+
+To create a new branch,
+
+$ git branch new_feature
+$ git branch
+* master
+  new_feature
+
+Now, I switch to that new branch via 
+$ git checkout new_feature
+Switched to branch 'new_feature'
+$ git branch
+  master
+* new_feature
+
+Now I am on the new_feature branch. Let's create a new file and commit
+it to our branch.
+
+$ echo "This is a test file" > testfile.txt
+$ git commit -m 'added testfile.txt to new_feature branch'
+$ ls
+  ... testfile.txt
+
+Let's say that new file broke everything and TMBIDL doesn't work
+anymore. Well crap, someone just walked in to the office and wants
+to see a plot. All you have to do is switch back to the master branch
+
+$ git checkout master
+$ ls
+  ... (no more testfile.txt)
+
+Now you see that testfile.txt is gone. That file only exists in your
+new_feature branch and TMBIDL is working again in the master branch.
+
+======================================================================
+	Using GIT - Part III. Merging
+======================================================================
+
+Alright, you've gone back and fixed your new file, testfile.txt, in
+your new_feature branch and everything is working. You're ready to add
+your new feature to the master branch of TMBIDL.
+
+First, switch to the master branch
+
+$ git checkout master
+
+Now, simply merge your new branch in to the master branch
+
+$ git merge new_feature
+Updating 4022e46..536b1fa
+Fast-forward
+ testfile.txt | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 testfile.txt
+
+Now, our master branch pulled in the changes from the new_feature
+branch. We can push it to the master branch on GitHub
+
+$ git push origin master
+Counting objects: 5, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 297 bytes | 0 bytes/s, done.
+Total 3 (delta 1), reused 0 (delta 0)
+To git@github.com:tvwenger/tmbidl.git
+   4022e46..536b1fa  master -> master
+
+and delete our new_feature branch
+
+$ git branch -d new_feature
+Deleted branch new_feature (was 536b1fa).
+
+Graphically, what we've done is
+
+|
+|\
+| \
+|  |
+|  0 new_feature branch, testfile.txt added
+|  |
+| /
+|/
+|
+|
+master branch
+
+======================================================================
+	Using GIT - Part IV. Merge conflicts
+======================================================================
+
+Imagine the following scenario. You make a branch called "oops" off
+the master branch. You switch to the oops branch, and edit
+testfile.txt to say "Trey was here" and commit it to the oops branch.
+Then, you switch back to the master branch and edit the testfile.txt
+to say "Bania was here" and commit it to the master branch. Not
+realizing what you've done, you try to merge the oops branch in to the
+master branch. This is what you will see
+
+$ git merge oops
+Auto-merging testfile.txt
+CONFLICT (content): Merge conflict in testfile.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+Graphically, let "0" represent commits, and "X" represent failed 
+merges. What happened is
+	     	     |
+                     |\
+       		     | \
+changed testfile.txt 0  | oops branch
+		     |	0 changed testfile.txt
+		     |	|
+		     | /
+		     |/
+		     X
+		     |
+       master branch |
+
+GIT knows that there is a conflict between these two files. If
+we look at the testfile.txt, we see
+
+$ cat testfile.txt
+<<<<<<< HEAD
+Bania was here.
+=======
+Trey was here.
+>>>>>>> oops
+
+On the conflicting lines, GIT puts in information about the changes on
+the different branches. So it says that on the HEAD (current: master)
+branch, we have "Bania was here". Then a ======= separator follwed by
+the "Trey was here." change on the oops branch. It is now the user's
+responsibility to fix this conflict. He or she needs to edit the
+conflicting file, testfile.txt in this case, and make the choose what
+resolutions are necessary. For example, let's say I want to use the
+oops version, I would change testfile.txt to be "Trey was here." I
+could, for example, change it to be "Trey and Bania were here." All I
+need to do is determine what resolutions need to be made. Now I can
+add it and commit it with the resolutions to the master branch.
+
+$ echo "Trey and Bania were here." > testfile.txt
+
+$ cat testfile.txt
+Trey and Bania were here.
+
+$ git add testfile.txt
+
+$ git commit -m 'fixed testfile.txt conflict'
+[master 15a4761] fixed testfile.txt conflict
+
+$ git push origin master
+Counting objects: 12, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (9/9), 748 bytes | 0 bytes/s, done.
+Total 9 (delta 4), reused 0 (delta 0)
+To git@github.com:tvwenger/tmbidl.git
+   536b1fa..15a4761  master -> master
+
+======================================================================
+	Using GIT - Part V. Log and reverting
+======================================================================
+
+Let's say we really didn't like our changes in the oops branch. 
+We can look at all of the commits in the branch via 
+
+$ git checkout oops
+Switched to branch 'oops'
+$ git log
+commit cb2de222b98541f2c78f2eb22945e5fc4641c99f
+Author: Trey Wenger <tvwenger@gmail.com>
+Date:   Wed Jul 2 15:21:23 2014 -0400
+
+    changed testfile.txt in oops branch
+
+commit 536b1fa4a5566f86109b3003151e9991ef995570
+Author: Trey Wenger <tvwenger@gmail.com>
+Date:   Wed Jul 2 15:14:48 2014 -0400
+
+    added testfile.txt
+
+Let's roll back the oops branch to before our edit to testfile.txt.
+To do this
+
+$ git reset --hard 536b1fa4a5566f86109b3003151e9991ef995570
+HEAD is now at 536b1fa added testfile.txt
+
+This resets the branch to the commit indicated by the long string.
+In this case, we are reverting back to when we "added testfile.txt".
+The "--hard" flag indicates that we also want to change our files
+back to the state they were in at this commit.
+
+Now, our branch reverted.
+
+======================================================================
+	TMBIDL and GIT
+======================================================================
+
+You should never edit the master branch directly. Keep this up-to-date
+with the current version on GitHub at all times. Get in the habit of
+doing a
+
+$ git pull origin master
+
+often. 
+
+When editing files in your sandbox, do so in a new branch.
+
+$ git branch tvw_sandbox
+$ git checkout tvw_sandbox
+... do your edits
+
+When you get to a point when you're ready to put your sandbox on
+the GitHub repository, merge it with the master branch, then push.
+
+$ git checkout master
+$ git pull origin master # make sure we're up to date
+$ git merge tvw_sandbox
+
+You should never get a conflict message when editing things in your
+sandbox as you are the only person who will edit things there.
+
+TMB is in charge of collecting and developing new versions of TMBIDL.
+TMB should do this development in a new branch. For example
+
+$ git branch v8.1_dev
+$ git checkout v8.1_dev
+... change and make edits in source/ and elsewhere
+
+When TMB wants to go back to the current version, he can simply do
+
+$ git checkout master
+
+Important bug fixes, but not feature additions, should be made
+directly to the master branch. TMB can incorporate these changes in
+to his v8.1_dev branch by
+
+$ git checkout v8.1_dev
+$ git merge master
+
+When version 8.1 is ready, TMB can *freeze* the stable v8.0 TMBIDL
+in to the GitHub repository by
+
+$ git checkout master
+$ git pull origin master # make sure the master branch is up to date
+$ git push origin master:v8.0_stable
+
+This last command will push the current master branch to GitHub with
+a new name v8.0_stable. Then
+
+$ git merge v8.1_dev
+$ git push origin master
+
+Will merge the v8.1 changes in to the master branch and push it to 
+the GitHub repository. Now, other people can do
+
+$ git checkout master
+$ git pull origin master
+
+to update to v8.1. If, for some reason, someone wants to still use
+v8.0, he can simply do
+
+$ git branch -a
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/v8.0_stable
+  remotes/origin/master
+$ git pull origin v8.0_stable:v8.0_stable
+
+This last command will pull the v8.0_stable branch and save it
+in to a v8.0_stable branch on your machine. Now
+
+$ git checkout v8.0_stable
+
+and you are using the v8.0 stable version. When you want to go back
+to the current TMBIDL version, just do
+
+$ git checkout master

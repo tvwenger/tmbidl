@@ -1,0 +1,72 @@
+;
+; VSAVE Compilation Batch File
+;
+; 26 June 2009
+;
+; tmb edit's removed .pro's that are:
+;             (1) now in V6.0 TMBIDL
+;             (2) not currently supposed to override V6.0
+;
+;.compile ../VSAVE/pro/xxf
+;.compile ../VSAVE/pro/acs_flags
+;.compile ../VSAVE/pro/smov
+.compile ../VSAVE/pro/sum1
+.compile ../VSAVE/pro/sum1_stk
+.compile ../VSAVE/pro/wham
+.compile ../VSAVE/pro/srset
+.compile ../VSAVE/pro/movenr
+.compile ../VSAVE/pro/h89tag
+.compile ../VSAVE/pro/h88tag
+.compile ../VSAVE/pro/h87tag
+.compile ../VSAVE/pro/he3tag
+.compile ../VSAVE/pro/h93tag
+.compile ../VSAVE/pro/h92tag
+.compile ../VSAVE/pro/h91tag
+.compile ../VSAVE/pro/h90tag
+.compile ../VSAVE/pro/a91tag
+.compile ../VSAVE/pro/a92tag
+.compile ../VSAVE/pro/b115tag
+.compile ../VSAVE/pro/hepptag
+.compile ../VSAVE/pro/g131tag
+.compile ../VSAVE/pro/g132tag
+.compile ../VSAVE/pro/acs_tags
+.compile ../VSAVE/pro/put_tr
+.compile ../VSAVE/pro/list_tr
+.compile ../VSAVE/pro/write_tr_file
+.compile ../VSAVE/pro/read_tr_file
+.compile ../VSAVE/pro/unpk_tr
+.compile ../VSAVE/pro/find_tr
+;.compile ../VSAVE/pro/bb
+;.compile ../VSAVE/pro/bbb
+;.compile ../VSAVE/pro/gg
+;.compile ../VSAVE/pro/g
+.compile ../VSAVE/pro/start_GBT_ACS
+.compile ../VSAVE/pro/put_lph
+.compile ../VSAVE/pro/prt_lph
+.compile ../VSAVE/pro/put_lp
+.compile ../VSAVE/pro/prt_lp1
+.compile ../VSAVE/pro/read_vsinfo
+.compile ../VSAVE/pro/prt_vstab
+.compile ../VSAVE/pro/write_vsinfo
+.compile ../VSAVE/pro/make_vsave
+.compile ../VSAVE/pro/prt_vsinfo
+.compile ../VSAVE/pro/putvs
+.compile ../VSAVE/pro/getvs
+.compile ../VSAVE/pro/ns_size
+.compile ../VSAVE/pro/make_nsave
+;.compile ../VSAVE/pro/attach
+.compile ../VSAVE/pro/putns
+.compile ../VSAVE/pro/putavns
+.compile ../VSAVE/pro/putvs
+;.compile ../VSAVE/pro/start_epoch
+;.compile ../VSAVE/pro/start_gav
+;.compile ../VSAVE/pro/daze
+;.compile ../VSAVE/pro/epav
+;.compile ../VSAVE/pro/bam
+.compile ../VSAVE/pro/pausex
+.compile ../VSAVE/pro/step1
+.compile ../VSAVE/pro/step2
+.compile ../VSAVE/pro/lfit1
+.compile ../VSAVE/pro/ng
+
+

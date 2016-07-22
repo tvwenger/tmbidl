@@ -1,0 +1,21 @@
+;================================================
+; Batch script to compile Wenger's HI Model code
+;================================================
+;
+print
+print,"Compiling Trey's HI Modelling Code"
+print
+;
+.compile ../HI_Models/circle_tvw.pro          ; draws circles
+.compile ../HI_Models/closest2d.pro       ; finds closest distance between two curves
+.compile ../HI_Models/histogram_clip.pro  ; for making tvimages
+.compile ../HI_Models/intersect2d.pro     ; finds intersection of two curves
+.compile ../HI_Models/los.pro             ; creates clouds on a line of sight
+.compile ../HI_Models/makegclouds.pro     ; creates galactic clouds
+.compile ../HI_Models/progressbar_tvw.pro ; TVW's progressbar
+.compile ../HI_Models/pspiral.pro         ; makes a spiral galaxy
+.compile ../HI_Models/radtrans.pro        ; does radiative transfer on a line of sight
+.compile ../HI_Models/synthlvimage.pro    ; make l-v map images
+.compile ../HI_Models/synthlv.pro         ; makes an l-v map
+.compile ../HI_Models/vlos.pro            ; gets velocities along a line of sight
+;

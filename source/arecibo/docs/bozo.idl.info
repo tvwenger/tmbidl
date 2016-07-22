@@ -1,0 +1,78 @@
+
+pertinent information for IDL programming:
+
+Phil's IDL procedures:
+
+Use: 
+
+istat=corposonoff(lun,b,t,cals,bonrecs,boffrecs,/sclcal,scan=scan)
+
+;corposonoff - process a position switch scan
+;SYNTAX: istat=corposonoff(lun,b,t,cals,bonrecs,boffrecs,sclcal=sclcal,
+;                  sclJy=sclJy,scan=scan,maxrecs=maxrecs,sl=sl,dbg=dbg,han=han,
+;                  swappol=swappol,median=median)
+
+
+function corposonoff,lun,b,t,cals,bonrecs,boffrecs,sclcal=sclcal,scan=scan,$
+                     dbg=dbg,sl=sl,han=han,scljy=scljy,maxrecs=maxrecs,$
+                     swappol=swappol,median=median,_extra=e
+
+
+;structures:
+;   b - holds the spectral data and headers: has N elements:
+;   b.b1 - board 1 thru
+;   b.bn - board n
+;   each b.bN has:
+;        b.bN.h  - header
+;        b.bN.d[nlags,nsbc] - spectral data
+;
+;   t- holds temperature/power data . has N elements
+;   t.b1 board 1 thru
+;   t.bN board N
+;   each t.bN has: 
+;        t.bN.src[nsbc] (on-off)*X power
+;        t.bN.on[nsbc]             on  power
+;        t.bN.off[nsbc]            off power
+;        The power units will be Kelvins if /corscl is set. If not,
+;        the units will be  TsysOffPos. nsbc can be 1 or 2 depending
+;        on the number of sbc in each board.
+;   
+;  cals[nbrds] holds the cal info. it is an array of {cal} structures:
+;   cals[i].h          - header from first cal on.
+;   cals[i].calval[2]  - cal value for each sbc this board
+;   cals[i].calscl[2]  - to convert corunits to kelvins sbc,1,2
+;       cals[i].h.cor.calOn  - has the total power calOn
+;       cals[i].h.cor.calOff - has the total power calOff .. units are
+;                              correlator units.
+;NOTES:
+; 1. If the individual records ard returned and /sclJy is returned then
+;    the values will be the SEFD (system equivalent flux density). 
+;    No bandpass correction is done on these individual records.
+;    values for the ons,offs with be Tsys/gain. There kk
+; 2. There is a difference between < on/off - 1> and
+;        <on>/<off> namely the bandpass shape .. let f be the bandpass shape:
+;        then < f*on/(f*off) -1> doesnot have the bandpass
+;        but   <f*on>/<f*off> does  the basic problem is that
+;        <a>/<b> is not equal to <a/b>
+;-
+
+;  each bN will have:
+;    b.b3.h     - complete header for this board 
+;    b.b3.p[2]  int. 1-polA,2->polB, 0, no data this sbc
+;    b.b3.accum double   . accumulate scale factor (if used)
+;    b.b3.d[nfreqchan,nsbc] the data. nsbc will be 1 or 2 depending on
+;                 how many sbc are using in this board.
+;    use pol to determine what pol each sbc is. It will also tell you if
+;    there is only 1 sbc pol[1] = 0. It will not compensate for
+;    zeeman switching..
+;
+;  The header will contain:
+;      .h.std - standard header
+;      .h.cor - correlator portion of header
+;      .h.pnt - pointing portion of header
+;      .h.iflo- if,lo    portion of header
+;      .h.dop - doppler frequency/velocity portion of header
+;      .h.proc- tcl procedure portion of header
+;
+; The data is returned in increasing frequency order as floats.
+;

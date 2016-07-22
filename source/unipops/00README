@@ -1,0 +1,101 @@
+=================================================================
+  TMBIDL DATA ANALYSIS PACKAGE FOR 140 FT 3-HELIUM EXPERIMENT 
+
+=================================================================
+
+RTR created the 140 FT experiment 3-Helium global average
+archive. TMB wrote this code to translate it. 
+
+==> TMB decided to make this data archive part of the TMBIDL
+standard release because it is so small... 
+
+bania@ninkasi /ninkasi0/idl/tmbidl/v7.0/unipops 
+> du -h data/
+7.3M    data/
+
+=================================================================
+
+BE WARNED!!! The 140 FT Model III AutoCorrelator had 256 channels
+             for each of our 4 observing bands. So be prepared
+             to be entirely underwhelmed at the spectral quality.
+
+=================================================================
+== CHECKING SANITY OF PACKAGE INSTALLATION
+
+Run the batch script:
+
+@../unipops/0SANITY
+
+At startup you should get:
+
+
+TMBIDL-->start,1
+=======================
+TMBIDL V7.1 INITIALIZED
+=======================
+
+Initializing TMBIDL for NRAO 140-FT UniPops NSAVE ARCHIVE data
+
+TMBIDL V7.1 loaded from /ninkasi0/idl/tmbidl/v7.0/startup
+
+
+% Compiled module: ARCHIVE_140.
+% Compiled module: UNI2TMB.
+% Compiled module: UNIPOPS.
+
+NSAVE write protection turned ON
+
+
+ONLINE data file is ../unipops/data/archive_140.dat
+
+ONLINE data file: ../unipops/data/archive_140.dat selected for searches
+ONLINE data file contains         1468 records
+Select scan range for searches is:            0 to         5992
+Files currently being used are:
+
+Spectral Line SDFITS  Data  file= 
+              LUN=   0
+Continuum     SDFITS  Data  file= 
+              
+ONLINE  Data  file= ../unipops/data/archive_140.dat LUN= 102
+OFFLINE Data  file= ../../data/continuum/Cdata.tmbidl LUN= 103
+
+Nsave file= ../../data/nsaves/nstest.LNS LUN= 100
+NSlog file= ../../data/nsaves/nstest.LNS.key LUN= 101
+
+PLOT    file= ../../figures/tmbidl.ps
+MESSAGE file= ../saves/messages
+ARCHIVE file= ../archive/archive
+
+Journal   = ../saves/jrnl_140FT.log
+SAVE_state= ../saves/state.dat
+SAVE_procs= ../saves/procs.dat
+STACK is now empty
+
+==>
+
+=================================================================
+=================================================================
+==> GLOBALS is currently empty but there as place holder
+
+==> RESOLVE_ROUTINES is currently empty but there as a
+    place holder.  All three .pro's extant were used
+    by tmb to convert the 140 FT data into TMBIDL.
+    They are hardwired (filenames etc) and will not run as is
+    without modification.  But they should be entirely 
+    unnecessary. 
+
+==> 'archive_data' structure was origin of final version of
+    'tmbidl_header' in that certain header words were added
+    to be compatible with 140 FT data. 
+    It is now superceded by 'tmbidl_header' structure. 
+=================================================================
+
+BE WARNED!!! ONLY the ONLINE data file has meaning.  It is the
+             TMBIDL version of the 140 FT NSAVE archive for the
+             entire 3-Helium experiment.
+            
+             The OFFLINE and NSAVE files are place holders.
+             They are the vanilla TMBIDL startup data files. 
+
+=================================================================
